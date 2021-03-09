@@ -1,0 +1,53 @@
+<ion-header class="ion-no-border ion-padding-top">
+  <ion-toolbar>
+    <ion-title>{{ "message a user"| uppercase}}</ion-title>
+    <ion-buttons slot="start" class="ion-no-padding">
+      <ion-icon slot="icon-only" src="assets/css/icon/back.svg" (click)="back()" style="zoom: 0.5; padding-left: 20px;"></ion-icon>
+    </ion-buttons>
+   </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-searchbar placeholder="Search for a user" class="ion-padding-start"  (ionChange)='finder($event)'></ion-searchbar>
+<ion-row class="ion-padding-vertical">
+  <ion-col class="ion-no-padding">
+    <ng-container *ngIf='userListing' >
+      <ion-item *ngFor='let user of userListing' class="ion-padding-vertical" class="user-item" >
+        <ion-col size="2" class="ion-padding-vertical avatar" (click)="goToMyStylin(user)">
+          <ion-avatar class="ion-no-padding" style="position: relative;">
+            <!-- <ion-img  *ngIf="user && (user.profile_profile_pic || user.user_profile_pic_url)" src="{{ user.profile_profile_pic || user.user_profile_pic_url }}"></ion-img>
+            <ion-img  *ngIf="user && (!user.profile_profile_pic && !user.user_profile_pic_url)" src="assets/css/imgs/placeholder.png"></ion-img> -->
+            <ion-img #image [src]="user.profile_profile_pic || user.user_profile_pic_url" (ionImgDidLoad)="isLoadedImg2(user)" (ionError)="errorLoad(user)" *ngIf="user && (user.profile_profile_pic || user.user_profile_pic_url) && !user.errorImage"></ion-img>
+            <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="user.errorImage" ></ion-img>
+            <ion-img src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="user && !user.profile_profile_pic && !user.user_profile_pic_url && !user.errorImage" ></ion-img>
+            <div *ngIf="!user.isLoadedProfile" class="spinner2">
+              <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+            </div>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="9" (click)="goToMyStylin(user)">
+          <ion-label class="ion-padding-start ion-padding-top">{{ user.profile_first_name || user.user_first_name }}  {{ user.profile_last_name || user.user_last_name }}</ion-label>
+          <ion-text *ngIf="user.stylist == 1" ion-text color="primary" style="font-weight: bold;padding-left: 15px;
+          font-size: 15px;font-family: 'Raleway';">STYLIST</ion-text>
+        </ion-col>
+        <ion-col size="1" slot="end" class="ion-no-margin ion-no-padding "  (click)="goToMessageModal(user)">
+          <ion-icon src=" assets/css/icon/message-gold.svg" class="icon-message" style="zoom: 2;"></ion-icon>
+        </ion-col>
+      </ion-item>
+    </ng-container>
+    <ng-container *ngIf="userListing < 1">
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-text style="font-family: 'Raleway' !important;">No user found.</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+  </ion-col>
+</ion-row>
+
+  <ng-container *ngIf="!disableInfinite">
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ng-container>
+</ion-content>

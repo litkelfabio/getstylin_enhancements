@@ -1,0 +1,145 @@
+ion-label{
+    font-family: 'Raleway' !important;
+}
+ion-text{
+    font-family: 'Raleway' !important;
+}
+.item-text{
+    font-size: 14px !important;
+}
+.row-no-padding{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+.icon {
+    position: relative;
+    /* Adjust these values accordingly */
+    top: 5px;
+    left: 5px;
+  }
+
+  .pointsAd{
+    width: 12px;
+    margin-left: 3px;
+    margin-right: 10px;
+}
+
+.exclusive-title{
+    font-family: 'Raleway' !important;
+    font-size: 15px;
+    font-weight: 900;
+}
+.mt-10{
+    margin-top:10px;
+}
+.descriptionChallenges{
+    font-size: 13px !important;
+    p{
+        margin:0px;
+        
+    }
+}
+.tiertag{
+    right: 0px;
+    position: absolute;
+    padding: 5px 10px;
+    background: #b3a25d;
+    font-size: 14px;
+    font-weight: 900;
+    color: white;
+    .triangle{
+        border: 13px solid #b3a25d;
+        position: absolute;
+        left: -10px;
+        top: 0;
+        border-left: 10px solid transparent;
+    }
+}
+ion-slides{
+   height: 100%;
+}
+.img-border{
+    border-radius: 10px !important;
+}
+.title-text{
+    font-size: 15px;
+}
+.rewards-title{
+    width: 10.6em !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1 !important;
+    -webkit-box-orient: vertical !important;
+    p{
+        margin: 0px !important;
+    }
+}
+.rewards-description{
+    width: 16em !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1 !important;
+    -webkit-box-orient: vertical !important;
+}
+.exclusive-title{
+    width: 10.6em !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1 !important;
+    -webkit-box-orient: vertical !important;
+}
+
+.exclusive-description{
+    width: 16em !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1 !important;
+    -webkit-box-orient: vertical !important;
+}
+.img-container{
+    border-radius: 10px !important;
+    width: auto !important;
+    height: 130px !important;
+    overflow: hidden;
+    position: relative;
+    ion-img{
+        height: 100% !important;
+        display: block !important;
+        width: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+    }
+}
+.spinner2{
+    background-color: gray !important;
+    border-radius: 10px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 130px;
+    width: 260px;
+    top: 0px;
+    left: 0px;
+  } 
+  .spinner-circle{
+    top: 48px;
+    left: 4px;
+  }
+
+  .spinner{
+    background-color: gray !important;
+    border-radius: 10px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 131px;
+    width: 255px;
+    top: 0px;
+    left: 0px;
+  } 
+  .spinner-circle-style-challenges{
+    top: 48px;
+    left: 5px;
+  }

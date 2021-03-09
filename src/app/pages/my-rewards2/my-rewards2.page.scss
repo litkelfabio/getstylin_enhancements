@@ -1,0 +1,37 @@
+ion-text {
+    font-family: 'Raleway' !important;
+}
+ion-button{
+    font-family: 'Raleway' !important;
+}
+.img-container{
+    border-radius: 10px !important;
+    width: 100% !important;
+    height: 200px !important;
+    overflow: hidden;
+    ion-img{
+        border-radius: 10px !important;
+        overflow: hidden;
+        height: 200px !important;
+        display: block !important;
+        width: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+    }
+}
+.spinner2{
+    background-color: gray !important;
+    border-radius: 10px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 202px;
+    width: 282px;
+    top: 3px;
+    left: 0px;
+  } 
+  .spinner-circle{
+    top: 78px;
+    left: 133px;
+  }

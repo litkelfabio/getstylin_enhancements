@@ -1,0 +1,38 @@
+ion-input{
+    background-color: rgba(196, 196, 196, 0.2);
+}
+.adjustments{
+    font-size: 10px !important;
+    color: red;
+}
+ion-label{
+    color: #B3A25D !important;
+    font-family: 'Raleway' !important;
+}
+.eye-icon{
+    position: absolute;
+    right: 18px;
+    top: 36px;
+    z-index: 99999999;
+}
+.eye2-icon{
+    position: absolute;
+    right: 8px;
+    top: 28px;
+    z-index: 99999999;
+}
+.bottomIcon{
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.available-email{
+    font-size: 10px !important;
+    color: darkgrey;
+}
+ion-button{
+    font-family: 'Raleway' !important;
+}
+ion-text{
+    font-family: 'Raleway' !important;
+}
+

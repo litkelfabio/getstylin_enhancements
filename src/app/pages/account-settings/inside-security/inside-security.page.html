@@ -1,0 +1,26 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title>SECURITY</ion-title>
+    <ion-buttons slot="start" (click)="back()" [collapse]="true">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+    <ion-row>
+      
+      <ng-container *ngIf="!userData.isSocial">
+        <ion-item (click)="goToInnerSetting()">
+          <ion-icon src="assets/icon/change-password.svg" no-margin tappable ></ion-icon>
+          <ion-label class='ion-text-wrap ion-padding-start'>Change Password</ion-label>
+        </ion-item>
+      </ng-container>
+      
+      <ion-item (click)="goToHistory()">
+        <ion-icon src="assets/icon/history-privacy.svg" ></ion-icon>
+        <ion-label class='ion-text-wrap ion-padding-start'>Search History</ion-label>
+      </ion-item>
+    </ion-row>
+</ion-content>

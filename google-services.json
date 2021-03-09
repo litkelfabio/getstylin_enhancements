@@ -1,0 +1,147 @@
+{
+  "project_info": {
+    "project_number": "51993057457",
+    "firebase_url": "https://getstylin-3ac91.firebaseio.com",
+    "project_id": "getstylin-3ac91",
+    "storage_bucket": "getstylin-3ac91.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51993057457:android:8211e2a7e1bd36e11a6a90",
+        "android_client_info": {
+          "package_name": "com.getstylin.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51993057457-lf76pk9a35in38kdc6jnsk75tgchrr55.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getstylin.app",
+            "certificate_hash": "89e8486eae95d565d01577e3b75d410babd02bd0"
+          }
+        },
+        {
+          "client_id": "51993057457-sqhvjee3smbudh8etfq4og7iq1aiuaom.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getstylin.app",
+            "certificate_hash": "06c61ab38fd1a2bbcdbbbbcb47e1f8422b4b2c4c"
+          }
+        },
+        {
+          "client_id": "51993057457-8aegq9rtlm7jde6pigklsvsghgtaqjas.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getstylin.app",
+            "certificate_hash": "4f4fb7248c4a82eea361c3b31cb493b54b5e4524"
+          }
+        },
+        {
+          "client_id": "51993057457-2shi9i16jvtvcf5si5tb5g1hvlj6959o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getstylin.app",
+            "certificate_hash": "8232844c474d5fb4c4f6d84358897c386f12877c"
+          }
+        },
+        {
+          "client_id": "51993057457-0bh4l5ehrqssnucbg6f8avm99masdvk4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2HH9AC_grwsR2CJMtHeXLSUzJKcvkwiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51993057457-0bh4l5ehrqssnucbg6f8avm99masdvk4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "51993057457-o707qga2qj2s7ds74p9g8588to5lahsh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.getstylin.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51993057457:android:a63eb79567fb8d281a6a90",
+        "android_client_info": {
+          "package_name": "com.getstylin.getstylin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51993057457-nepjnnc80vmtros5fve08j0scmlt1dmg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getstylin.getstylin",
+            "certificate_hash": "89e8486eae95d565d01577e3b75d410babd02bd0"
+          }
+        },
+        {
+          "client_id": "51993057457-ng6sucsnp44fqdsmr8jltsq5ur6ms9bi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getstylin.getstylin",
+            "certificate_hash": "06c61ab38fd1a2bbcdbbbbcb47e1f8422b4b2c4c"
+          }
+        },
+        {
+          "client_id": "51993057457-k0pml6dfdvcdkg0vsbno9l9v5i8scpfc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getstylin.getstylin",
+            "certificate_hash": "4f4fb7248c4a82eea361c3b31cb493b54b5e4524"
+          }
+        },
+        {
+          "client_id": "51993057457-v3q4qs2unnqqrpk4fgc09u40fc5bm0ul.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getstylin.getstylin",
+            "certificate_hash": "8232844c474d5fb4c4f6d84358897c386f12877c"
+          }
+        },
+        {
+          "client_id": "51993057457-0bh4l5ehrqssnucbg6f8avm99masdvk4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2HH9AC_grwsR2CJMtHeXLSUzJKcvkwiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51993057457-0bh4l5ehrqssnucbg6f8avm99masdvk4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "51993057457-o707qga2qj2s7ds74p9g8588to5lahsh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.getstylin.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

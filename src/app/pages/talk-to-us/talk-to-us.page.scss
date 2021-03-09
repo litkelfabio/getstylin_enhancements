@@ -1,0 +1,63 @@
+ion-img{
+    height: 120px !important;
+}
+ion-item{
+    width: 94% !important;
+
+    input, input:focus{
+        outline: transparent !important;
+        border: transparent !important;
+    }
+}
+.name-input::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: #CBCBCB;
+    font-size: 15px !important;
+    font-family: 'Raleway' !important;
+    padding-bottom: 15px !important;
+}
+ion-button{
+    --border-radius: 5px !important
+}
+
+.content{
+    // position: relative; 
+    // min-height: 100px;
+}
+.hiddenButton{
+    display: none;
+}
+.send-button{
+    // margin-top: 20px;
+    // margin-bottom: 20px;
+    // transform: translateY(199px);
+    position:absolute;
+    bottom: 15px;
+    // align-items: baseline;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+    font-size: 15px;
+    font-family: 'Raleway';
+}
+textarea{
+    // max-height: 100px !important;
+}
+
+textarea, textarea:focus{
+    width: 100% !important;
+    border: 0px transparent !important;
+    outline: none !important;
+    
+}
+textarea::-webkit-input-placeholder {
+    font-family: 'Raleway' !important;
+    font-size:  15px !important;
+    opacity: 0.5;
+}
+.error-text{
+    font-family: 'Raleway' !important;
+    font-size: 10px !important;
+    color: red;
+}
+

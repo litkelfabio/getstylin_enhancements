@@ -1,0 +1,300 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title class="ion-text-center"> {{ "Get Stylin'" | uppercase }}</ion-title>
+    <!-- <ng-container *ngIf="convo || messageCount"> -->
+      <ion-badge class="message-badge" color="primary">{{messageCount}}</ion-badge>
+    <!-- </ng-container> -->
+    <ion-icon [src]="messageTabIcon" slot="start" style="zoom: 2;"(click)="goToMessages()" style="zoom: 1.5;"></ion-icon>
+    <ion-icon src="assets/css/icon/notifs.svg" slot="end" style="zoom: 1.5;" (click)="goToNotifications()" style="zoom: 1;">
+    </ion-icon>
+    <ng-container *ngIf="showNotificationBlip">
+     <div class="badge-primary"></div>
+    </ng-container> 
+    
+    </ion-toolbar>
+</ion-header>
+<ng-progress #progressBar [color]="'#B3A25D'" [spinner]="false" [fixed]="true" [meteor]="false" [thick]="true"></ng-progress>
+<ion-content class="ion-padding-horizontal ion-padding-bottom" *ngIf="items">
+  <ion-refresher #refresherRef slot="fixed" mode="md" 
+    (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <div  id="feed">
+    <ng-container *ngIf="isLoaded && items.length > 0">
+      <ng-container *ngFor="let item of items; let i = index" class="ion-no-padding">
+         <ion-row class="ion-no-padding">
+           <ion-col size="12" class="ion-no-padding ion-padding-bottom">
+             <ion-row >
+               <ion-col size="2" (click)="goToProfile(item.userinfo)">
+                 <ion-avatar class="ion-no-margin" style="position: relative;">
+                  <ion-img #image [src]="item.userinfo.profile_profile_pic" (ionImgDidLoad)="isLoadedImg2(item)" (ionError)="errorLoadAvatar(item)" *ngIf="item.userinfo.profile_profile_pic &&!item.errorImage"></ion-img>
+                  <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="item.errorImage" ></ion-img>
+                  <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="item && !item.userinfo.profile_profile_pic" ></ion-img>
+                  
+                  <div *ngIf="!item.isLoadedProfile" class="spinner2">
+                    <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+                  </div>
+                  <!-- <img-loader backgroundSize="cover"  *ngIf="item && item.userinfo.profile_profile_pic" src="{{ item.userinfo.profile_profile_pic }}" fallbackUrl="assets/css/imgs/empty-states/no-user-photo.png" [fallbackAsPlaceholder]="true"></img-loader>
+                   <img *ngIf="item && !item.userinfo.profile_profile_pic" src="assets/css/imgs/empty-states/no-user-photo.png"/> -->
+                 </ion-avatar>
+               </ion-col>
+               <ion-col size="8" (click)="goToProfile(item.userinfo)">
+                 <div class="header-user-data-container">
+                   <h5 ion-text class="ellipsis ion-no-margin"><strong>{{ item.userinfo.profile_first_name }} {{ item.userinfo.profile_last_name }}</strong></h5>
+                   <p ion-text class="ellipsis loc ion-no-margin" *ngIf="item.location && item.location != 'null'">{{ item.location }}</p>
+                 </div>
+               </ion-col>
+               <ion-col size="2" class="ion-text-center ion-no-padding" (click)="editPostModal(item)" *ngIf="!isLoading">
+                 <ion-icon src="assets/css/icon/more.svg"  class="ion-no-padding" style="zoom: 2.5;" ></ion-icon>
+               </ion-col>
+               <ion-col size="2" class="ion-text-center ion-no-padding" *ngIf="isLoading">
+                 <ion-spinner name="dots"></ion-spinner>
+              </ion-col>
+             </ion-row>
+             <ion-row (click)="gotoDetails(item)">
+               <ion-col size="12" >
+                 <!-- <ng-container *ngIf="isAndroid">
+                  <div [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
+                    <ngx-progressive-img-loader #thisImage
+                      [height]="'auto'"
+                      [width]="'100%'"
+                      [img]="item.photo"
+                      [thumbnail]="item.photo"
+                      [preserveAspectRatio]="true"
+                      class="borderImg"
+                      (imageLoaded)="onImgLoad($event, item)"
+                      [fallbackImg]="'/assets/css/imgs/empty-states/fallback.svg'">
+                    </ngx-progressive-img-loader>
+                    <ng-container *ngIf="!item.isLoaded">
+                      <img src= "/assets/css/imgs/empty-states/fallback.svg">
+                    </ng-container>
+                 </div>
+                 </ng-container>
+                  <ng-container *ngIf="!isAndroid"> -->
+                    <div class="photo-container" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
+                      <ion-img #image class="img-dashboard" [src]="item.photo" (ionImgDidLoad)="isLoadedImg(item)" (ionError)="errorLoad()" style="border-radius: 10px!important;"></ion-img>
+                      <!-- <img [src]="item.photo" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }" tappable (click)="gotoDetails(item)"/> -->
+                      <ng-container *ngIf="!item.isLoaded">
+                        <ion-spinner name="crescent" class="spinner"></ion-spinner>
+                        <!-- <ion-skeleton-text animated style="width: 100%; height: 300px; border-radius: 10px;"></ion-skeleton-text> -->
+                        <!-- <img src= "/assets/css/imgs/empty-states/fallback.svg"> -->
+                      </ng-container>
+                    </div>
+                  <!-- </ng-container> -->
+                 
+               </ion-col>
+             </ion-row>
+             <ion-row style="height: 50px!important;">
+               <ion-col size="6" *ngIf="!isLoading">
+                 <ng-container *ngIf="item.isLiked != null">
+                  <ion-col size = "1.5"   class="ion-no-padding"  >
+                    <ion-button fill="clear" class="likebutton" size="small" (click)="like(1,item)" [disabled]="isReactingTo == item.id && isReacting == true"> 
+                     <ng-container *ngIf="item.isLiked == 1">
+                       <ion-icon slot="icon-only" src="/assets/css/icon/likes-selected.svg" style="zoom: 1.2;"></ion-icon>
+                     </ng-container>
+                     <ng-container *ngIf="item.isLiked == 0">
+                       <ion-icon slot="icon-only" src="/assets/css/icon/likes.svg" style="zoom: 1.5;"></ion-icon>
+                     </ng-container>
+                   </ion-button>
+                  </ion-col>
+                  <ion-col size = "1.5" class="ion-no-padding">
+                    <ion-button fill="clear" class="likebutton" size="small" (click)="like(0,item)" [disabled]="isReactingTo == item.id && isReacting == true">
+                     <ng-container *ngIf="item.isLiked == 0">
+                       <ion-icon slot="icon-only" src="/assets/css/icon/dislike-selected.svg" style="zoom: 1.1;"></ion-icon>
+                     </ng-container>
+                     <ng-container *ngIf="item.isLiked == 1">
+                       <ion-icon slot="icon-only" src="/assets/css/icon/dislike.svg" style="zoom: 1.5;"></ion-icon>
+                     </ng-container>
+                    </ion-button>
+                  </ion-col> 
+                 </ng-container>
+                 <ng-container *ngIf="item.isLiked == null">
+                  <ion-col size = "1.5"   class="ion-no-padding"  >
+                    <ion-button fill="clear" class="likebutton" size="small" (click)="like(1,item)" [disabled]="isReactingTo == item.id && isReacting == true"> 
+                       <ion-icon slot="icon-only" src="/assets/css/icon/likes.svg" style="zoom: 1.5;"></ion-icon>
+                   </ion-button>
+                  </ion-col>
+                  <ion-col size = "1.5" class="ion-no-padding">
+                    <ion-button fill="clear" class="likebutton" size="small" (click)="like(0,item)" [disabled]="isReactingTo == item.id && isReacting == true">
+                       <ion-icon slot="icon-only" src="/assets/css/icon/dislike.svg" style="zoom: 1.5;"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                 </ng-container>
+                 <ion-col size = "1.5" class="ion-no-padding" (click)="gotoDetails(item)">
+                   <ion-button fill="clear" class="likebutton" size="small" (click)="gotoDetails(item)">
+                    <ion-icon class="icon-like-size" slot="icon-only" [src]="'/assets/css/icon/comments.svg'" ></ion-icon>
+                   </ion-button>
+                 </ion-col>
+               </ion-col>
+               <ion-col size="6" *ngIf="isLoading">
+                <ion-spinner name="dots" style="zoom: 1.3;" color="primary"></ion-spinner>
+               </ion-col>
+               <ion-col size="6" class="ion-text-right" (click)="likesDislikesModal(item)">
+                 <ion-col size = "1.5"  class="ion-no-padding">
+                   <ion-icon src="assets/css/icon/likes.svg" style="zoom: 1;"></ion-icon>
+                   <ion-note>{{ item.no_of_likes }}</ion-note>
+                   <!-- <ion-text style="font-size: 10px; font-weight: 0.02;">1</ion-text> -->
+                 </ion-col>
+                 <ion-col size = "1.5" class="ion-no-padding">
+                   <ion-icon src="assets/css/icon/dislike.svg" style="zoom: 1;"></ion-icon>
+                   <ion-note>{{ item.no_of_dislikes }}</ion-note>
+                   <!-- <ion-text style="font-size: 10px;">4</ion-text> -->
+                 </ion-col>
+                 <ion-col size = "1.5"  class="ion-no-padding">
+                   <ion-icon src="assets/css/icon/comments.svg" style="zoom: 1;"></ion-icon>
+                   <ion-note>{{ item.no_of_comments }}</ion-note>
+                   <!-- <ion-text style="font-size: 10px;">2</ion-text> -->
+                 </ion-col>
+               </ion-col>
+             </ion-row> 
+             <ion-row>
+               <ion-col col-12 no-padding>
+                 <div class="">
+                   <p color="pitchblack" class="ion-no-margin">
+                     {{ item.description && item.description != 'null' ? item.description : '' }}
+                     <ion-note showWhen="ios" style="margin-left: 5px">{{ getMoment(item.created_at) | timeAgoV2 }}</ion-note>
+                     <!-- <ion-note showWhen="android" style="margin-left: 5px">{{ item.created_at | timeAgoV2 }}</ion-note> -->
+                   </p>
+                 </div>
+               </ion-col>
+             </ion-row>
+             <ion-row *ngIf="item.tags && item.tags">
+               <ion-col size="12" class="ion-no-padding">
+                 <div class="horizontal-padded">
+                   <p color="#B3A25D" class="hashtags ion-no-margin">
+                     <ng-container *ngFor="let tag of item.tags; let i = index">
+                       <span tappable (click)="gotoTagsRelatedPosts(tag)">{{ tag.tags }}</span>
+                     </ng-container>
+                   </p>
+                 </div>
+               </ion-col>
+             </ion-row>
+           </ion-col>
+         </ion-row>
+      </ng-container>
+     </ng-container>
+     <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="totalPages > page">
+       <ion-infinite-scroll-content></ion-infinite-scroll-content>
+     </ion-infinite-scroll>
+     <ng-container *ngIf="isLoaded && items.length == 0">
+       <ion-row>
+         <ion-col col-12 text-center padding-horizontal>
+           <h3 ion-text>Start connecting with friends, stylists and other members to get your daily dose of style straight to your dashboard!</h3>
+         </ion-col>
+       </ion-row>
+       <ion-row>
+         <ion-col col-6 text-right>
+           <button mode="ios" class="gray" ion-button strong small tappable (click)="goToInviteFriends()">{{ "Invite Friends" | uppercase }} </button>
+         </ion-col>
+         <ion-col col-6>
+           <button mode="ios" ion-button strong small tappable (click)="gotoFindFriends()">{{ "Find Friends" | uppercase }}</button>
+         </ion-col>
+       </ion-row>
+       <!-- <ion-row>
+         <ion-col col-6 text-right>
+           <button mode="ios" class="gray" ion-button strong small tappable (click)="serveNotificationToast()">{{ "Show Toast" | uppercase }} </button>
+         </ion-col>
+       </ion-row> -->
+     </ng-container>
+   
+     <ng-container *ngIf="!isLoaded">
+       <!-- <ion-card>
+         <ion-item no-padding margin-bottom>
+           <ion-row>
+             <ion-col col-2 col-xs-2 col-sm-1>
+               <ion-avatar item-start>
+                 <ion-skeleton-text height="35px" width="35px" rounded></ion-skeleton-text>
+               </ion-avatar>
+             </ion-col>
+             <ion-col col-8 col-xs-8 col-sm-10>
+               <ion-skeleton-text height = "16px"></ion-skeleton-text>
+               <ion-skeleton-text height = "12px"></ion-skeleton-text>
+             </ion-col>
+             <ion-col col-2 col-xs-2 col-sm-1 text-right>
+               <ion-icon name="custom-more" ></ion-icon>
+             </ion-col>
+           </ion-row>
+         </ion-item>
+         <ion-row>
+           <ion-skeleton-text height="200px" width="500px"></ion-skeleton-text>
+         </ion-row>
+         <ion-row >
+           <ion-col col-6 no-margin >
+             <ion-buttons>
+               <button ion-button clear icon-only small>
+                 <ion-icon name="custom-likes" no-padding></ion-icon>
+               </button>
+               <button ion-button clear icon-only small>
+                 <ion-icon name="custom-dislike" no-padding></ion-icon>
+               </button>
+               <button ion-button clear icon-only small>
+                 <ion-icon name="custom-comments" no-padding></ion-icon>
+               </button>
+             </ion-buttons>
+           </ion-col>
+           <ion-col col-6 text-right >
+             <ion-buttons>
+               <button ion-button clear icon-only small>
+                 <ion-icon name="custom-smlike" no-padding></ion-icon>&nbsp;
+                 <ion-note><ion-skeleton-text height="5px" width="20px" no-margin></ion-skeleton-text></ion-note>
+               </button>
+               <button ion-button clear icon-only small>
+                 <ion-icon name="custom-smdis" no-padding></ion-icon>&nbsp;
+                 <ion-note><ion-skeleton-text height="5px" width="20px" no-margin></ion-skeleton-text></ion-note>
+               </button>
+               <button ion-button clear icon-only small>
+                 <ion-icon name="custom-smcomments" no-padding></ion-icon>&nbsp;
+                 <ion-note><ion-skeleton-text height="5px" width="20px" no-margin></ion-skeleton-text></ion-note>
+               </button>
+             </ion-buttons>
+           </ion-col>
+         </ion-row>
+         <ion-row>
+           <ion-col col-12>
+             <p ion-text color="t-gold" no-margin class="hashtags">
+               <ion-skeleton-text height = "12px" ></ion-skeleton-text>
+               <ion-skeleton-text height = "12px" width="50%"></ion-skeleton-text>
+             </p>
+           </ion-col>
+         </ion-row>
+       </ion-card> -->
+     </ng-container>
+  </div>
+</ion-content>
+<ion-content *ngIf="!items" class="ion-padding-horizontal ion-padding-bottom" scrollY="false">
+  <div class="object">
+    <div class=" custom-skeleton">
+      <ion-row>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10" class="ion-padding-top">
+          <ion-skeleton-text animated style="width: 60%; height: 30px;"></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+     <ion-row >
+      <ion-skeleton-text animated style="width: 100%; height: 300px; border-radius: 10px;"></ion-skeleton-text>
+     </ion-row>
+      <ion-skeleton-text animated style="width: 70%; height: 30px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%; height: 20px;"></ion-skeleton-text>
+      <ion-row class="ion-padding-top">
+        <ion-col size="2">
+          <ion-avatar> 
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10" class="ion-padding-top">
+          <ion-skeleton-text animated style="width: 60%; height: 30px;"></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+     <ion-row>
+      <ion-skeleton-text animated style="width: 100%; height: 300px; border-radius: 10px;"></ion-skeleton-text>
+     </ion-row>
+      <ion-skeleton-text animated style="width: 70%; height: 30px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%; height: 20px;"></ion-skeleton-text>
+    </div>
+  </div>
+</ion-content>

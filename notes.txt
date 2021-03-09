@@ -1,0 +1,80 @@
+ //privacy camera description for xcode
+ Please allow GetStylin' to use your camera for uploading a new post.
+
+// For migrated version of config app id
+id="com.getstylintest.app" version="2.0.0"
+
+//For original version of config app id
+id="com.getstylin.app" version="2.0.0"
+
+HOW TO RELEASE BUILD?
+------------------------------------------------------------------------------------------------------------------------------
+JKS:
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore getstylin.jks platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk getstylin
+PW: @4tech98!
+
+zipalign -v 4 platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk platforms/android/app/build/outputs/apk/release/Getstylin-prod-ionic-4-2.1.2socket.apk   
+
+------------------------------------------------------------------------------------------------------------------------------
+
+FOR IOS:
+By removing lines 107-110 from CDVFileTransfer.m I was able to compile:
+
+    NSString* userAgent = [self.commandDelegate userAgent];
+    if (userAgent) {
+        [req setValue:userAgent forHTTPHeaderField:@"User-Agent"];
+    }
+------------------------------------------------------------------------------------------------------------------------------
+
+For ionic serve
+
+uncomment the     import {  FCM } from '@ionic-native/fcm/ngx' 
+and comment import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
+
+On app.component.ts
+
+uncomment the if condition on line 85 to 87 and 194 to 198
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+For build the app Android and IOS 
+
+comment the  import {  FCM } from '@ionic-native/fcm/ngx' 
+and uncomment import { FCM } from 'cordova-plugin-fcm-with-dependecy-updated/ionic/ngx';
+
+
+On app.component.ts
+
+comment the if condition on line 85 to 87 and 194 to 198
+------------------------------------------------------------------------------------------------------------------------------
+
+On notification icon on Android
+
+//uninstall the fcm
+
+ionic cordova plugin rm cordova-plugin-fcm-with-dependecy-updated
+
+//install the cordova fcm
+
+ionic cordova plugin add cordova-plugin-fcm-with-dependecy-updated@latest --variable ANDROID_DEFAULT_NOTIFICATION_ICON="@drawable/notification_icon"
+
+and get the notification_icon on resource/android/notification_icon/drawable-hdpi and put the notification_icon.png on platforms/android/app/src/res/drawable
+
+Para madala yung filter ng image sa pagvview ng fullscreen:
+1. pumunta sa ngx-ionic-image-viewer.js na file
+2. paste to style="filter: brightness(${this.filter.brightness}) contrast(${this.filter.contrast}) saturate(${this.filter.saturation});" sa loob ng ngOnInit then swiper.appendSlide sa loob ng img tag
+
+------------------------------------------------------------------------------------------------------------------------------
+leenteech's facebook appid and app name
+        
+        <variable name="APP_ID" value="1301737246672525" />
+        <variable name="APP_NAME" value="GET STYLIN" />
+
+        
+------------------------------------------------------------------------------------------------------------------------------
+	pod 'FBSDKCoreKit', '~> 8.0.0'
+	pod 'FBSDKLoginKit', '~> 8.0.0'
+	pod 'FBSDKShareKit', '~> 8.0.0'
+	pod 'FBSDKGamingServiceKit', '~> 8.0.0'

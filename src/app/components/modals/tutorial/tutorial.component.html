@@ -1,0 +1,639 @@
+<ion-content>
+  <ng-container *ngIf="!isLoaded">
+    <ion-header class="ion-no-border ion-padding">
+      <ion-toolbar>
+        <ion-title>DISCOVER</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ng-container>
+      <ion-row>
+        <ion-searchbar placeholder="          Search user, style event or question"></ion-searchbar>
+      </ion-row>
+      <ion-row>
+        <ion-text class="ion-text-right ion-padding" style="font-size: 15px;"><b>MEET OUR STYLISTS</b></ion-text>
+      </ion-row>
+      <ion-row class="ion-padding-start ion-padding-bottom">
+        <div class="ion-padding-end" style="padding-left: 4px;">
+          <ion-avatar >
+            <img src="assets/css/imgs/placeholder.png">
+          </ion-avatar>
+        </div>
+        <ion-avatar>
+          <img src="assets/css/imgs/placeholder.png">
+        </ion-avatar>
+      </ion-row>
+      <ion-row class="ion-no-padding-vertical">
+        <ion-text class="ion-padding-horizontal" style="font-size: 13px;">Kevin L.</ion-text>
+        <ion-text  style="font-size: 13px;">Shreen B.</ion-text>
+      </ion-row>
+      <ion-row class="ion-padding-top">
+        <ion-text class="ion-text-right ion-padding" style="font-size: 15px;"><b>POPULAR TAGS</b></ion-text>
+      </ion-row>
+      <ion-row class="ion-padding-horizontal">
+        <ion-chip >
+          <ion-label>Funinthesun</ion-label>
+        </ion-chip>
+        <ion-chip>
+          <ion-label>streetwear</ion-label>
+        </ion-chip>
+        <ion-chip>
+          <ion-label>denim</ion-label>
+        </ion-chip>
+        <ion-chip>
+          <ion-label>Summer</ion-label>
+        </ion-chip>
+        <ion-chip>
+          <ion-label>lace</ion-label>
+        </ion-chip>
+        <ion-chip>
+          <ion-label>alligatorpurse</ion-label>
+        </ion-chip>
+        <ion-chip>
+          <ion-label>urban</ion-label>
+        </ion-chip>
+        <ion-chip>
+          <ion-label>Ootd</ion-label>
+        </ion-chip>
+      </ion-row>
+      <ion-row class="ion-padding">
+        <ion-col class="ion-text-start">
+          <ion-text style="font-size: 15px;"><b>BROWSE STYLES</b></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-horizontal" style="overflow-x: auto !important;">
+        <ng-container >
+          <div class="ion-padding-end">
+            <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+            <div>
+              <ion-text style="font-size: 16px;">Sporty</ion-text>
+            </div>
+            </div>
+            <div class="ion-padding-end">
+            <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+            <div>
+              <ion-text style="font-size: 16px;">Sporty</ion-text>
+            </div>
+            </div>
+            <div class="ion-padding-end">
+            <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+            <div>
+              <ion-text style="font-size: 16px;">Sporty</ion-text>
+            </div>
+            </div>
+          </ng-container>
+      </ion-row>
+      <ion-row class="ion-padding">
+        <ion-col class="ion-text-start">
+          <ion-text style="font-size: 15px;"><b>BROWSE EVENTS</b></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-horizontal">
+        <ng-container >
+          <div class="ion-padding-end">
+            <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+            <div>
+              <ion-text style="font-size: 16px;">Sporty</ion-text>
+            </div>
+            </div>
+            <div class="ion-padding-end">
+            <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+            <div>
+              <ion-text style="font-size: 16px;">Sporty</ion-text>
+            </div>
+            </div>
+            <div class="ion-padding-end">
+            <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+            <div>
+              <ion-text style="font-size: 16px;">Sporty</ion-text>
+            </div>
+            </div>
+          </ng-container>
+      </ion-row>
+      <ion-segment class="footer-segment">
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/dashboard.svg"></ion-icon>
+          <ion-label>DASHBOARD</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/profile.svg"></ion-icon>
+          <ion-label>MY STYLIN'</ion-label>
+        </ion-segment-button>
+        <ion-segment-button id='select1' class="tabs-button">
+          <ion-icon  src="assets/css/icon/upload-active.svg"></ion-icon>
+          <ion-label>UPLOAD</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/rewards2.svg"></ion-icon>
+          <ion-label>REWARDS</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/discover.svg"></ion-icon>
+          <ion-label>DISCOVER</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ng-container>
+  </ng-container>
+
+  <ion-slides  (ionSlideDidChange)="slideChanged($event)" *ngIf="isLoaded">
+    <ion-slide pager="true" style="display: block;">
+      <ion-header class="ion-no-border ion-padding">
+        <ion-toolbar>
+          <ion-title>DISCOVER</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ng-container>
+        <ion-row>
+          <ion-searchbar placeholder=" Search user, style event or question"></ion-searchbar>
+        </ion-row>
+        <ion-row>
+          <ion-text class="ion-text-right ion-padding" style="font-size: 15px;"><b>MEET OUR STYLISTS</b></ion-text>
+        </ion-row>
+        <ion-row class="ion-padding-start ion-padding-bottom">
+          <div class="ion-padding-end" style="padding-left: 4px;">
+            <ion-avatar >
+              <img src="assets/css/imgs/placeholder.png">
+            </ion-avatar>
+          </div>
+          <ion-avatar>
+            <img src="assets/css/imgs/placeholder.png">
+          </ion-avatar>
+        </ion-row>
+        <ion-row class="ion-no-padding-vertical">
+          <ion-text class="ion-padding-horizontal" style="font-size: 13px;">Kevin L.</ion-text>
+          <ion-text  style="font-size: 13px;">Shreen B.</ion-text>
+        </ion-row>
+        <ion-row class="ion-padding-top">
+          <ion-text class="ion-text-right ion-padding" style="font-size: 15px;"><b>POPULAR TAGS</b></ion-text>
+        </ion-row>
+        <ion-row class="ion-padding-horizontal">
+          <ion-chip >
+            <ion-label>Funinthesun</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>streetwear</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>denim</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>Summer</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>lace</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>alligatorpurse</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>urban</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>Ootd</ion-label>
+          </ion-chip>
+        </ion-row>
+        <ion-row class="ion-padding">
+          <ion-col class="ion-text-start">
+            <ion-text style="font-size: 15px;"><b>BROWSE STYLES</b></ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-padding-horizontal" style="overflow-x: auto !important;">
+          <ng-container >
+            <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+              <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+              <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+            </ng-container>
+        </ion-row>
+        <ion-row class="ion-padding">
+          <ion-col class="ion-text-start">
+            <ion-text style="font-size: 15px;"><b>BROWSE EVENTS</b></ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-padding-horizontal">
+          <ng-container >
+            <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+              <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+              <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+             
+            </ng-container>
+        </ion-row>
+        <ion-segment class="footer-segment tabs-button">
+          <ion-segment-button class="tabs-button">
+            <ion-icon src="assets/css/icon/dashboard.svg"></ion-icon>
+            <ion-label>DASHBOARD</ion-label>
+          </ion-segment-button>
+          <ion-segment-button class="tabs-button">
+            <ion-icon src="assets/css/icon/profile.svg"></ion-icon>
+            <ion-label>MY STYLIN'</ion-label>
+          </ion-segment-button>
+          <ion-segment-button class="tabs-button">
+            <ion-icon src="assets/css/icon/upload.svg"></ion-icon>
+            <ion-label>UPLOAD</ion-label>
+          </ion-segment-button>
+          <ion-segment-button class="tabs-button">
+            <ion-icon src="assets/css/icon/rewards2.svg"></ion-icon>
+            <ion-label>REWARDS</ion-label>
+          </ion-segment-button>
+          <ion-segment-button id='select0' class="tabs-button">
+            <ion-icon src="assets/css/icon/discover-active.svg"></ion-icon>
+            <ion-label>DISCOVER</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ng-container>
+      
+    </ion-slide>
+    <ion-slide style="display: block;">
+
+      <ion-header class="ion-no-border ion-padding">
+        <ion-toolbar>
+          <ion-title>DISCOVER</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ng-container>
+        <ion-row>
+          <ion-searchbar placeholder=" Search user, style event or question"></ion-searchbar>
+        </ion-row>
+        <ion-row>
+          <ion-text class="ion-text-right ion-padding" style="font-size: 15px;"><b>MEET OUR STYLISTS</b></ion-text>
+        </ion-row>
+        <ion-row class="ion-padding-start ion-padding-bottom">
+          <div class="ion-padding-end" style="padding-left: 4px;">
+            <ion-avatar >
+              <img src="assets/css/imgs/placeholder.png">
+            </ion-avatar>
+          </div>
+          <ion-avatar>
+            <img src="assets/css/imgs/placeholder.png">
+          </ion-avatar>
+        </ion-row>
+        <ion-row class="ion-no-padding-vertical">
+          <ion-text class="ion-padding-horizontal" style="font-size: 13px;">Kevin L.</ion-text>
+          <ion-text  style="font-size: 13px;">Shreen B.</ion-text>
+        </ion-row>
+        <ion-row class="ion-padding-top">
+          <ion-text class="ion-text-right ion-padding" style="font-size: 15px;"><b>POPULAR TAGS</b></ion-text>
+        </ion-row>
+        <ion-row class="ion-padding-horizontal">
+          <ion-chip >
+            <ion-label>Funinthesun</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>streetwear</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>denim</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>Summer</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>lace</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>alligatorpurse</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>urban</ion-label>
+          </ion-chip>
+          <ion-chip>
+            <ion-label>Ootd</ion-label>
+          </ion-chip>
+        </ion-row>
+        <ion-row class="ion-padding">
+          <ion-col class="ion-text-start">
+            <ion-text style="font-size: 15px;"><b>BROWSE STYLES</b></ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-padding-horizontal" style="overflow-x: auto !important;">
+          <ng-container >
+            <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+              <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+              <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+            </ng-container>
+        </ion-row>
+        <ion-row class="ion-padding">
+          <ion-col class="ion-text-start">
+            <ion-text style="font-size: 15px;"><b>BROWSE EVENTS</b></ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-padding-horizontal">
+          <ng-container >
+            <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+              <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+              <div class="ion-padding-end">
+              <img src="assets/imgs/empty-states/no-user-photo.png" style="width: 90px; height: 140px; border-radius: 10px;">
+              <div>
+                <ion-text style="font-size: 16px;">Sporty</ion-text>
+              </div>
+              </div>
+            </ng-container>
+        </ion-row>
+        <ion-segment class="footer-segment">
+          <ion-segment-button class="tabs-button">
+            <ion-icon src="assets/css/icon/dashboard.svg"></ion-icon>
+            <ion-label>DASHBOARD</ion-label>
+          </ion-segment-button>
+          <ion-segment-button class="tabs-button">
+            <ion-icon src="assets/css/icon/profile.svg"></ion-icon>
+            <ion-label>MY STYLIN'</ion-label>
+          </ion-segment-button>
+          <ion-segment-button id='select1' class="tabs-button">
+            <ion-icon  src="assets/css/icon/upload-active.svg"></ion-icon>
+            <ion-label>UPLOAD</ion-label>
+          </ion-segment-button>
+          <ion-segment-button class="tabs-button">
+            <ion-icon src="assets/css/icon/rewards2.svg"></ion-icon>
+            <ion-label>REWARDS</ion-label>
+          </ion-segment-button>
+          <ion-segment-button class="tabs-button">
+            <ion-icon src="assets/css/icon/discover.svg"></ion-icon>
+            <ion-label>DISCOVER</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ng-container>
+
+    </ion-slide>
+    <ion-slide style="display: block;">
+      <ion-header class="ion-no-border ion-padding-top">
+        <ion-toolbar>
+          <ion-buttons slot="start" class="ion-padding">
+              <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.5;"></ion-icon>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ng-container class="ion-padding">
+       <ion-row class="ion-padding ion-no-padding-top">
+        <ion-col class="ion-text-center ion-no-padding">
+          <ion-icon src="assets/css/icon/style-points-icon.svg" style="zoom: 1.5;"></ion-icon>
+          <ion-spinner name="dots" color="primary"></ion-spinner>
+          <ion-row class="ion-text-center">
+            <ion-col class="ion-text-center">
+              <ion-text style="font-size: 15px !important; "><b>YOU ARE A RISING STAR!</b></ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row class="ion-text-center">
+            <ion-text color="medium" style="font-size: 12px;">Get more style points by joining the different Style Challenges. Learn more about your progress and the different
+              rewards below.
+            </ion-text>
+          </ion-row>
+        </ion-col>
+       </ion-row>
+       <ion-row class="ion-padding-horizontal">
+        <ion-col class="ion-text-center">
+         <!-- <div class="tier-switcher"> --><!-- </div> -->
+           <ion-segment>
+             <ion-segment-button style="background-color:#B3A25D;">
+               <ion-icon src="assets/css/icon/rising-star-white.svg" class="ion-padding-top" style="zoom: 0.8;"></ion-icon>
+               <ion-label class="ion-padding-top" style="color: white; padding-bottom: 2px;">RISING STAR</ion-label>
+             </ion-segment-button>
+             <ion-segment-button id='select2'>
+               <ion-icon src="assets/css/icon/a-rising-star.svg"></ion-icon>
+               <ion-label class="ion-padding-top" style="color:#B3A25D;">SUPERSTAR</ion-label>
+             </ion-segment-button>
+             <ion-segment-button >
+               <ion-icon src="assets/css/icon/icon-star.svg"></ion-icon>
+               <ion-label class="ion-padding-top" style="color:#B3A25D;">ICON</ion-label>
+             </ion-segment-button>
+             <ion-segment-button>
+               <ion-icon src="assets/css/icon/legend-star.svg"></ion-icon>
+               <ion-label class="ion-padding-top" style="color:#B3A25D;">LEGEND</ion-label>
+             </ion-segment-button>
+           </ion-segment>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-start ion-padding-start ion-padding-top">
+          <ion-text style="font-size: 15px !important;"><b>TIER PROGRESS</b></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-center ion-padding-horizontal">
+          <ion-progress-bar value="0.5" color="primary"></ion-progress-bar>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-no-padding">
+        <ion-col class="ion-text-right">
+          <ion-text class="non-raleway ion-padding-end" style="font-size: 13px;"  >0/5,000</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-start ion-padding">
+          <ion-text style="font-size: 15px !important;"><b>RISING STAR PRIVILEGES</b></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row style="margin-bottom: 25%">
+        <ng-container >
+          <ion-col class="ion-text-center">
+            <ion-item>
+              <ion-label class="ion-padding-horizontal"> ✓<ion-text  class="ion-padding-start">Access to discounts and promotions</ion-text></ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label class="ion-padding-horizontal"> ✓<ion-text  class="ion-padding-start">Birthday Rewards</ion-text></ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label class="ion-padding-horizontal"> ✓<ion-text  class="ion-padding-start">Access to exclusive shopping events</ion-text></ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label class="ion-padding-horizontal"> ✓<ion-text  class="ion-padding-start">Access to exclusive contests</ion-text></ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label class="ion-padding-horizontal"> ✓<ion-text  class="ion-padding-start">Access to exclusive content</ion-text></ion-label>
+            </ion-item>
+          </ion-col>
+        </ng-container>
+      </ion-row>
+      <ion-segment class="footer-segment">
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/dashboard.svg"></ion-icon>
+          <ion-label>DASHBOARD</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/profile-active.svg"></ion-icon>
+          <ion-label>MY STYLIN'</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/upload.svg"></ion-icon>
+          <ion-label>UPLOAD</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/rewards2.svg"></ion-icon>
+          <ion-label>REWARDS</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/discover.svg"></ion-icon>
+          <ion-label>DISCOVER</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      </ng-container>
+      
+    </ion-slide>
+    <ion-slide style="display: block;">
+      <ng-container class="ion-padding">
+       <ion-row class="ion-padding">
+        <ion-col class="ion-text-center ion-padding">
+          <ion-label style="font-weight: bold; display: inline-flex !important;align-items: center; font-size: 25px;">
+            <ion-icon src="assets/css/icon/style-points-gold.svg" slot="start" style="zoom: 0.8;"></ion-icon>
+            &nbsp;<b style="font-size: 25px;">100 </b>  <b style="font-size: 14px;"> &nbsp;&nbsp;PTS</b>
+          </ion-label>
+          <ion-row class="ion-text-center">
+            <ion-col class="ion-text-center">
+              <ion-text style="font-size: 14px !important; "><b>YOU ARE A RISING STAR!</b></ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row class="ion-text-center">
+            <ion-text color="medium" style="font-size: 12px;">Get more style points by joining the different Style Challenges. Learn more about your progress and the different
+              rewards below.
+            </ion-text>
+          </ion-row>
+        </ion-col>
+       </ion-row>
+       <ion-row class="ion-padding-horizontal">
+        <ion-col class="ion-text-center">
+           <ion-segment >
+             <ion-segment-button class="slide4-segment" style="background-color: #B3A25D;">
+               <ion-icon src="assets/css/icon/rising-star-white.svg" class="ion-padding-vertical"  style="zoom: 0.7;"></ion-icon>
+               <ion-label class="ion-no-padding" style="color: white;font-size: 10px">RISING STAR</ion-label>
+               <ion-label class="ion-no-padding" style="color: white; font-size: 10px;padding-bottom: 2px;">0 PTS</ion-label>
+             </ion-segment-button>
+             <ion-segment-button class="slide4-segment">
+               <ion-icon src="assets/css/icon/a-rising-star.svg" class="ion-padding-vertical"  style="zoom: 0.7;"></ion-icon>
+               <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">SUPERSTAR</ion-label>
+               <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">5,000 PTS</ion-label>
+             </ion-segment-button>
+             <ion-segment-button class="slide4-segment">
+               <ion-icon src="assets/css/icon/icon-star.svg" class="ion-padding-vertical" style="zoom: 0.7;"></ion-icon>
+               <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">ICON</ion-label>
+               <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">15,000 PTS</ion-label>
+             </ion-segment-button>
+             <ion-segment-button class="slide4-segment">
+               <ion-icon src="assets/css/icon/legend-star.svg" style="zoom: 0.7;" class="ion-padding-vertical"></ion-icon>
+               <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">LEGEND</ion-label>
+               <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">20,000 PTS</ion-label>
+             </ion-segment-button>
+           </ion-segment>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-start ion-padding-start ion-padding-top">
+          <ion-text style="font-size: 14px !important;"><b>POINTS NEXT TIER</b></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-center ion-padding-horizontal">
+          <ion-progress-bar value="0.5" color="primary"></ion-progress-bar>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-no-padding">
+        <ion-col class="ion-text-center ion-no-padding">
+          <ion-text class="non-raleway ion-padding-end" style="font-size: 13px;" >100/5,000</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-start" style='background: rgba(178, 161, 92, 0.2);'>
+        <ion-col class='ion-text-start '>
+          <div style="padding-top: 5px !important; align-items: center;">
+            <img style='width: 20px; height: 18px; margin-right: 8px;' src="assets/icon/gold-gift.png" />
+          <ion-text style="font-size: 13px;padding-left: 5px;"><b>{{ 'My rewards' | uppercase }}</b></ion-text>
+          </div>
+        </ion-col>
+        <ion-col class='ion-text-end ion-padding-top'>
+          <ion-icon no-padding src="assets/css/icon/back-reverse.svg" style="zoom: 1.5;"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-top">
+        <ion-col class="ion-text-start ion-padding-horizontal">
+          <ion-text style="font-size: 14px !important;"><b>STYLE CHALLENGES</b></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-horizontal  ion-text-start">
+        <ion-text color="medium" style="font-size: 12px;">Earn extra style points by participating with our ongoing challenges</ion-text>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-start ion-padding-horizontal">
+          <img src="assets/imgs/placeholder.png" style="width: 170px; border-radius: 10px; height: 120px;">
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-no-padding" style="margin-top: 24%;">
+        <ion-col class="ion-text-start ion-padding-start">
+          <ion-button fill="outline" color="primary">LEARN MORE</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-segment class="footer-segment">
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/dashboard.svg"></ion-icon>
+          <ion-label>DASHBOARD</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/profile.svg"></ion-icon>
+          <ion-label>MY STYLIN'</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/upload.svg"></ion-icon>
+          <ion-label>UPLOAD</ion-label>
+        </ion-segment-button>
+        <ion-segment-button id='select3' class="tabs-button">
+          <ion-icon  src="assets/css/icon/rewards2-active.svg"></ion-icon>
+          <ion-label>REWARDS</ion-label>
+        </ion-segment-button>
+        <ion-segment-button class="tabs-button">
+          <ion-icon src="assets/css/icon/discover.svg"></ion-icon>
+          <ion-label>DISCOVER</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      </ng-container>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

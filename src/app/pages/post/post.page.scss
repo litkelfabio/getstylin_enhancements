@@ -1,0 +1,168 @@
+.auto-complete-container {
+    // position: absolute !important;
+    // bottom: -124px !important;
+    width: 100% !important;
+    // display: block !important;
+
+}
+.select{
+    font-size: 15px !important;
+    font-family: 'Raleway' !important;
+    max-width: 100% !important;
+}
+ion-item{
+    ion-icon{
+        zoom: 0.7;
+    }
+}
+ion-textarea{
+    font-size: 15px !important;
+    font-family: 'Raleway' !important;
+    max-width: 100% !important;
+}
+
+ion-header{
+    ion-icon.save-icon.ios.hydrated{
+        zoom: 1.4 !important;
+    }
+}
+ion-text{
+    font-size: 14px !important;
+    font-family: 'Raleway' !important;
+    font-weight: 600 !important;
+}
+ion-chip{
+    ion-label{
+        font-size: 13px !important;
+    font-family: 'Raleway' !important;
+    }
+}
+
+.vertical-line{
+    position: absolute;
+    top: 7px;
+}
+.rotate-icon{
+    position: absolute;
+    top: 4px;
+    zoom: 1.5;
+    padding-left: 10px !important;
+}
+.geo-item{
+    font-family: 'Raleway' !important;
+    font-size: 15px !important;
+}
+ion-input{
+    font-size: 15px !important;
+}
+ion-list{
+    ion-item{
+        ion-icon{
+            zoom: 0.7;
+        }
+    }
+}
+ion-card .list-ios {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 100%;
+}
+
+
+.img-dashboard{
+    border-radius: 10px!important;
+    overflow: hidden;
+}
+.chips-tag{
+    background-color: #B3A25D!important;
+}
+.index-indicator{
+    top: 15% !important;
+    border-radius: 13px;
+    position: absolute!important;
+    width: 14%;
+    z-index: 2;
+    right: 6px;
+    background-color: gray;
+    color: white;
+    height: 25px;
+}
+.index{
+    position: absolute;
+    top: 3px;
+    left: 10px;
+}
+// video {
+//     max-width: 100%;
+//     max-height: 100%;
+//     display: inline-block;
+//     vertical-align: middle;
+//     object-fit: none !important;
+//   }
+// iframe{
+//     width: 100%;
+//     height: 410px;
+//     border: none !important;
+// }
+// video{
+//     min-width: 350px !important;
+//     min-height: 100% !important;
+//     max-width: 100%;
+//     max-height: 100%;
+//     display: inline-block;
+//     vertical-align: middle;
+// }
+
+video{
+    width: 100%;
+}
+.c-video{
+    width: 100%;
+    max-width: 500px !important;
+    position: relative;
+}
+.controls{
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    flex-wrap: wrap;
+    background: rgba(0,0,0,0.7);
+}
+// .c-duration{
+//     height: 8px;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     background: lightgray;
+// }
+// .duration{
+//     height: 8px;
+//     // width: ;
+//     background: #B3A25D;
+// }
+.button-play-pause{
+    --border-radius : 50%;
+    position: absolute;
+    top: 42%;
+    z-index: 999;
+    left: 42%;
+    height: 60px;
+    width: 66px
+}
+.hide-buttons{
+    display: none;
+    animation: FadeText 2s ease;
+}
+
+@keyframes FadeText {
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
+}
+    

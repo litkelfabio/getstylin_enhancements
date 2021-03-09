@@ -1,0 +1,27 @@
+<ion-content class="ion-padding">
+  <ion-row>
+    <ion-col class="ion-text-center">
+      <ion-list>
+        <ion-item lines="none" (click)="blockUserPrompt()" *ngIf="conversationData.isBlocked == false && conversationData.blockedBy == false || conversationData.blockedBy == false">
+          <ng-container *ngIf="conversationData.isBlocked == false && conversationData.blockedBy == false">
+            <ion-text >Block</ion-text>
+          <ion-icon src="assets/css/icon/block-icon.svg" slot="end" style="zoom: 0.8;"></ion-icon>
+          </ng-container>
+          <ng-container *ngIf="conversationData.isBlocked == true">
+            <ion-text >Unblock</ion-text>
+          <ion-icon src="assets/css/icon/blockeduser-icon.svg" slot="end" style="zoom: 0.8;"></ion-icon>
+          </ng-container>
+        </ion-item >
+
+        <ion-item lines="none" (click)="deleteMessagePrompt()">
+          <ion-text>Delete Conversation</ion-text>
+          <ion-icon name="close-circle-outline" slot="end"></ion-icon>
+        </ion-item>
+        
+        <ion-item lines="none" (click)="reportConversation()">
+          <ion-text>Report Conversation</ion-text>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+</ion-content>

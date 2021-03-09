@@ -1,0 +1,106 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title>{{ pageTitle | uppercase}}</ion-title>
+    <ion-buttons slot="start" (click)="back()">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-icon slot="end" src="assets/css/icon/send.svg" (click)="fireAction(pageContext)"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header> 
+<ng-progress #ngProgress [color]="'#B3A25D'" [spinner]="false" [fixed]="true" [meteor]="false" [thick]="true"></ng-progress>
+
+<ion-content>
+  <ng-container *ngIf="pageContext == 'username'">  
+    <form [formGroup]="changeUsernameForm">
+      <ion-row>
+        <ion-item col-2 text-center no-padding>
+          <ion-icon name="custom-account-profile" color="pitchblack" no-margin></ion-icon>
+        </ion-item>
+        <ion-item col-10 no-padding>
+          <ion-input type="text" class="emailAdd" placeholder="Username" formControlName="username" [readonly]="isSending" (input)='validateInfo($event.target.value)' (blur)="validateInfo($event.target.value)"></ion-input>
+        </ion-item>
+        <!-- This username is invalid. You can only use alphanumeric characters and the period symbol (.) -- this is an error state for username -->
+        <ng-container *ngIf="changeUsernameForm.controls.username.touched">
+          <ion-text class="adjustments" color="danger"  *ngIf="changeUsernameForm.controls.username.hasError('required')">This field is required.</ion-text>
+          <ion-text class="adjustments" color="danger"  *ngIf="changeUsernameForm.controls.username.hasError('pattern')">This username is invalid. You can only use alphanumeric characters and the period symbol (.)</ion-text>
+          <ion-text class="adjustments" color="danger" *ngIf="changeUsernameForm.controls.username.hasError('maxLength')">Username should not exceed 30 characters.</ion-text>
+          <ion-text class="adjustments" color="medium" *ngIf="!changeUsernameForm.controls.username.hasError('required') && !changeUsernameForm.controls.username.hasError('maxLength') && usernameExists == false && !changeUsernameForm.controls.username.hasError('pattern') && !isSameAsPrevious">Username is available.</ion-text>
+          <ion-text class="adjustments" color="danger"  color="danger" *ngIf="!changeUsernameForm.controls.username.hasError('required') && !changeUsernameForm.controls.username.hasError('maxLength') && usernameExists == true">This username is already taken.</ion-text>
+        </ng-container>
+        <ion-item no-padding no-lines *ngIf="hasSubmissionErrors">
+          <p ion-text text-wrap class="spacing" color="danger">{{ submissionErrorMessage }}</p>
+        </ion-item>
+        <ion-item no-padding no-lines>
+          <p ion-text text-wrap class="descAdjust">Your unique username is your main identification (along with your unique e-mail address) in this app.</p>
+        </ion-item>
+        <!-- *ngIf="!changeUsernameForm.controls.username.hasError('pattern') && !changeUsernameForm.controls.username.hasError('required') && !changeUsernameForm.controls.username.hasError('maxLength')" -->
+      </ion-row>
+    </form>
+  </ng-container>
+
+  <ng-container *ngIf="pageContext == 'emailaddress'">
+    <form [formGroup]="changeEmailForm">
+      <ion-row>
+        <ion-item col-2 text-center no-padding>
+          <ion-icon name="custom-inside-email" color="pitchblack" no-margin></ion-icon>
+        </ion-item>
+        <ion-item col-10 r no-padding>
+          <ion-input type="text" class="emailAdd" placeholder="Email Address" formControlName="email" (keyup)="validateInfos($event.target.value)"></ion-input>
+          <!--   <h4 tappable (click)="goToInnerSettings()">Email Address</h4> -->
+          <!-- (keyup)="validateInfos($event.target.value)" -->
+        </ion-item>
+        <ng-container *ngIf="changeEmailForm.controls.email.touched && changeEmailForm.valid || !changeEmailForm.valid">
+          <!-- on-going UI adjustments on this one -->
+          <p ion-text padding-left no-margin text-right  color="danger" class="adjustments" *ngIf="!changeEmailForm.valid">{{ emailError }}</p>
+          <p ion-text padding-left no-margin text-right  color="very-gray" class="adjustments" *ngIf="changeEmailForm.valid && emailExistence === false">Email Address is available.</p>
+          <p ion-text padding-left no-margin text-right  color="danger" class="adjustments" *ngIf="changeEmailForm.valid && emailExistence === true">Email Address already exists.</p>
+        </ng-container>
+
+        <ion-item no-padding no-lines class="usernameInfo">
+          <p ion-text text-wrap class="descAdjust">Your unique e-mail address is your main identification (along with your unique username) in this app. All account-related updats and notices are sent to this e-mail address.</p>
+        </ion-item>
+      </ion-row>
+    </form>
+  </ng-container>
+
+  <ng-container *ngIf="pageContext == 'password'">
+    <form [formGroup]="changePasswordForm" class="ion-padding-end">
+      <!-- <ion-row> -->
+        <ion-item>
+          <ion-label position="floating" class="ion-padding-start input-label">Old Password</ion-label>
+          <ion-input type="{{ passwordType[0] }}" class="emailAdd" formControlName="current_password"></ion-input>
+          <ion-button type="button" class="eye" fill='clear' item-end *ngIf="!changePasswordForm.controls.current_password.hasError('required')"  tappable (click)="togglePassword(0)">
+            <ion-icon style="zoom: 1;" name="{{ passwordIcon[0] }}"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating" class="ion-padding-start input-label">New Password</ion-label>
+          <ion-input type="{{ passwordType[1] }}" formControlName="password" ></ion-input>
+              <ion-button type="button" class="eye" fill='clear' item-end *ngIf="!changePasswordForm.controls.password.hasError('required')"  tappable (click)="togglePassword(1)">
+                <ion-icon style="zoom: 1;" name="{{ passwordIcon[1] }}"></ion-icon>
+              </ion-button>
+        </ion-item>
+        <ng-container *ngIf="changePasswordForm.controls.password.touched">
+          <ion-text color="danger" class="adjustments" *ngIf="changePasswordForm.controls.password.hasError('required')">This field is required</ion-text>
+          <ion-text color="danger" class="adjustments" *ngIf="changePasswordForm.controls.password.hasError('minlength')">Password must be at least 8 characters</ion-text>
+        </ng-container>
+        <ion-item>
+          <ion-label position="floating" class="ion-padding-start input-label">Confirm Password</ion-label>
+          <ion-input type="{{ passwordType[2] }}" formControlName="confirm_password"  clearOnEdit="false" ></ion-input>
+          <ion-button type="button" class="eye" fill='clear' item-end *ngIf="!changePasswordForm.controls.confirm_password.hasError('required') && changePasswordForm.controls.confirm_password.value" tappable (click)="togglePassword(2)">
+            <ion-icon style="zoom: 1;" name="{{ passwordIcon[2] }}"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ng-container *ngIf="changePasswordForm.controls.confirm_password.value">
+          <ion-text class="adjustments" color="danger" *ngIf="!changePasswordForm.controls.confirm_password.hasError('required') && !changePasswordForm.controls.confirm_password.hasError('minlength') && changePasswordForm.controls.confirm_password.errors?.MatchPassword">Password do not match</ion-text>
+          <ion-text color="primary" class="adjustments" *ngIf="!changePasswordForm.controls.confirm_password.hasError('required') && !changePasswordForm.controls.confirm_password.hasError('minlength') && !changePasswordForm.controls.confirm_password.errors?.MatchPassword">Password match</ion-text>
+        </ng-container>
+        <ion-item no-padding no-lines *ngIf="hasSubmissionErrors" lines="none">
+          <ion-text color="danger" class="adjustments">{{ submissionErrorMessage }}</ion-text>
+        </ion-item>
+      <!-- </ion-row> -->
+    </form>
+  </ng-container>
+</ion-content>

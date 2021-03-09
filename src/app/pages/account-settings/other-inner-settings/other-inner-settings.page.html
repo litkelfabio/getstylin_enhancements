@@ -1,0 +1,94 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title>{{ pageTitle | uppercase }}</ion-title>
+    <ion-buttons>
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" (click)="back()" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="pageContext == 'search'">
+    <ion-row>
+      <ion-item col-11 no-padding>
+        <ion-input type="text" [(ngModel)]="searchQuery" placeholder="Search history..." (keyup)="searchTheHistory()"></ion-input>
+        <ion-icon src="assets/icon/close.svg" tappable (click)="clearSearch()"  style="zoom: 0.5;"></ion-icon>
+      </ion-item>
+
+      <ion-col col-12 no-padding>
+        <ng-container *ngIf="histories">
+          <div [hidden]="isSearching" *ngFor="let history of histories">
+            <ion-item class="history-item ion-no-padding ion-no-margin" lines="none">
+              <ion-label class="ion-padding-start history-label">{{ history }}</ion-label>
+              <ion-button  fill="clear" size="small" (click)="removeItem(history)">
+                <ion-icon slot="end" src="assets/icon/close.svg" style="z-index: 0.5;"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="tempHistory" >
+          <ion-item  *ngFor="let history of tempHistory" lines="none" class="history-item ion-no-padding ion-no-margin">
+            <ion-label class="ion-padding-start history-label">{{ history }}</ion-label>
+            <ion-button fill="clear" size="small" (click)="removeItem(history)">
+              <ion-icon  src="assets/icon/close.svg" style="z-index: 0.5;"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ng-container>
+
+        <div id="empty">
+          <!-- <ion-item class="history-item" lines="none" no-padding *ngIf="!histories" text-center>No search history.</ion-item> -->
+          <ion-row>
+            <ion-col class="ion-text-center">
+              <ion-text *ngIf="!histories">No search history.</ion-text>
+              <ion-text *ngIf="isEmpty === true">No search results.</ion-text>
+            </ion-col>
+          </ion-row>
+          <!-- <ion-item class="history-item" lines="none" no-padding *ngIf="isEmpty === true" text-center>No search results.</ion-item> -->
+        </div>
+      </ion-col>
+
+       <ion-col size="12" class='ion-text-center' [hidden]="isSearching === true">
+          <ion-button class="clear" mode="ios" strong size="small" tappable [disabled]="!histories || histories.length == 0" (click)="clearSearchHistory()">{{ "Clear All" | uppercase }}</ion-button>
+       </ion-col>
+    </ion-row>
+</ng-container>
+
+<ng-container *ngIf="pageContext == 'about'">
+  <ion-row>
+      <ion-item (click)="goToTermsAndConditions()" col-12 no-padding>
+        <ion-label  text-wrap>Terms and Conditions</ion-label>
+      </ion-item>
+     <ion-item (click)="goToPolicy()" col-12 no-padding>
+      <ion-label  text-wrap>Privacy Policy</ion-label>
+     </ion-item>
+    </ion-row>
+</ng-container>
+
+<ng-container *ngIf="pageContext == 'terms'">
+ 
+   <div class="!loading" *ngIf="!cmsContent">
+     <ion-row class="ion-padding-top">
+      <ion-col class="ion-text-center ion-padding-top">
+        <ion-spinner color="primary"></ion-spinner>
+       </ion-col>
+     </ion-row>
+   </div>  
+   <ion-row>
+   <div *ngIf="cmsContent" [innerHTML]="cmsContent.content" class="terms"></div>
+  </ion-row>
+</ng-container>
+
+<ng-container *ngIf="pageContext == 'privacy'">
+  <div class="loading" *ngIf="!cmsContent">
+    <ion-row class="ion-padding-top">
+      <ion-col class="ion-text-center ion-padding-top">
+        <ion-spinner color="primary"></ion-spinner>
+       </ion-col>
+     </ion-row>
+  </div>
+  <ion-row>
+   <div *ngIf="cmsContent" [innerHTML]="cmsContent.content" class="privacy"></div>
+  </ion-row>
+</ng-container>
+</ion-content>

@@ -1,0 +1,32 @@
+<ion-content>
+    <ion-row>
+        <ion-col size="12">
+            <ion-row>
+                <ion-col size="10">
+                    <ion-row (click)="goToProfile()">
+                        <ion-col size="4">
+                            <circle-progress
+                            [titleFontSize]="20"
+                            [percent]="progress"
+                            [radius]="30" 
+                            [animation]="true"
+                            [animationDuration]="150"
+                            [outerStrokeWidth]="5"
+                            [showSubtitle]="false"
+                            [unitsFontSize]='20'
+                            ></circle-progress>
+                        </ion-col>
+                        <ion-col size="8" class="ion-padding-top">
+                            <ion-text class="modal-text">Almost there! Complete your profile to earn more style points!</ion-text>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+                <ion-col size="2">
+                    <ion-button fill="clear" (click)="closeModal()">
+                        <ion-icon slot="icon-only" src="assets/css/icon/close.svg" style="zoom: 0.5;"></ion-icon>
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-col>
+    </ion-row>
+</ion-content>

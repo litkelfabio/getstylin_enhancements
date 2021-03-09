@@ -1,0 +1,35 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title>ACCOUNT SETTINGS</ion-title>
+    <ion-buttons slot="start" fill="clear">
+        <ion-icon src="assets/css/icon/back.svg" (click)="back()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <ion-col size="12">
+    
+      <ion-item (click)="goToProfileSettings()">
+        <ion-icon src="assets/css/icon/account-info.svg" class="ion-padding"></ion-icon>
+        <ion-label class="ion-text-wrap ion-padding-start">Profile</ion-label>
+      </ion-item>
+      <ion-item (click)="goToInsideNotification()">
+        <ion-icon src="assets/css/icon/notif.svg" class="ion-padding"></ion-icon>
+        <ion-label class="ion-text-wrap ion-padding-start">Notifications</ion-label>
+      </ion-item>
+      <ion-item  (click)="goToPrivacy()" >
+        <ion-icon src="assets/css/icon/account-privacy.svg" class="ion-padding" ></ion-icon>
+        <ion-label class="ion-text-wrap ion-padding-start">Privacy</ion-label>
+      </ion-item>
+      <ion-item (click)="goToInsideSecurity()">
+        <ion-icon src="assets/css/icon/account-security.svg" class="ion-padding" ></ion-icon>
+        <ion-label class="ion-text-wrap ion-padding-start">Security</ion-label>
+      </ion-item>
+      <ion-item (click)="goToAbout()">
+        <ion-icon src="assets/css/icon/account-about.svg" class="ion-padding" ></ion-icon>
+        <ion-label class="ion-text-wrap ion-padding-start">About</ion-label>
+      </ion-item>
+   
+  </ion-col>
+</ion-content>

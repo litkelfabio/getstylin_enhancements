@@ -1,0 +1,7 @@
+{
+  "name": "getstylin",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,77 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+
+    <ion-menu contentId="main-content" menuId="content" side="end" swipeGesture="false">
+
+      <ion-content>
+
+        <ng-container *ngIf="!otherUser">
+          <ion-list style="padding-top: 100px;">
+            <ion-menu-toggle auto-hide="false" >
+              <ion-item lines="none" (click)="goToConnectionRequests2()">
+                <ion-icon src="assets/css/icon/account-info.svg"></ion-icon>
+                <ion-badge color="primary" slot="end" *ngIf="requestCount > 0">{{requestCount}}</ion-badge>
+                <ion-label>&nbsp;&nbsp; <strong>CONNECTION REQUESTS</strong></ion-label>
+              </ion-item>
+              <ion-item lines="none" (click)="goToAccountSettings()">
+                <ion-icon src="assets/css/icon/account-settings.svg"></ion-icon>
+                <ion-label>&nbsp;&nbsp; <strong>ACCOUNT SETTINGS</strong></ion-label>
+              </ion-item>
+              <ion-item lines="none" (click)="openConnectModal()" routerDirection="forward">
+                <ion-icon src="assets/css/icon/connect.svg"></ion-icon>
+                <ion-label>&nbsp;&nbsp; <strong>CONNECT WITH FRIENDS</strong></ion-label>
+              </ion-item>
+              <ng-container *ngIf="userAccount == '0'">
+                <ion-item lines="none" (click)="goToStylist()"  routerDirection="forward">
+                  <ion-icon src="assets/css/icon/faqs.svg"></ion-icon>
+                  <ion-label>&nbsp;&nbsp; <strong>BECOME A STYLIST</strong></ion-label>
+                </ion-item>
+              </ng-container>
+              <ion-item lines="none" (click)="goToTutorialModal()">
+                <ion-icon src="assets/css/icon/tutorial-icon.svg"></ion-icon>
+                <ion-label>&nbsp;&nbsp; <strong>STYLE GUIDE</strong></ion-label>
+              </ion-item>
+              <!-- <ion-item lines="none" (click)="goToFaqs()">
+                <ion-icon name="help-circle-outline"></ion-icon>
+                <ion-label>&nbsp;&nbsp; <strong>FAQS</strong></ion-label>
+              </ion-item>
+              <ion-item lines="none" (click)="goToTalkToUs()">
+                <ion-icon name="mail-outline"></ion-icon>
+              <ion-label>&nbsp;&nbsp; <strong>TALK TO US</strong></ion-label>
+              </ion-item> -->
+              <ion-item lines="none" (click)="logout()">
+                <ion-icon src="assets/css/icon/logout.svg"></ion-icon>
+                <ion-label>&nbsp;&nbsp; <strong>LOG OUT</strong></ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ion-list>
+        </ng-container>
+
+        <ng-container *ngIf="otherUser">
+          <ion-list style="padding-top: 100px;" class="ion-padding">
+            <ion-menu-toggle auto-hide="false" >
+              <ion-item lines="none" (click)="gotoConnections(otherUser)">
+                <ion-icon src="assets/css/icon/account-info.svg"></ion-icon>
+                <ion-label>&nbsp;&nbsp; <strong>CONNECTIONS</strong></ion-label>
+              </ion-item>
+              <ion-item lines="none" (click)="blockUser(otherUser)" *ngIf="otherUser.is_style_concierge != '1'">
+                <ion-icon src="assets/css/icon/blocked-icon.svg"></ion-icon>
+                <ion-label>&nbsp;&nbsp; <strong>BLOCK</strong></ion-label>
+              </ion-item>
+              <ion-item lines="none" (click)="muteUser(otherUser)">
+                <ion-icon *ngIf="otherUser.isFriend === 'connected'" src="assets/css/icon/muteduser-icon.svg"></ion-icon>
+                <ion-label *ngIf="!otherUser.isMuted && otherUser.isFriend === 'connected'">&nbsp;&nbsp; <strong>MUTE</strong></ion-label>
+                <ion-label *ngIf="otherUser.isMuted && otherUser.isFriend === 'connected'">&nbsp;&nbsp; <strong>UNMUTE</strong></ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ion-list>
+        </ng-container>
+
+      </ion-content>
+
+    </ion-menu>
+
+    <ion-router-outlet id="main-content" main [swipeGesture]="false" animate="false"></ion-router-outlet>
+
+  </ion-split-pane>
+</ion-app>

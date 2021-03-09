@@ -1,0 +1,59 @@
+<ion-header mode="ios">
+	<ion-toolbar mode="ios">
+		<ion-buttons slot="start">
+			<!-- <ion-button fill="clear" (click)="dismiss('exit')"> -->
+				<ion-button fill="clear" (click)="exit()">
+				<ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.8;"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+		<ion-buttons slot="end">
+			<ion-button fill="clear" (click)="dismiss()">
+				Done
+			</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+<ion-content>
+	<div class="h-100-per">
+		<div class="h-90-per">
+			<div class="flex ai-center h-100-per">
+				   <!-- 
+					 [imageChangedEvent]="imageBase64"
+					   [imageBase64]="imageBase64"
+				   -->
+				<image-cropper *ngIf="type == 'avatar'"
+					[imageFile]="imageBase64"
+					[aspectRatio]="aspect_width / aspect_height"
+					format="jpeg"
+					(imageCropped)="imageCropped($event)"
+					roundCropper="true"
+					outputType="base64"
+				></image-cropper>
+				<image-cropper *ngIf="type != 'avatar'"
+					[imageFile]="imageBase64"
+					[aspectRatio]="aspect_width / aspect_height"
+					[canvasRotation]="rotate"
+					format="jpeg"
+					(imageCropped)="imageCropped($event)"
+					outputType="base64"
+				></image-cropper>
+				<!-- <div class="content-item rotate" (click)="rotateRight()"> 
+					<div class="crop-icon flex p-10">
+						<ion-icon mode="md" name="refresh" slot="icon-only"></ion-icon>
+					</div>
+				 </div> -->
+			</div>
+		</div>
+	</div>
+</ion-content>
+<ion-footer mode="ios" class="bg-dark">
+	<ion-grid padding-horizontal>
+		<ion-row>
+			<ion-col size="12" text-end>
+				<ion-button fill="clear" (click)="rotateRight()" no-padding>
+					<ion-icon mode="md" name="refresh" class="fs-24"></ion-icon>
+				</ion-button>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+</ion-footer>

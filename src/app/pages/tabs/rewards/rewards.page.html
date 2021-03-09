@@ -1,0 +1,372 @@
+<ion-header class="ion-padding ion-no-border">
+  <ion-toolbar>
+    <ion-title>REWARDS</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ng-progress #progressBar [color]="'#B3A25D'" [spinner]="false" [fixed]="true" [meteor]="false" [thick]="true"></ng-progress>
+
+<ion-content class="ion-no-padding">
+  <ion-refresher #refresherRef slot="fixed" 
+    (ionRefresh)="doRefresh($event)" mode="md" >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-col size="12" >
+    <ion-row class="ion-padding-horizontal" style='background: rgba(179 162 93, 0.05);'>
+      <ion-col class='flex-items-center ion-no-padding ion-padding-top' size="6" style="padding: 10px 0px;">
+        <ion-icon src="/assets/css/icon/style-points-gold.svg" class="pointsAd" style="float:left; margin-right:8px;width:20px;height:20px;"></ion-icon>
+        <h5 ion-text class="ion-no-margin" color='white'>{{ 'my wallet' | uppercase }}</h5>
+      </ion-col>
+      <ion-col class='flex-items-end ion-no-padding' size="6" style="padding: 10px 0px;" >
+        <h5 *ngIf="points" class="ion-no-margin" color='white' style="text-align: right;">{{ points + ' PTS' | uppercase }}</h5>
+        <!-- <h5 *ngIf="!points" class="fs-18 ion-no-margin" ion-text color='white' style="font-size: 15px !important;">{{ '0 PTS' | uppercase }}</h5> -->
+        <ion-spinner name="dots" *ngIf="!points" style="float:right"></ion-spinner >
+      </ion-col>
+    </ion-row>
+    <ion-row  class="ion-padding-horizontal" style='background:rgb(240,236,223);' (click)="goToMyClaimedRewards()">
+      <ion-col class='flex-items-center ion-no-padding' size="10" >
+        <ion-row (click)="goToMyRewards()">
+          <ion-col class="ion-no-padding" size="11" style="padding: 10px 0px;">
+            <img style='width: 20px; height: 20px; margin-right: 8px; float: left;' src="assets/css/icon/gold-gift.png"  (click)="goToMyClaimedRewards()">
+            <h5 ion-text class="ion-no-margin" style="padding:5px 0px;" color='white'>{{ 'My rewards' | uppercase }}</h5>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col class='flex-items-end ' size="2" class="ion-no-padding" style="padding: 10px 0px;">
+        <ion-icon no-padding class="big" src="/assets/css/icon/back-reverse.svg" style="width: 30px; height: 25px; float:right;"></ion-icon>
+      </ion-col>
+    </ion-row>
+
+    <ng-container *ngIf="rewards.length == 0 && isLoaded">
+      <ion-row class="mt-10" >
+        <ion-col  class='flex-items-center ion-padding' size="16">
+          <ion-text class="exclusive-title">Spend Your Points!</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-text>No promo available</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+
+    <ng-container *ngIf="!isLoaded">
+      <ion-row class="mt-10" >
+        <ion-col  class='flex-items-center ion-padding' size="16">
+          <ion-text class="exclusive-title">Spend Your Points!</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-skeleton-text style="width: 10px; height: 10px;"></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+
+    <ng-container *ngIf="rewards.length">
+      <ion-row class="mt-10" >
+        <ion-col  class='flex-items-center ion-padding-horizontal ion-padding-top' size="16">
+          <ion-text class="exclusive-title">Spend Your Points!</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="rewards != ''">
+      <ion-row class="slideRow">
+        <ion-col size="12" class="ion-padding-horizontal">
+          <ion-slides pager="true" [options]="slideReward">
+            <ng-container *ngFor="let item of rewards;let i = index ">
+              <ng-container *ngIf="item.isShow == '1'">
+                <ion-slide class="ion-padding-start">
+                  <!-- <img src="{{ item.photo }}" alt="" style="border-radius: 10px; height: 150px; width: 100%;"> -->
+                  <!-- <div (click)="gotoRewardsDetail(item.id)" class="img-thumbnail-holder rounded h-150 w-100-per"
+                  [ngStyle]="{'background-image': 'url('+ item.photo +')' }">
+      
+                  </div> -->
+                  <!-- <-loader
+                    useImg
+                    *ngIf="style && style.photo"
+                    src="{{ style.photo }}"
+                    fallbackUrl="assets/imgs/empty-states/fallback.svg"
+                    allbackAsPlaceholder="true"></img-loader>
+                    <img-loader
+                    useImg
+                    *ngIf="style && !style.photo"
+                    src="assets/imgs/empty-states/fallback.svg"></img-loader> -->
+                    <!-- <ion-row>
+                      <ion-col col-8 class="pull-left"><h2 text-left class="my-0 mt-10"><strong>{{ item.promo }}<span *ngIf="item.promo"> on </span>{{ item.name }}</strong></h2></ion-col>
+                      <ion-col col-4 class="pull-right text-right text-gold"><h2 text-right class="my-0 mt-10"><strong>{{ item.point_value }} PTS</strong></h2></ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col col-12>
+                        <p text-left ion-text text-wrap class="descriptionChallenges sub-text my-0 fs-14" [innerHTML]="item.description">
+      
+                        </p> -->
+                        <div >
+                  <!-- <ngx-progressive-img-loader class="img-border" (click)="goToStyleMarket(item.id)"
+                  #imagePost
+                  [height]="'150px'"
+                  [width]="'100%'"
+                  (imageLoaded)="onImgLoad($event)"
+                  (thumbnailLoaded)="onThumbLoad($event)"
+                  [img]="item.photo"
+                  [thumbnail]="item.photo"
+                  [placeholderBgColor]="'grey'"
+                  [preserveAspectRatio]="true"
+                  [overlayTint]="'rgba(0,0,0,0)'"
+                   >
+                  </ngx-progressive-img-loader> -->
+                  <div class="img-container" (click)="goToStyleMarket(item.id)">
+                  <ion-img #image2 id='image2' [src]="item.photo" (ionImgDidLoad)="ionImgDidLoadStyleMarket(item)" (ionError)="errorLoad2(item)" *ngIf="item.photo &&!item.errorImage"></ion-img>
+                  <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="item.errorImage" ></ion-img>
+                  <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="item && !item.photo" ></ion-img>
+                  <div *ngIf="!item.isLoadedStyleMarket" class="spinner2">
+                    <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+                  </div>
+                </div>
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-row>
+                        <ion-col size="8" class="ion-text-start">
+                          <strong><ion-text class="title-text rewards-title" [innerHTML]="item.promo" style="padding:0px;"></ion-text></strong>
+                        </ion-col>
+                        <ion-col size="4" class="ion-text-end">
+                          <ion-text color="primary" class="title-text"><strong>{{item.point_value}}&nbsp;</strong><strong *ngIf="item.point_value < 2">PT </strong> <strong *ngIf="item.point_value > 1">PTS</strong></ion-text>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col class="ion-text-start">
+                          <strong><ion-text class="title-text rewards-description" [innerHTML]="item.name"></ion-text></strong>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+                  </ion-row>
+                  <!-- <ion-row>
+                    <ion-col size="6" class="ion-text-start">
+                      <ion-button fill="outline" color="primary" expand=" block" (click)="goToStyleChallenges(item.id)">LEARN MORE</ion-button>
+                    </ion-col>
+                  </ion-row> -->
+                 </div>
+                      <!-- </ion-col> -->
+                    <!-- </ion-row> -->
+                </ion-slide>
+              </ng-container>
+            </ng-container>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+    <ng-container *ngIf="exclusives.length && showRewardExclusive">
+      <ion-row class="mt-30">
+        <ion-col class='flex-items-center ion-padding' size="12">
+          <span class="exclusive-title">Exclusive Deals</span>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="!exclusives.length">
+          <ion-col class="ion-text-center">
+            <ion-text>No exclusives available</ion-text>
+          </ion-col>
+      </ion-row>  
+      <ion-row *ngIf="exclusives !=''">
+        <ion-col col-12 class="ion-padding-horizontal">
+          <ion-slides pager="true" [options]="slideReward">
+            <ng-container *ngFor="let item of exclusives;let i = index ">
+              <ng-container *ngIf="item.isShow == '1'">
+                <ion-slide class="" >
+                  <!-- <img src="{{ item.photo }}" alt="" style="border-radius: 10px; height: 150px; width: 100%;"> -->
+                  <div>
+                    <div class="img-container" (click)="goToStyleMarket(item.id)">
+                      <div class="tiertag d-flex align-items-center" style="z-index: 999999;">
+                        <svg style="margin-right:10px;z-index:999999" width="23" height="15" viewBox="0 0 23 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M19.7159 14.7274L14.9208 11.9835L9.63814 14.75C10.0378 12.8544 10.4374 10.9593 10.8371 9.06457L6.95642 4.80488H12.033L14.5653 0L16.9029 4.80455H22.0606L18.651 9.12294L19.7159 14.7274ZM14.9466 10.9309L18.4342 12.9265L17.7805 9.48696C17.751 9.25552 17.7213 9.0242 17.6913 8.79298L20.1489 5.73536H16.3289L14.5325 2.04415L12.5876 5.73536H9.05441L11.83 8.78219L11.0479 12.9096L14.9466 10.9309Z" fill="#B3A25D"/>
+                          <path d="M9.67308 4.11158L8.68457 4.10247C9.44589 2.7352 10.2073 1.36771 10.9689 0H11.9071C11.1623 1.37064 10.4177 2.74116 9.67308 4.11158Z" fill="white"/>
+                          <path d="M7.86351 4.11158L6.875 4.10247C7.63833 2.7352 8.40178 1.36771 9.16534 0H10.0925L7.86351 4.11158Z" fill="white"/>
+                          <path d="M11.505 4.11158L10.5165 4.10247C11.2814 2.7352 12.0465 1.36771 12.8118 0H13.7501C13.0015 1.37064 12.2531 2.74116 11.505 4.11158Z" fill="white"/>
+                          <path d="M8.86381 14.746L7.97917 14.7487L9.13188 9.40634L4.6886 4.81299H5.90397L10.0815 9.13138L8.86381 14.746Z" fill="white"/>
+                          <path d="M7.16018 14.7487H6.26617C6.6265 13.1043 6.98694 11.4598 7.3475 9.81523L2.35132 4.81299H3.59115L8.30116 9.53319L7.16018 14.7487Z" fill="white"/>
+                          <path d="M5.44922 14.7487H4.55185C4.89475 13.2494 5.23744 11.7502 5.5799 10.2511L0 4.81299H1.24553L6.53993 9.96435C6.17625 11.5592 5.81267 13.154 5.44922 14.7487Z" fill="white"/>
+                          <path d="M8.34143 5.272L11.2902 8.73549L10.486 13.3912L14.6451 11.3896L18.9524 13.7738L18.2152 8.93791L21.2759 5.09184H16.7857L14.6451 0.953613L12.4516 5.04697L8.34143 5.272Z" fill="white"/>
+                        </svg>
+                        {{ getTierName( item.tier )}}
+                        <div class="triangle"></div>
+                      </div>
+                    <ion-img #image2 id='image2' [src]="item.photo" (ionImgDidLoad)="ionImgDidLoadExclusive(item)" (ionError)="errorLoad2(item)" *ngIf="item.photo &&!item.errorImage"></ion-img>
+                    <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="item.errorImage" ></ion-img>
+                    <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="item && !item.photo" ></ion-img>
+                    <div *ngIf="!item.isLoadedExclusive" class="spinner2">
+                      <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+                    </div>
+                  </div>
+                    <!-- <ion-row>
+                      <ion-col size="12">
+                        <p text-left ion-text text-wrap class="descriptionChallenges sub-text my-0 fs-14" [innerHTML]="item.description">
+                        </p>
+                      </ion-col>
+                    </ion-row> -->
+
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-row>
+                          <ion-col size="8" class="ion-text-start">
+                            <ion-text class="title-text exclusive-title"><strong>{{item.promo}}</strong></ion-text>
+                          </ion-col>
+                          <ion-col size="4" class="ion-text-end">
+                            <ion-text color="primary" class="title-text"><strong>{{item.point_value}} &nbsp;</strong> <strong *ngIf="item.point_value < 2">PT</strong> <strong *ngIf="item.point_value > 1">PTS</strong></ion-text>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col class="ion-text-start">
+                            <ion-text class="title-text exclusive-description"><strong>{{item.name}}</strong></ion-text>
+                          </ion-col>
+                        </ion-row>
+                      </ion-col>
+                    </ion-row>
+                   </div>
+                  
+                  <!-- <div (click)="gotoRewardsDetail(item.id)" class="img-thumbnail-holder rounded h-150 w-100-per"
+                  [ngStyle]="{'background-image': 'url('+ item.photo +')' }">
+      
+                  </div> -->
+                    <!-- <ion-row>
+                      <ion-col size="8" class="pull-left"><h2 text-left class="my-0 mt-10"><strong>{{ item.promo }} on {{ item.name }}</strong></h2></ion-col>
+                      <ion-col size="4" class="pull-right text-right text-gold"><h2 text-right class="my-0 mt-10"><strong>{{ item.point_value }} PTS</strong></h2></ion-col>
+                    </ion-row> -->
+                    <!-- <ion-row>
+                      <ion-col size="12">
+                        <p text-left ion-text text-wrap class="descriptionChallenges sub-text my-0 fs-14" [innerHTML]="item.description">
+                        </p>
+                      </ion-col>
+                    </ion-row> -->
+                </ion-slide>
+              </ng-container>
+            </ng-container>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+  
+    <ng-container *ngIf="style_challenges">
+      <ion-row class="ion-padding-top">
+        <ion-col size="12" style="padding:0px 17px;">
+            <ion-text style="display: block;" >
+              <ion-text class="customH5v2 ion-no-margin"><strong>STYLE CHALLENGES</strong> </ion-text>
+            </ion-text>
+            <ion-text style="display: block;">
+              <p class="descriptionChallenges padding-top ion-no-margin">Earn extra style points by participating with our ongoing challenges.</p>
+            </ion-text>
+        </ion-col>
+      </ion-row>
+
+      <ng-container *ngIf="style_challenges_count == 0">
+        <ion-row class="ion-padding-top">
+          <ion-col class="ion-text-center ion-padding-top">
+            <ion-text>No Style Challenges available</ion-text>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+      
+     <ng-container *ngIf="style_challenges_count !=0">
+  
+      <ion-row class=" slideChallenges">
+        <ion-col size="12" class=" ion-padding-horizontal">
+          <ion-slides pager="true" [options]="slideChallenges">
+            <ng-container *ngFor="let carousel of style_challenges;let i = index ">
+              <ng-container *ngIf="carousel.isShow == '1'">
+                <ion-slide>
+                  <!-- <img src="{{ carousel.photo }}" alt="" style="border-radius: 10px; height: 150px; width: 100%;"> -->
+                 <div>
+                  <!-- <ngx-progressive-img-loader class="img-border"
+                  #imagePost
+                  [height]="'150px'"
+                  [width]="'100%'"
+                  (imageLoaded)="onImgLoad($event)"
+                  (thumbnailLoaded)="onThumbLoad($event)"
+                  [img]="carousel.photo"
+                  [thumbnail]="carousel.photo"
+                  [placeholderBgColor]="'grey'"
+                  [preserveAspectRatio]="true"
+                  [overlayTint]="'rgba(0,0,0,0)'"
+                   >
+                  </ngx-progressive-img-loader> -->
+                  <div class="img-container">
+                    <ion-img #image id='image2' (ionImgDidLoad)="ionImgDidLoadStyleChallenge(carousel)" [src]="carousel.photo" (ionError)="errorLoad(carousel)" *ngIf="carousel.photo &&!carousel.errorImage"></ion-img>
+                  <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="carousel.errorImage" ></ion-img>
+                  <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="carousel && !carousel.photo" ></ion-img>
+                  <div *ngIf="!carousel.isLoadedStyleChallenges" class="spinner">
+                    <ion-spinner  name="crescent" class="spinner-circle-style-challenges"></ion-spinner>
+                  </div>
+                </div>
+                  <ion-row>
+                    <ion-col class="ion-text-start">
+                      <ion-text class="title-text"><strong>{{carousel.challenge_title}}</strong></ion-text>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="6" class="ion-text-start">
+                      <ion-button fill="outline" color="primary" expand=" block" (click)="goToStyleChallenges(carousel.id)">LEARN MORE</ion-button>
+                    </ion-col>
+                  </ion-row>
+                 </div>
+                  <!-- <div class="img-thumbnail-holder rounded h-150 w-100-per"
+                  [ngStyle]="{'background-image': 'url('+ carousel.photo +')' }">
+    
+                  </div> -->
+                  <!-- <-loader
+                    useImg
+                    *ngIf="style && style.photo"
+                    src="{{ style.photo }}"
+                    fallbackUrl="assets/imgs/empty-states/fallback.svg"
+                    allbackAsPlaceholder="true"></img-loader>
+                    <img-loader
+                    useImg
+                    *ngIf="style && !style.photo"
+                    src="assets/imgs/empty-states/fallback.svg"></img-loader> -->
+                </ion-slide>
+              </ng-container>
+            </ng-container>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+     </ng-container>
+    </ng-container>
+   
+    <!-- <ion-row  >
+      <ion-col size="12" >
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-icon src="assets/css/icon/style-points-gold.svg"style="zoom: 0.8;"></ion-icon>
+          <ion-label class="item-text ion-paddin-horizontal"><b>&nbsp;&nbsp;MY WALLET</b></ion-label>
+          <ion-text class="ion-text-right item-text"> 0 PTS</ion-text>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row padding-left style='background: rgba(178, 161, 92, 0.2);' class="row-no-padding">
+      <ion-col class="ion-text-start">
+        <img style='width: 20px; height: 20px; margin-right: 8px;' src="assets/icon/gold-gift.png" />
+        <ion-text class="item-text"><b>{{ 'My rewards' | uppercase }}</b></ion-text>
+        <ion-col class="ion-text-right">
+          <ion-icon src="assets/css/icon/back-reverse.svg"></ion-icon>
+        </ion-col>
+       </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <h3>Spend Your Points!</h3>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <img src="https://getstylin.com/public/deploy1599536530/images/lns/gs/L2ltYWdlcy91cGxvYWRzL3N0eWxlcy85/type/toheight/height/400/allow_enlarge/0/1594837016_vwxh3ajkg9raqox3nbgi.jpg"
+        style="border-radius: 10px; height: 200px; width: 90%;">
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6" class="ion-text-left">
+        <h3>Buy 1 Take 1 on Bohemian Dress</h3>
+      </ion-col>
+      <ion-col size="6" class="ion-text-right">
+        <h3>120 PTS</h3>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-text>Get this item twice with a price of one</ion-text>
+    </ion-row> -->
+  </ion-col>
+</ion-content>

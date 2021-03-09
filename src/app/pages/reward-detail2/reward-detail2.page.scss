@@ -1,0 +1,44 @@
+ion-text{
+    font-family: 'Raleway' !important;
+}
+.text-promo{
+    font-size: 15px !important;
+    font-family: 'sans-serif' !important;
+}
+.code-text{
+    font-size: 18px !important;
+}
+ion-button{
+    font-family: 'Raleway' !important;
+}
+ion-card{
+    border-radius: 5px !important;
+    background: rgb(240,236,223) !important;
+}
+.url-text{
+    font-size: 18px !important;
+    width: 14.6em !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis; 
+    height: 24px;
+}
+.img-container{
+    border-radius: 10px !important;
+    overflow: hidden;
+}
+.spinner{
+    background-color: gray !important;
+    border-radius: 10px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 200px;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+  } 
+  .spinner-circle-style-challenges{
+    top: 84px;
+    left: 151px;
+  }

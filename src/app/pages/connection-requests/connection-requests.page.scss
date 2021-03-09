@@ -1,0 +1,26 @@
+ion-searchbar{
+    font-family: 'Raleway' !important;
+}
+img-loader{
+    border-radius: 50% !important;
+}
+ion-text{
+    font-family: 'Roboto' !important;
+    font-size: 15px !important;
+}
+.spinner2{
+    background-color: gray !important;
+    border-radius: 50%;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 52px;
+    width: 52px;
+    top: 12px;
+    left: 2px;
+  } 
+  .spinner-circle{
+    top: 11px;
+    left: 12px;
+  }

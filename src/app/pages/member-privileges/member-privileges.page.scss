@@ -1,0 +1,100 @@
+ion-segment{
+    border-style: solid !important;
+        border-color: white !important;
+    border-radius: 0px !important;
+    ion-segment-button{
+        // --indicator-color : transparent!important;
+        // --indicator-border-radius: 0px !important;
+        // margin: 0px !important;
+        // border-color: white !important;
+        // border-style: solid !important;
+        // // border-width: 1.5px !important;
+        // background: rgba(179, 162, 93, 0.15);
+        // height: 75px;
+        // width: 90px !important;
+        // border-top-left-radius: 0 !important;
+        // border-top-right-radius: 0 !important;
+        // border-bottom-right-radius: 0 !important;
+        // border-radius: 0px !important;
+        // border-bottom-left-radius: 0 !important;
+        border-style: solid !important;
+        border-color: white !important;
+        --indicator-box-shadow: transparent!important;
+          border-radius: 0em !important;
+          padding: 0px!important;
+          height: 75px !important;
+        width: 90px !important;
+          margin: 0;
+          --background-checked: #B3A25D!important;
+          --color-checked:white!important;
+          --indicator-color : transparent!important; 
+          .segment-button-disabled{
+              opacity: 0 !important;
+          }
+        ion-label{
+            font-family: 'Raleway' !important;
+            font-size: 10px !important;
+            // font-weight: 600 !important;
+        }
+    //    .segment-button-checked{
+    //        opacity: 0 !important;
+    //    }
+    }
+    
+}
+
+
+.title{
+    font-family: 'Raleway' !important;
+    font-size: 15px !important;
+}
+.subtitle{
+    font-size: 14px !important;
+}
+strong{
+    font-family: 'Raleway' !important;
+    font-size: 14px !important;
+}
+ion-progress-bar{
+    height: 6px !important;
+    --background: lightgray;
+}
+.points{
+    font-size: 13px !important;
+}
+.profile-points{
+    font-family: 'Raleway' !important;
+    font-size: 20px !important;
+}
+h5.gold-text{
+    color: #B3A25D;;
+}
+.img-container{
+    border-radius: 10px !important;
+    width: 250px !important;
+    height: 130px !important;
+    overflow: hidden;
+    ion-img{
+        height: 130px !important;
+        display: block !important;
+        width: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+    }
+}
+.spinner{
+    background-color: gray !important;
+    border-radius: 10px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 131px;
+    width: 255px;
+    top: 0px;
+    left: 0px;
+  } 
+  .spinner-circle-style-challenges{
+    top: 48px;
+    left: 5px;
+  }

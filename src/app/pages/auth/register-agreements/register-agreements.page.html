@@ -1,0 +1,29 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-buttons slot="start" (click)="back()">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <div id="absolute-center-container" class="padded-lr">
+    <div id="agreement-container">
+      <ion-row class="ion-padding-bottom">
+        
+          <ion-text class="title"><strong>Before you join</strong></ion-text>
+      
+      </ion-row>
+      <ion-row>
+        <ion-text class="subtext">
+          By signing up, you hereby agree to GET STYLIN's <a class="highlighted" tappable (click)="pushTermsModal()"><ion-text color="primary">Terms and Conditions</ion-text></a>
+          and <a class="highlighted" (click)="pushPrivacyModal()"><ion-text color="primary">Privacy Policy</ion-text></a>.
+        </ion-text>
+      </ion-row>
+
+      <div id="control-container">
+        <ion-button (click)="decline()" class="ion-padding-end" color="secondary" size="medium"><strong>Decline</strong></ion-button>
+        <ion-button (click)="accept()" ><strong>Accept</strong></ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

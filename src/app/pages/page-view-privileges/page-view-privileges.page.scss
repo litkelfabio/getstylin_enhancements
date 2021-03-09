@@ -1,0 +1,182 @@
+// page-pages-view-privilege {
+//     .progress-outer{
+//         margin: 0px !important;
+//         width: 100% !important;
+//           padding: 0 !important;
+//           background-color: #B6B7AD !important;
+//           border-radius: 0 !important;
+//       }
+//       .progress-inner{
+//           height: 18px !important;
+//       }
+
+//     .buttonModification{
+//         background: rgba(179, 162, 93, 0.15);
+//         height: 57px;
+//         width: 79.51px;
+//     }
+
+//     .tier-switcher {
+//         padding: 16px 12px;
+//       }
+
+//     ion-icon{
+//         padding-top: 11px;
+//     }
+
+//   .segment-ios .segment-button{
+//       border-color: white !important;
+//       border-style: solid !important;
+//       border-width: 1.5px !important;
+//       background: rgba(182, 183, 173, 0.20);
+//       height: 78px;
+//       width: 79.51px;
+//       border-top-left-radius: 0 !important;
+//       border-top-right-radius: 0 !important;
+//       border-bottom-right-radius:0 !important;
+//       border-bottom-left-radius: 0 !important;
+//   }
+//   .segment-button.segment-activated{
+//       background-color: #B3A25D !important;
+//       ion-label{
+
+//           color: #ffffff !important;
+//       }
+//       ion-icon{
+//           filter: brightness(3);
+//       }
+//   }
+
+//     .ranks{
+//         font-size: 2.5vw !important;
+//         margin-top: -1.3rem !important;
+//     }
+
+//     .privilege-header {
+//         border: solid transparent 1px;
+//         background: rgba(179,162,93,0.75);
+//         color: white;
+//         border-radius: 12px 12px 0px 0px;
+//     }
+
+//     .privilege-body {
+//         border-color: rgba(182, 183, 173, 100);
+//         border: 1px solid rgba(182, 183, 173, 100);
+//         border-radius: 0px 0px 12px 12px;
+//     }
+
+//     .privilege-icon {
+//         width: 35px;
+//         padding-top: 0px;
+//     }
+
+//     .check-icon {
+//         color: rgb(179,162,93);
+//         font-size: 24px;
+//     }
+// }
+
+// .list-ios>.item-block:first-child {
+//     border-top: none;
+// }
+// .list-ios>.item-block:last-child {
+//     border-bottom: none;
+// }
+// ion-segment-button{
+//     margin: 0px !important;
+//     border-color: white !important;
+//     border-style: solid !important;
+//     // border-width: 1.5px !important;
+//     background: rgba(179, 162, 93, 0.15);
+//     height: 75px;
+//     width: 90px !important;
+//     border-top-left-radius: 0 !important;
+//     border-top-right-radius: 0 !important;
+//     border-bottom-right-radius: 0 !important;
+//     border-radius: 0px !important;
+//     border-bottom-left-radius: 0 !important;
+//     ion-label{
+//         font-family: 'Raleway' !important;
+//         font-size: 10px !important;
+//     }
+//     .segment-button-indicator-background {
+//         border-radius: 0px !important;
+//         background: red !important;
+//     }
+// }
+ion-segment{
+    border-style: solid !important;
+        border-color: white !important;
+    border-radius: 0px !important;
+    ion-segment-button{
+        // --indicator-color : transparent!important;
+        // --indicator-border-radius: 0px !important;
+        // margin: 0px !important;
+        // border-color: white !important;
+        // border-style: solid !important;
+        // // border-width: 1.5px !important;
+        // background: rgba(179, 162, 93, 0.15);
+        // height: 75px;
+        // width: 90px !important;
+        // border-top-left-radius: 0 !important;
+        // border-top-right-radius: 0 !important;
+        // border-bottom-right-radius: 0 !important;
+        // border-radius: 0px !important;
+        // border-bottom-left-radius: 0 !important;
+        border-style: solid !important;
+        border-color: white !important;
+        --indicator-box-shadow: transparent!important;
+          border-radius: 0em !important;
+          padding: 0px!important;
+          height: 75px !important;
+        width: 90px !important;
+          margin: 0;
+          --background-checked: #B3A25D!important;
+          --color-checked:white!important;
+          --indicator-color : transparent!important; 
+         
+        ion-label{
+            font-family: 'Raleway' !important;
+            font-size: 10px !important;
+            // font-weight: 600 !important;
+        }
+    //    .segment-button-checked{
+    //        opacity: 0 !important;
+    //    }
+    }
+    
+}
+.customH6{
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+    font-family: 'Raleway' !important;
+}
+
+ion-progress-bar{
+    height: 6px !important;
+    --background: lightgray;
+}
+.privilege-icon{
+    zoom: 3;
+    padding-top: 5px;
+}
+.privilege-header{
+    background-color: #b1a266d6;
+}
+ion-card{
+    border-radius: 10px !important;
+}
+.privilege-title{
+    color: white;
+    font-size: 15px !important;
+    margin: 15px 0px 10px 0px !important;
+}
+ion-item{
+    width: 95% !important;
+}
+.check-icon{
+    zoom: 0.6 !important;
+}
+.privilege-name{
+    font-family: 'Raleway' !important;
+}

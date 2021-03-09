@@ -1,0 +1,23 @@
+ion-content{
+    --ion-background-color:#B3A25D;
+}
+.modal-text{
+    font-size: 16px;
+    font-weight: 1000 !important;
+    //line-height: 5px;
+    //font-style: 'san-serif';
+    color: white;
+    font-family: 'Raleway' !important;
+    margin-bottom: 3px;
+}
+.modal-subtext{
+    font-size: 13px;
+    display: block;
+    //line-height: 5px;
+    //font-style: 'san-serif';
+    color: white;
+    font-family: 'Raleway' !important;
+}
+ion-img{
+    width: 70%;
+}

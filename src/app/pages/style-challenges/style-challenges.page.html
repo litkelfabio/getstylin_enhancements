@@ -1,0 +1,98 @@
+<ion-header class="ion-no-border ion-padding-top">
+  <ion-toolbar>
+    <ion-title>{{ "style challenges"| uppercase}}</ion-title>
+    <ion-buttons slot="start" class="ion-no-padding">
+      <ion-icon slot="icon-only" src="assets/css/icon/back.svg" (click)="back()" style="zoom: 0.5; padding-left: 20px;"></ion-icon>
+    </ion-buttons>
+   </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="challenge_details">
+    <ion-row class="set-padding-0-12-16-12" >
+      <ion-col col-12 >
+        <ng-container *ngIf="img">
+          <!-- <ngx-progressive-img-loader class="img-border"
+                    #imagePost
+                    [height]="'200px'"
+                    [width]="'100%'"
+                    (imageLoaded)="onImgLoad($event)"
+                    (thumbnailLoaded)="onThumbLoad($event)"
+                    [img]="img"
+                    [thumbnail]="img"
+                    [placeholderBgColor]="'grey'"
+                    [preserveAspectRatio]="true"
+                    [overlayTint]="'rgba(0,0,0,0)'"
+                     >
+                    </ngx-progressive-img-loader> -->
+                    <div class="img-container">
+                      <ion-img #image id='image2' [src]="img"  (ionError)="errorLoad(img)" *ngIf="img &&!img.errorImage"></ion-img>
+                    <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="img.errorImage" ></ion-img>
+                    <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="img && !img" ></ion-img>
+                  </div>         
+        </ng-container>
+        <ng-container *ngIf="!img">
+          <img src="assets/css/imgs/placeholder.png">
+        </ng-container>
+        <!-- <div *ngIf="challenge_details" class="rounded img-thumbnail-holder w-100-per" [ngStyle]="{'background-image': 'url('+ challenge_details.photo +')'}">
+        </div> -->
+        <ion-row class="ion-padding-top">
+          <ion-text class="title-text" *ngIf="challenge_details" ><strong>{{ challenge_details.challenge_title }}</strong></ion-text>
+        </ion-row>
+        <ion-text class="body-text">
+          <div *ngIf="challenge_details" [innerHTML]="challenge_details.description"></div>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <!-- <ion-row class="set-padding-0-12-16-12" style="margin-bottom:60px">
+      <ion-col>
+        <ion-list col-12 no-lines no-padding>
+          <button (click)="expandItem(item)" ion-item item-start *ngFor="let item of items" no-padding (click)="clickTerms()">
+            <p>terms and conditions</p>
+            <ng-container *ngIf="seeTerms">
+              <ion-text *ngIf="challenge_details">
+                <div text-left ion-text text-wrap class="reward-detail-description" [innerHTML]="challenge_details.terms_condition"></div>
+              </ion-text>
+            </ng-container>
+          </button>
+        </ion-list>
+      </ion-col>
+    </ion-row> -->
+  
+      <ion-item lines="none" (click)="clickTerms()">
+       <ion-icon src="assets/css/icon/back-reverse.svg" slot="end"></ion-icon>
+       <ion-col class="ion-text-start">
+        <ion-text color="medium" class="reward-detail-description">terms and conditions</ion-text>
+        <ng-container *ngIf="seeTerms">
+          <ng-container *ngIf="challenge_details">
+            <div class="reward-detail-description ion-no-padding" [innerHTML]="challenge_details.terms_condition"></div>
+          </ng-container>
+        </ng-container>
+       </ion-col>
+      </ion-item>
+  
+    <ion-row *ngIf="!hideJoinButton" class="set-padding-0-12-16-12"  
+    style="
+      position: relative;
+      bottom: 0px;
+      width: 100%;
+      background: white;">
+      <ion-col col-12>
+        <ion-button *ngIf="!alreadyJoined" fill="outline" color="primary" expand="block" (click)="joinNowButton()">{{'join now'| uppercase}}</ion-button>
+        <ion-button *ngIf="alreadyJoined" disabled fill="outline" color="primary" expand="block" class="disabled" >{{'already joined'| uppercase}}</ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+  <!-- Skeleton screen -->
+  <div *ngIf="!challenge_details">
+    <div class="ion-padding custom-skeleton">
+      <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 50%;height: 50px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,253 @@
+<ion-header class="ion-no-border ion-padding-vertical">
+  <ion-toolbar>
+    <ion-title>{{'messages' | uppercase}}</ion-title>
+    <ion-buttons slot="start" class="ion-padding-start" (click)="back()">
+        <ion-icon src="assets/css/icon/back.svg"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+ 
+</ion-header>
+<ng-progress style="z-index: 2;" #progressBar [color]="'#B3A25D'" [spinner]="false" [fixed]="true" [meteor]="false" [thick]="true"></ng-progress>
+<ion-content class="ion-no-padding">
+  <ion-refresher slot="fixed" #refresherRef (ionRefresh)="doRefresh($event)" mode="md" >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-fab vertical = "bottom" horizontal = "end" slot="fixed">
+    <ion-fab-button color="light" (click)="goToMessageUserModal()">
+      <ion-icon name = "add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-searchbar #searchBar class="search-bar-messages" debounce="100" placeholder="Search conversations" (ionChange)='searchConvo($event)' (ionCancel)="restoreCachedMessages()"></ion-searchbar>
+  <ion-row *ngIf="showSpinner">
+    <ion-col class="ion-text-center ion-no-padding" >
+      <div>
+        <ion-spinner color="primary" class="spinner"></ion-spinner>
+      </div>
+    </ion-col>
+  </ion-row>
+  <div class="error" *ngIf="isFaulted">
+    <ion-row class="ion-padding">
+      <ion-col siz="9">
+        <ion-text> Cannot get conversations right now.</ion-text>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button fill="outline" size="small" mode="ios"  (click)="doRefresh('reload')">Retry</ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+  
+
+  <div class="empty" *ngIf="!pageIsLoading && convos && convos.length == 0 && !isSearching && !isFaulted">
+    <ion-row class="ion-padding">
+      <ion-col class="ion-text-center">
+        <ion-text>You have no conversations with anyone yet.</ion-text>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div class="empty" *ngIf="!pageIsLoading && convos && convos.length == 0 && isSearching && !isFaulted">
+    <ion-row class="ion-padding">
+      <ion-col class="ion-text-center">
+        <ion-text>No conversations found.</ion-text>
+      </ion-col>
+    </ion-row>
+  </div>
+
+
+  <ng-container *ngIf="!isFaulted && !pageIsLoading && convos && convos.length > 0">
+    <ion-item-sliding *ngFor="let convo of convos; index as i">
+      <ion-item lines="none" (click)="openMessageModal(convo, i)">
+        <ion-col size="2" style="padding-top: 10px;" class="ion-no-padding">
+          <ion-avatar style="position: relative;">
+            <!-- <ion-img *ngIf="convo && convo.other_img_url && convo.isBlocked == false && convo.blockedBy == false"
+            src="{{ convo.other_img_url }}" fallbackUrl="assets/css/imgs/placeholder.png" fallbackAsPlaceholder="true" ></ion-img>
+            <ion-img *ngIf="convo && !convo.other_img_url || (convo.isBlocked == true || convo.blockedBy == true)"
+            src="assets/css/imgs/placeholder.png" ></ion-img> -->
+            <ion-img #image [src]="convo.other_img_url" (ionImgDidLoad)="isLoadedImg2(convo)" (ionError)="errorLoad(convo)" *ngIf="convo && convo.other_img_url && convo.isBlocked == false && convo.blockedBy == false && !convo.errorImage"></ion-img>
+            <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="convo.errorImage" ></ion-img>
+            <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="convo && !convo.other_img_url"></ion-img>
+            <ion-img src="/assets/css/imgs/icon-getstylin.png" (ionImgDidLoad)="isLoadedImg3(convo)" *ngIf="convo.isBlocked == true || convo.blockedBy == true"></ion-img>
+            <div *ngIf="!convo.isLoadedProfile" class="spinner2">
+              <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+            </div>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="8.5" class="ion-padding-top" >
+          <ion-row class="ion-no-padding">
+            <ion-col size="12" class="ion-no-padding">
+              <ion-text *ngIf="convo.isBlocked == true || convo.blockedBy == true"><strong>GET STYLIN' User</strong></ion-text>
+              <ion-text class="ion-no-padding convo-name" *ngIf="convo.isBlocked == false && convo.blockedBy == false"><b>{{ convo.other_first_name }} {{ convo.other_last_name }} </b>
+                <ng-container *ngIf="convo.read_at == '' || convo.read_at == null">
+                  <div class="badge-primary"></div>
+                </ng-container>
+              </ion-text>
+            </ion-col>
+            <ion-col size="12" class="ion-no-padding">
+              <ion-text class="convo-text">{{ convo.last_message }}</ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size="1.5" style="padding-right: 8px !important;">
+          <ion-text class="ion-no-padding" style="font-size: 10px;" color="medium"
+          *ngIf="convo.isBlocked == false && convo.blockedBy == false"><b>{{ getMomentFormat(convo.update_at) | timezone }}</b></ion-text>
+        </ion-col>
+      </ion-item>
+      <ion-item-options side="end" lines="none">
+        <ion-button mode="md" style="height: 62px;
+        --border-radius: 0px;" color="danger" expand="block" (click)="promptDeleteConvo(convo)">
+          <ion-icon name="remove-circle"></ion-icon>
+        </ion-button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ng-container>
+
+<!-- SKELETAL LOADER ONLY! -->
+  <div *ngIf="pageIsLoading">
+    <div class="ion-padding custom-skeleton">
+      <ion-row>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          </ion-row>
+          <ion-row>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-top">
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          </ion-row>
+          <ion-row>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-top">
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          </ion-row>
+          <ion-row>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-top">
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          </ion-row>
+          <ion-row>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-top">
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          </ion-row>
+          <ion-row>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-top">
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          </ion-row>
+          <ion-row>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-top">
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          </ion-row>
+          <ion-row>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-top">
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          </ion-row>
+          <ion-row>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-top">
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          </ion-row>
+          <ion-row>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+  <ion-infinite-scroll #infiniteScroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content>
+      <ion-text *ngIf="isLoadedMessage" style="font-family: 'Raleway' !important;">No more message left</ion-text>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

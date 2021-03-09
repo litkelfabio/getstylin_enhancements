@@ -1,0 +1,264 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar *ngIf="!show">
+    <ion-title *ngIf="type">{{type | uppercase}}</ion-title>
+    <ion-title *ngIf="!type">{{'connection requests' | uppercase}}</ion-title>
+    <ng-container *ngIf="!isNotified">
+      <ion-buttons slot="start" (click)="back()">
+        <ion-icon src="assets/css/icon/back.svg"  ></ion-icon>
+      </ion-buttons>
+    </ng-container>
+    <ng-container *ngIf="isNotified">
+      <ion-buttons slot="start" (click)="backRoot()">
+        <ion-icon  src="assets/css/icon/back.svg"  ></ion-icon>
+    </ion-buttons>
+    </ng-container>
+    <ion-buttons slot="end" (click)="showsearchBar(true)">
+      <ion-icon slot="end" src="assets/css/icon/active-discover.svg" ></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="show" class="ion-padding-top">
+    <ion-searchbar debounce="500" placeholder="Search for users" (ionInput)="searchUser($event)" showCancelButton="focus" cancelButtonText="Cancel" (ionCancel)="showsearchBar(false)"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ng-progress #progressBar [color]="'#B3A25D'" [spinner]="false" [fixed]="true" [meteor]="false" [thick]="true"></ng-progress>
+<ion-content class="ion-padding-vertical">
+  <ng-container >
+    <ion-refresher #refresherRef slot="fixed" (ionRefresh)="doRefresh($event)" mode="md" >
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+   </ng-container>
+  <!-- <div class="padded-lr">
+    <ion-list lines="none" class="ion-no-margin">
+      <ng-container *ngIf="!isLoaded && !otherUser">
+        <ion-row>
+          <ion-item size="9" class="ion-padding-bottom" >
+            <ion-skeleton-text animate style="height:12px; width:50%"></ion-skeleton-text>
+          </ion-item>
+          <ion-item size="3" class="ion-no-padding ion-margin-bottom" >
+            <ion-skeleton-text animate style="height:39.36px"></ion-skeleton-text>
+          </ion-item>
+        </ion-row>
+      </ng-container>
+    </ion-list>
+  </div> -->
+
+  <!-- <div class="padded-lr-grid">
+    <ion-row *ngIf="isLoaded && !otherUser && type == 'connections'" class="ion-padding-bottom">
+      <ng-container *ngIf="requestCount != 0 || requestCount">
+        <ion-col size="9">
+          <h6 class="ion-no-margin"> {{ profileInfo.profile_first_name }}, you have {{ requestCount != 0 ? requestCount : 'no'  }} connection requests waiting for your response.</h6>
+        </ion-col>
+        <ion-col size="3">
+          <ion-button mode="ios" block strong small class="ellipsis ion-no-margin " tappable (click)="goToConnectionRequests()">{{ "View" | uppercase }}</ion-button>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </div> -->
+
+      <ng-container *ngIf="isLoaded && items && items.length > 0">
+        <ion-item *ngFor="let item of items; let i = index">
+          <!-- <ion-item col-2 no-padding margin-bottom>
+            <ion-avatar tappable (click)="gotoProfile(item)">
+              <img-loader  *ngIf="item && item.profile_profile_pic" src="{{ item.profile_profile_pic }}" fallbackUrl="assets/imgs/empty-states/no-user-photo.png" fallbackAsPlaceholder="true"></img-loader>
+              <img-loader *ngIf="item && !item.profile_profile_pic" src="assets/imgs/empty-states/no-user-photo.png"></img-loader>
+            </ion-avatar>
+          </ion-item>
+          <ion-item col-6 no-padding margin-bottom>
+            <h4 ion-text class="ellipsis" tappable (click)="gotoProfile(item)">{{ item.profile_first_name }} {{ item.profile_last_name }}</h4>
+            <p ion-text *ngIf="item.stylist == 1" color="t-gold" class="style">STYLIST</p>
+          </ion-item>
+          <ng-container>
+            <ion-item col-4 no-padding margin-bottom *ngIf="type == 'blocked accounts'">
+              <button mode="ios" ion-button block strong small class="ellipsis" tappable (click)="confirm(item)" *ngIf="!item.isBlocked">{{ "Block" | uppercase }}</button>
+              <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item)" *ngIf="item.isBlocked">{{ "Unblock" | uppercase }}</button>
+            </ion-item>
+            <ion-item col-4 no-padding margin-bottom *ngIf="type == 'connections'">
+              <ng-container *ngIf="item.isBlocked">
+                  <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, 'block')">{{ "Unblock" | uppercase }}</button>
+              </ng-container>
+              <ng-container *ngIf="!item.isBlocked">
+                <button mode="ios" ion-button block strong small class="ellipsis" tappable (click)="confirm(item, null, 'unconnected')" *ngIf="item.isFriend == 'unconnected'" [hidden]="profileInfo['id'] == item.id">{{ "Connect" | uppercase }}</button>
+                <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, null, 'pending')" *ngIf="item.isFriend == 'pending'" [disabled]="profileInfo['id'] == item.id">{{ "Cancel" | uppercase }}</button>
+                <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, null, 'connected')" *ngIf="item.isFriend == 'connected'" [disabled]="profileInfo['id'] == item.id">{{ "Disconnect" | uppercase }}</button>
+              </ng-container>
+            </ion-item>
+            <ion-item col-4 no-padding margin-bottom *ngIf="type == 'find friends'">
+              <ng-container *ngIf="item.isBlocked">
+                <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, 'block')">{{ "Unblock" | uppercase }}</button>
+              </ng-container>
+              <ng-container *ngIf="!item.isBlocked">
+                <button mode="ios" ion-button block strong small class="ellipsis" tappable (click)="confirm(item, 'friend', 'unconnected')" *ngIf="item.isFriend == 'unconnected'" [hidden]="profileInfo['id'] == item.id">{{ "Connect" | uppercase }}</button>
+                <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, 'friend', 'pending')" *ngIf="item.isFriend == 'pending'" [disabled]="profileInfo['id'] == item.id">{{ "Cancel" | uppercase }}</button>
+              <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, 'friend', 'connected')" *ngIf="item.isFriend == 'connected'" [disabled]="profileInfo['id'] == item.id">{{ "Disconnect" | uppercase }}</button>
+              </ng-container>
+            </ion-item>
+            <ion-item col-4 no-padding margin-bottom *ngIf="type == 'muted accounts'">
+              <button mode="ios" ion-button block strong small class="ellipsis" tappable (click)="confirm(item)" *ngIf="!item.isMuted">{{ "Mute" | uppercase }}</button>
+              <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item)" *ngIf="item.isMuted">{{ "Unmute" | uppercase }}</button>
+            </ion-item>
+          </ng-container> -->
+        <ion-col size="2" class="ion-padding-vertical" (click)="gotoProfile(item)" >
+            <ion-avatar >
+              <ion-img #image [src]="item.profile_profile_pic" (ionImgDidLoad)="ionImgDidLoadProfile(item)" (ionError)="errorLoad(item)" *ngIf="item && item.profile_profile_pic &&!item.errorImage"></ion-img>
+              <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="item.errorImage" ></ion-img>
+              <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="item && !item.profile_profile_pic && !item.errorImage" ></ion-img>
+              <div *ngIf="!item.isLoadedProfile && item.profile_profile_pic" class="spinner2">
+                <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+              </div>
+              <!-- <img-loader
+                backgroundSize="cover"
+                *ngIf="item && item.profile_profile_pic"
+                src="{{ item.profile_profile_pic }}"
+                fallbackUrl="/assets/css/imgs/placeholder.png"
+                fallbackAsPlaceholder="true"
+              ></img-loader> -->
+            <!-- <img-loader backgroundSize="cover"  *ngIf="item && !item.profile_profile_pic" src="/assets/imgs/empty-states/no-user-photo.png" fallbackUrl="/assets/imgs/empty-states/no-user-photo.png"  fallbackAsPlaceholder="true"></img-loader> -->
+            </ion-avatar>
+        </ion-col>
+        <ion-col size="6" class="ion-padding-vertical" (click)="gotoProfile(item)">
+          <ion-text style='margin-left: 4px;'>{{ item.profile_first_name }} {{ item.profile_last_name }}</ion-text>
+          <ion-text *ngIf="item.isStylist == 1" color="t-gold" class="style">STYLIST</ion-text>
+        </ion-col>
+        <ion-col size="4">
+          <ng-container *ngIf="type == 'blocked accounts'">
+              <!-- <button mode="ios" ion-button block strong small class="ellipsis" tappable (click)="confirm(item)" *ngIf="!item.isBlocked">{{ "Block" | uppercase }}</button>
+              <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item)" *ngIf="item.isBlocked">{{ "Unblock" | uppercase }}</button> -->
+              <!-- <ion-button (click)="confirm(item)" expand="block" *ngIf="!item.isBlocked"><strong>{{ "Block" | uppercase }}</strong></ion-button>
+              <ion-button fill="outline" expand="block" (click)="confirm(item)" *ngIf="item.isBlocked">{{ "Unblock" | uppercase }}</ion-button> -->
+           </ng-container>
+           <ng-container *ngIf="type == 'blocked accounts'">
+            <ion-button mode="ios"  expand="block" color="primary" (click)="confirm(item, 'block')"
+            *ngIf="!item.isBlocked"><strong>{{ "block" | uppercase }}</strong></ion-button>
+            <ion-button mode="ios" fill="outline" expand="block" color="primary" (click)="confirm(item, 'block')"
+            *ngIf="item.isBlocked"><strong>{{ "Unblock" | uppercase }}</strong></ion-button>
+           </ng-container>
+           <ng-container *ngIf="!item.isBlocked">
+            <ion-button mode="ios" expand="block" (click)="confirm(item, null, 'unconnected')" *ngIf="item.isFriend == 'unconnected'" [hidden]="profileInfo['id'] == item.id"><strong>{{ "Connect" | uppercase }}</strong></ion-button>
+            <ion-button mode="ios" strong="true" fill="outline" expand="block" (click)="confirm(item, null, 'pending')" *ngIf="item.isFriend == 'pending'" [disabled]="profileInfo['id'] == item.id"><strong>{{ "Cancel" | uppercase }}</strong></ion-button>
+            <ion-button mode="ios" strong="true" fill="outline" expand="block" (click)="confirm(item, null, 'connected')" *ngIf="item.isFriend == 'connected'" [disabled]="profileInfo['id'] == item.id"><strong>{{ "Disconnect" | uppercase }}</strong></ion-button>
+            
+           </ng-container>
+           <ng-container *ngIf="type == 'muted accounts'">
+            <!-- <ion-item col-4 no-padding margin-bottom *ngIf="type == 'muted accounts'"> -->
+              <ion-button mode="ios" expand="block" strong=true (click)="confirm(item)" *ngIf="!item.isMuted">{{ "Mute" | uppercase }}</ion-button>
+              <ion-button  mode="ios" fill="outline" expand="block" strong="true" (click)="confirm(item)" *ngIf="item.isMuted">{{ "Unmute" | uppercase }}</ion-button>
+            <!-- </ion-item> -->
+           </ng-container>
+
+            <!-- <ion-item col-4 no-padding margin-bottom *ngIf="type == 'connections'">
+              <ng-container *ngIf="item.isBlocked">
+                  <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, 'block')">{{ "Unblock" | uppercase }}</button>
+              </ng-container>
+              <ng-container *ngIf="!item.isBlocked">
+                <button mode="ios" ion-button block strong small class="ellipsis" tappable (click)="confirm(item, null, 'unconnected')" *ngIf="item.isFriend == 'unconnected'" [hidden]="profileInfo['id'] == item.id">{{ "Connect" | uppercase }}</button>
+                <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, null, 'pending')" *ngIf="item.isFriend == 'pending'" [disabled]="profileInfo['id'] == item.id">{{ "Cancel" | uppercase }}</button>
+                <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, null, 'connected')" *ngIf="item.isFriend == 'connected'" [disabled]="profileInfo['id'] == item.id">{{ "Disconnect" | uppercase }}</button>
+              </ng-container>
+            </ion-item>
+
+            <ion-item col-4 no-padding margin-bottom *ngIf="type == 'find friends'">
+              <ng-container *ngIf="item.isBlocked">
+                <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, 'block')">{{ "Unblock" | uppercase }}</button>
+              </ng-container>
+              <ng-container *ngIf="!item.isBlocked">
+                <button mode="ios" ion-button block strong small class="ellipsis" tappable (click)="confirm(item, 'friend', 'unconnected')" *ngIf="item.isFriend == 'unconnected'" [hidden]="profileInfo['id'] == item.id">{{ "Connect" | uppercase }}</button>
+                <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, 'friend', 'pending')" *ngIf="item.isFriend == 'pending'" [disabled]="profileInfo['id'] == item.id">{{ "Cancel" | uppercase }}</button>
+              <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item, 'friend', 'connected')" *ngIf="item.isFriend == 'connected'" [disabled]="profileInfo['id'] == item.id">{{ "Disconnect" | uppercase }}</button>
+              </ng-container>
+            </ion-item>
+            <ion-item col-4 no-padding margin-bottom *ngIf="type == 'muted accounts'">
+              <button mode="ios" ion-button block strong small class="ellipsis" tappable (click)="confirm(item)" *ngIf="!item.isMuted">{{ "Mute" | uppercase }}</button>
+              <button mode="ios" ion-button outline block strong small class="ellipsis" tappable (click)="confirm(item)" *ngIf="item.isMuted">{{ "Unmute" | uppercase }}</button>
+            </ion-item>
+          </ng-container> -->
+        </ion-col>
+        </ion-item>
+      </ng-container>
+
+      <ng-container *ngIf="isLoaded && items && items.length == 0">
+        <ion-row class="ion-padding-top">
+          <ion-col class="ion-text-center">
+            <ion-text style="font-family: 'Raleway'!important;">{{ emptyState }}</ion-text>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+  
+ <div *ngIf="!isLoaded && !otherUser" class="ion-padding-start">
+  <div class="ion-no-padding custom-skeleton">
+    <ion-row>
+      <ion-col size="2">
+        <ion-avatar>
+          <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+        </ion-avatar>
+      </ion-col>
+      <ion-col size="10">
+        <ion-row style="padding-top: 5px !important;">
+          <ion-skeleton-text animated style="width: 88%;height:30px;"></ion-skeleton-text>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2">
+        <ion-avatar>
+          <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+        </ion-avatar>
+      </ion-col>
+      <ion-col size="10">
+        <ion-row style="padding-top: 5px !important;" >
+          <ion-skeleton-text animated style="width: 88%;height:30px;"></ion-skeleton-text>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2">
+        <ion-avatar>
+          <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+        </ion-avatar>
+      </ion-col>
+      <ion-col size="10">
+        <ion-row style="padding-top: 5px !important;" >
+          <ion-skeleton-text animated style="width: 88%;height:30px;"></ion-skeleton-text>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2">
+        <ion-avatar>
+          <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+        </ion-avatar>
+      </ion-col>
+      <ion-col size="10">
+        <ion-row style="padding-top: 5px !important;" >
+          <ion-skeleton-text animated style="width: 88%;height:30px;"></ion-skeleton-text>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2">
+        <ion-avatar>
+          <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+        </ion-avatar>
+      </ion-col>
+      <ion-col size="10">
+        <ion-row style="padding-top: 5px !important;" >
+          <ion-skeleton-text animated style="width: 88%;height:30px;"></ion-skeleton-text>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </div>
+</div>
+
+
+<!-- <ng-container>
+  <ion-col size="12" class="ion-text-center">
+    <h4> Express your style to make connections!</h4>
+   </ion-col>
+</ng-container> -->
+<ion-infinite-scroll #infiniteScroll (ionInfinite)="doInfinite($event)">
+  <ion-infinite-scroll-content>
+    <ion-text *ngIf="isLoadedConnectionList" style="font-family: 'Raleway' !important;">No more connection list</ion-text>
+  </ion-infinite-scroll-content>
+</ion-infinite-scroll>
+
+</ion-content>

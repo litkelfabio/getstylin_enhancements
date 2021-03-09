@@ -1,0 +1,419 @@
+img{
+    border-radius: 10px;
+}
+.custom-text{
+    font-family: "Raleway" !important;
+}
+.text{
+    font-size: 13px;
+}
+ion-input{
+    background-color: rgba(196, 196, 196, 0.2);
+    font-size: 13px;
+}
+.send-icon{
+    position: absolute;
+    top: 25px;
+    right: 26px;
+    z-index: 9999999;
+}
+.toolbar-ios {
+    padding-left: 6px;
+  }
+
+  #fullQuestion-container {
+    margin-top: 6px;
+  }
+
+  ion-content{
+    img{
+        border-radius: 10px;
+    }
+    .bgcolor{
+        background: rgba(196, 196, 196, 0.2);
+        border-radius: 5px !important;
+    }
+    ion-input input{
+    padding: 8px 0px !important
+
+    }
+    ion-icon{
+        min-height: 0 !important;
+    }
+  }
+
+  #question-cover {
+    width: 100%;
+    height: 214px;
+    border-radius: 10px;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
+    display: flex;
+    align-items: flex-end;
+    padding: 14px;
+
+    #question-text {
+      font-family: 'Raleway';
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 24px;
+      color: #FFFFFF;
+    }
+  }
+
+  #question-description {
+    margin-top: 14px;
+    font-family: 'Roboto', sans-serif;
+    line-height: 18px;
+    letter-spacing: 0.01em;
+    font-style: normal;
+    font-size: 14px;
+  }
+
+  #question-tags {
+    margin: 14px 0px;
+    font-size: 14px;
+  }
+
+  .questionTag {
+    display: inline;
+    margin-right: 4px;
+
+    span {
+      color: #B3A25D;
+    }
+  }
+
+  #timestamp {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    color: #9f9f9f;
+    margin-bottom: 26px;
+    font-size: 11px;
+  }
+
+  #response-container {
+    margin-top: 26px;
+    width: 100%;
+
+    .loading, .empty {
+      width: 100%;
+    }
+
+    .empty {
+      margin-bottom: 20vh;
+    }
+
+    .filled span {
+      font-family: 'Roboto';
+      color: #464646;
+      letter-spacing: 0.075em;
+    }
+  }
+
+  #response-container #comment-tree {
+    width: 100%;
+    margin-bottom: 40px;
+    padding-right: 0px !important;
+
+    .comment-parent {
+      // padding: 0px 20px;
+      margin-top: 20px;
+      padding: 0 !important;
+    }
+
+    .comment-parent-controls {
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+    }
+
+    .timestamp {
+      color: #C4C4C4 !important;
+    }
+
+    .control-item {
+      font-size: 13px;
+      font-family: 'Roboto';
+      font-weight: bold;
+      line-height: 12px;
+      letter-spacing: normal;
+      margin-right: 6px;
+      color: #B3A25D;
+    }
+
+    .thumbnail-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .owner-thumbnail {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+
+    div.comment-owner .owner-name {
+      font-family: 'Roboto';
+      font-weight: bold;
+      line-height: 16px;
+      font-size: 14px !important;
+      letter-spacing: normal !important;
+      color: #000000;
+    }
+
+    div.comment-text p {
+      margin: 4px 0px 8px 0px;
+      font-family: 'Roboto';
+      font-size: 14px !important;
+      line-height: 18px;
+      letter-spacing: normal;
+      color:#000000;
+      text-rendering: optimizeLegibility;
+    }
+  }
+
+  #response-entryField-container {
+   
+    background: rgba(196, 196, 196, 0.2);
+    border-radius: 5px !important;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    ion-col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .comment-entry-inputField {
+    width: 100%;
+    max-width: 100%;
+    resize: none;
+    font-family: 'Roboto';
+    font-weight: normal;
+    letter-spacing: normal;
+    border: 0px;
+    background-color: transparent;
+    padding-left: 12px;
+    padding-top: 7px;
+
+    // textarea, textarea:focus {
+    //   font-family: 'Roboto';
+    //   font-weight: normal;
+    //   letter-spacing: 0.05em;
+    //   line-height: 14px;
+    //   border: 0px;
+    //   background-color: transparent;
+    // }
+    //
+    // span, textarea {
+    //   font-family: 'Roboto';
+    //   font-weight: normal;
+    //   letter-spacing: 0.05em;
+    //   line-height: 14px;
+    //   color: #B6B7AD;
+    // }
+  }
+
+  .comment-entry-post {
+    width: 100%;
+    min-height: 52px;
+    background-color: #ffffff;
+    border-top: 1px solid rgba(182, 183, 173, 0.25);
+    padding: 12px;
+
+    ion-grid {
+      height: 100%;
+    }
+
+    .item-ios {
+      margin: 0px !important;
+      padding: 0px !important;
+    }
+
+    .item-block {
+      min-height: 100% !important;
+    }
+
+    .item-ios ion-input, .item-ios input, .item-ios textarea {
+      font-size: 12px !important;
+    }
+
+    .text-input-ios {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .comment-entry-item {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .comment-entry-user-photo {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: #999999;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .comment-entry-inputField {
+      width: 100%;
+      max-width: 100%;
+      resize: none;
+      padding-left: 0px !important;
+
+      textarea, textarea:focus {
+        font-family: 'Roboto';
+        font-weight: normal;
+        letter-spacing: normal;
+        line-height: 14px;
+        border: 0px transparent !important;
+      }
+      //
+      // span, textarea {
+      //   font-family: 'Roboto';
+      //   font-weight: normal;
+      //   letter-spacing: 0.05em;
+      //   line-height: 14px;
+      //   color: #B6B7AD;
+      // }
+    }
+
+    .comment-entry-sendBtn {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .button[icon-only] {
+        padding: 0px;
+        width: fit-content !important;
+        height: fit-content !important;
+        margin: 0px;
+      }
+    }
+  }
+
+  #replying-to {
+    width: 100%;
+    height: auto;
+    background-color: #ffffff;
+    border-top: 1px solid rgba(182, 183, 173, 0.25);
+
+    ion-item {
+      font-family: 'Roboto';
+      font-weight: normal;
+      font-size: 12px;
+    }
+
+    #snippet {
+      width: 80%;
+    }
+
+    .button[icon-only] {
+      font-size: 2rem;
+    }
+  }
+.loadingspinner{
+    --color : #B3A25D;
+    font-family: 'Raleway' !important;
+}
+.answer-title{
+  font-size: 15px !important;
+  padding: 0px 10px !important;
+}
+// ion-thumbnail{
+  .thumbnail{
+    border-radius: 50% !important;
+    width: 32px;
+    height: 32px;
+  }
+// }
+
+.more{
+  font-size: 13px !important;
+}
+.view{
+  font-size: 13px !important;
+  font-family: 'Raleway' !important;
+}
+.name-text{
+    font-size: 13px;
+}
+.comment-text{
+    font-size: 13px;
+}
+.spinner-circle{
+  position: absolute;
+    top: 8px;
+    left: 10px;
+}
+// .date{
+//   position: absolute;
+//     top: 40px !important;
+//     left: 23px !important;
+//     font-size: 12px;
+// }
+// .reply{
+//   position: absolute;
+//     top: 40px !important;
+//     left: 53px !important;
+//     font-size: 12px !important;
+//     font-weight: 600 !important;
+// }
+// .edit{
+//   position: absolute;
+//   top: 40px !important;
+//   left: 86px !important;
+//   font-size: 12px !important;
+//   font-weight: 600 !important;
+// }
+// .delete{
+//   position: absolute;
+//   top: 40px !important;
+//   left: 111px !important;
+//   font-size: 12px !important;
+//   font-weight: 600 !important;
+// }
+// .view{
+//   font-family: 'Raleway' !important;
+//   position: absolute;
+//   top: 60px !important;
+//   left: 23px !important;
+//   font-size: 12px !important;
+//   z-index: 999;
+// }
+.response-comment{
+  font-size: 13px !important;
+}
+.response-img{
+  position: fixed;
+}
+.show-less{
+    --color: initial;
+    display: block;
+    color: var(--color);
+    font-family: var(--ion-font-family, inherit);
+    font-size: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 13px;
+}

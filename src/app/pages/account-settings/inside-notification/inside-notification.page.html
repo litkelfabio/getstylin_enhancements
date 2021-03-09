@@ -1,0 +1,59 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title>NOTIFICATIONS</ion-title>
+    <ion-buttons slot="start">
+        <ion-icon src="assets/css/icon/back.svg" (click)="back()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+    <ion-col size="12">
+      <ion-item>
+        <ion-label class='ion-text-wrap'>Mute all notifications</ion-label>
+        <ion-toggle slot="end" [disabled]="pageIsLoading" [(ngModel)]="notificationModel[0].isMuted" mode="md"></ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon src="assets/css/icon/inside-mute-notif.svg" class="ion-padding"></ion-icon>
+        <ion-label class='ion-text-wrap'>&nbsp;&nbsp;Mute post notifications</ion-label>
+        <ion-toggle slot="end" [disabled]="pageIsLoading || notificationModel[0].isMuted" [(ngModel)]="notificationModel[1].isMuted" mode="md"></ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon src="assets/icon/inside-style-mute.svg" class="ion-padding"></ion-icon>
+        <ion-label class='ion-no-margin ion-text-wrap'>&nbsp;&nbsp;Mute style column notifications</ion-label>
+         <ion-toggle slot="end" [disabled]="pageIsLoading || notificationModel[0].isMuted" [(ngModel)]="notificationModel[2].isMuted" mode="md"></ion-toggle>
+      </ion-item>
+      <!-- <ion-col size='9' no-padding>
+     
+      </ion-col>
+      <ion-col size='3' no-padding text-right>
+          
+      </ion-col>
+
+      <ion-col size='2' text-center no-padding>
+       
+      </ion-col>
+
+      <ion-col size='7' no-padding>
+      
+      </ion-col>
+      <ion-col size='3' no-padding text-right>
+          
+      </ion-col>
+
+
+      <ion-col size='2' text-center no-padding>
+          
+        </ion-col>
+
+        <ion-col size='7' no-padding>
+          
+        </ion-col>
+        <ion-col size='3' no-padding text-right>
+          </ion-col> -->
+           
+    </ion-col>
+</ion-content>

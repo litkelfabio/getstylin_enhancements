@@ -1,0 +1,217 @@
+<!-- <ion-header class="ion-no-border ion-padding-top">
+  <ion-toolbar>
+    <ion-title>LIKES | DISLIKES</ion-title>
+    <ion-buttons slot="start" class="ion-padding">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" (click)="dismissModal()" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header> -->
+
+
+<ion-header class="ion-padding ion-no-border">
+  <ion-toolbar>
+    <ion-buttons  (click)="back()">
+        <ion-icon src="assets/css/icon/back.svg" ></ion-icon>
+    </ion-buttons>
+
+    <ion-title>
+      LIKE | DISLIKES
+    </ion-title>
+  </ion-toolbar>
+
+  <!-- <div class="ion-padding-top ion-margin-top">
+    <ion-segment #likesDislikes padding-bottom [(ngModel)]="actions" color="t-gold">
+      <ion-segment-button value="likes">
+        <ion-icon src="assets/css/icon/likes.svg"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="dislikes">
+        <ion-icon src="assets/css/icon/dislike.svg"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </div> -->
+  <ng-progress [color]="'#B3A25D'" #progressBar [spinner]="false" [thick]="true" [meteor]="false"></ng-progress>
+</ion-header>
+
+<ion-content>
+
+  <ion-row class="ion-padding-top">
+    <ion-col class="ion-text-center">
+      <ion-segment #likesDislikes [(ngModel)]="actions" color="primary" mode="md" >
+        <ion-segment-button value="likes" (click)="likesDislike()">
+          <ng-container *ngIf="actions != 'likes'">
+            <ion-icon src="assets/css/icon/likes.svg" style="zoom: 1.3;"></ion-icon>
+          </ng-container>
+          <ng-container *ngIf="actions == 'likes'">
+            <ion-icon src="assets/css/icon/likes-selected.svg"></ion-icon>
+          </ng-container>
+        </ion-segment-button>
+        <ion-segment-button value="dislikes" (click)="likesDislike()">
+          <ng-container *ngIf="actions != 'dislikes'">
+          <ion-icon src="assets/css/icon/dislike.svg" style="zoom: 1.3;"></ion-icon>
+          </ng-container>
+          <ng-container *ngIf="actions == 'dislikes'">
+          <ion-icon src="assets/css/icon/dislike-selected.svg"></ion-icon>
+          </ng-container>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-col>
+  </ion-row>
+ 
+  <!-- <div class="ion-padding">
+    <ion-segment #likesDislikes padding-bottom [(ngModel)]="actions">
+      <ion-segment-button value="likes">
+        <ion-icon src="assets/css/icon/likes.svg"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="dislikes">
+        <ion-icon src="assets/css/icon/dislike.svg"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+    <ion-col size="12">
+      <ion-item lines="none" (click)="goToProfile()">
+        <ion-avatar>
+          <ion-img src="assets/css/imgs/placeholder.png"></ion-img>
+        </ion-avatar>
+        <ion-text class="ion-padding" style="font-size: 14px;">Juan Dela Cruz</ion-text>
+      </ion-item>
+    </ion-col> -->
+    <ion-refresher (ionRefresh)="doRefresh($event)" slot="fixed" mode="md" >
+      <ion-refresher-content disabled refreshingSpinner="none"></ion-refresher-content>
+    </ion-refresher>
+
+    <div [ngSwitch]='actions' class="padded-lr">
+      <ion-list *ngSwitchCase="'likes'">
+        <ng-container *ngIf="like_users && like_total == 0">
+            <ion-row class=" ion-padding-top">
+              <ion-col class="ion-text-center">
+                <ion-text class="no-dislike">No user reacted to post yet.</ion-text>
+              </ion-col>
+            </ion-row>
+        </ng-container>
+  
+        <ng-container *ngIf="!like_users">
+          <ion-item lines="none">
+            <ion-avatar item-start>
+              <ion-skeleton-text animated style="border-radius: 50%"></ion-skeleton-text>
+            </ion-avatar>
+            <ion-col>
+              <ion-skeleton-text animated style="width: 80%;height: 15px; padding-left: 30px;"></ion-skeleton-text>
+            </ion-col>
+          </ion-item>
+          <ion-item  lines="none">
+            <ion-avatar item-start>
+              <ion-skeleton-text animated style="border-radius: 50%"></ion-skeleton-text>
+            </ion-avatar>
+            <ion-col>
+              <ion-skeleton-text animated style="width: 80%;height: 15px; padding-left: 30px;"></ion-skeleton-text>
+            </ion-col>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-avatar item-start>
+              <ion-skeleton-text animated style="border-radius: 50%"></ion-skeleton-text>
+            </ion-avatar>
+            <ion-col>
+              <ion-skeleton-text animated style="width: 80%;height: 15px; padding-left: 30px;"></ion-skeleton-text>
+            </ion-col>
+          </ion-item>
+        </ng-container>
+  
+        <ng-container *ngIf="like_users && like_total != 0">
+            <!-- <ion-item no-lines lines="none" *ngFor="let user of like_users" padding-bottom tappable (click)="goToProfile(user)">
+              <ion-avatar item-start>
+                <img-loader useImg src='{{ user.user_profile_pic_url }}' fallbackUrl="assets/imgs/empty-states/no-user-photo.png" fallbackAsPlaceholder="true"></img-loader>
+              </ion-avatar>
+              <h6 ion-text class="username" no-paddding padding-left> {{ user.user_first_name | titlecase }} {{ user.user_last_name | titlecase }} </h6>
+            </ion-item> -->
+            <ion-item lines="none" *ngFor="let user of like_users" class="ion-no-padding" (click)="goToProfile(user)">
+              <ion-col size="2" class="ion-text-start ion-padding-horizontal">
+                <ion-avatar item-start>
+                  <!-- <img-loader useImg src='{{ user.user_profile_pic_url }}' fallbackUrl="assets/imgs/empty-states/no-user-photo.png" fallbackAsPlaceholder="true"></img-loader> -->
+
+                  <!-- <ngx-progressive-img-loader
+                      #imagePost
+                      [height]="'45px'"
+                      [width]="'45px'"
+                      (imageLoaded)="onImgLoad($event)"
+                      (thumbnailLoaded)="onThumbLoad($event)"
+                      [img]="user.user_profile_pic_url"
+                      [thumbnail]="user.user_profile_pic_url"
+                      [placeholderBgColor]="'grey'"
+                      [preserveAspectRatio]="true"
+                      class="likesProfilePhoto"
+                       >
+                    </ngx-progressive-img-loader> -->
+                  <ion-img #image [src]="user.user_profile_pic_url" (ionImgDidLoad)="ionImgDidLoad(user)" (ionError)="errorLoad(user)" *ngIf="user.user_profile_pic_url &&!user.errorImage && !user.placeholder"></ion-img>
+                  <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="user.errorImage && !user.placeholder" ></ion-img>
+                  <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="user && !user.user_profile_pic_url && !user.placeholder" ></ion-img>
+                  <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="user.placeholder" ></ion-img>
+                </ion-avatar>
+              </ion-col>
+              <ion-col size="10">
+                <ion-text class="user-text ion-padding-start" > {{ user.user_first_name | titlecase }} {{ user.user_last_name | titlecase }} </ion-text>
+              </ion-col>
+            </ion-item>
+        </ng-container>
+  
+        <ion-infinite-scroll (ionInfinite)="doInfinite($event, 'likes')">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-list>
+  
+      <ion-list *ngSwitchCase="'dislikes'">
+        <ng-container *ngIf="dislike_users && dislike_total == 0">
+            <ion-row class="ion-padding-top">
+              <ion-col class="ion-text-center">
+                <ion-text class="no-dislike">No user disliked post yet.</ion-text>
+              </ion-col>
+            </ion-row>
+        </ng-container>
+  
+        <ng-container *ngIf="dislike_users && dislike_total != 0">
+          <!-- <ion-item no-lines padding-vertical lines="none" *ngFor="let user of dislike_users" padding-bottom tappable (click)="goToProfile(user)">
+            <ion-avatar item-start>
+              <img-loader useImg src='{{ user.user_profile_pic_url }}' fallbackUrl="assets/imgs/empty-states/no-user-photo.png" fallbackAsPlaceholder="true"></img-loader>
+            </ion-avatar>
+            <h6 ion-text class="username" no-paddding padding-left> {{ user.user_first_name | titlecase }} {{ user.user_last_name | titlecase }} </h6>
+          </ion-item> -->
+          <ion-item lines="none" *ngFor="let user of dislike_users" class="ion-no-padding" (click)="goToProfile(user)">
+            <ion-col size="2" class="ion-text-start ion-padding-horizontal">
+              <ion-avatar item-start>
+                <!-- <img-loader useImg src='{{ user.user_profile_pic_url }}' fallbackUrl="assets/imgs/empty-states/no-user-photo.png" fallbackAsPlaceholder="true"></img-loader> -->
+
+                <!-- <ngx-progressive-img-loader
+                    #imagePost
+                    [height]="'45px'"
+                    [width]="'45px'"
+                    (imageLoaded)="onImgLoad($event)"
+                    (thumbnailLoaded)="onThumbLoad($event)"
+                    [img]="user.user_profile_pic_url"
+                    [thumbnail]="user.user_profile_pic_url"
+                    [placeholderBgColor]="'grey'"
+                    [preserveAspectRatio]="true"
+                    class="likesProfilePhoto"
+                     >
+                  </ngx-progressive-img-loader> -->
+                  <ion-img #image [src]="user.user_profile_pic_url" (ionImgDidLoad)="ionImgDidLoad(user)" (ionError)="errorLoad(user)" *ngIf="user.user_profile_pic_url &&!user.errorImage && !user.placeholder"></ion-img>
+                  <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="user.errorImage && !user.placeholder" ></ion-img>
+                  <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="user && !user.user_profile_pic_url && !user.placeholder" ></ion-img>
+                  <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="user.placeholder" ></ion-img>
+                  <div *ngIf="!user.isLoadedProfile" class="spinner2">
+                    <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+                  </div>
+              </ion-avatar>
+            </ion-col>
+            <ion-col size="10">
+              <ion-text class="user-text ion-padding-start" > {{ user.user_first_name | titlecase }} {{ user.user_last_name | titlecase }} </ion-text>
+            </ion-col>
+          </ion-item>
+
+        </ng-container>
+  
+        <ion-infinite-scroll (ionInfinite)="doInfinite($event, 'dislikes')">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-list>
+    </div>
+</ion-content>

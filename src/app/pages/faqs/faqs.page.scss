@@ -1,0 +1,28 @@
+.question-name{
+    font-family: 'Raleway' !important;
+    color: rgb(0,0,0) !important;
+    font-weight: 500 !important;
+}
+.item-line{
+    border-bottom: solid 0.1px #CBCACF !important;
+}
+.question-details{
+    color: #686464;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 13px !important;
+}
+.object {
+    animation: FadeText 1s ease;
+  }
+  
+@keyframes FadeText {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+  

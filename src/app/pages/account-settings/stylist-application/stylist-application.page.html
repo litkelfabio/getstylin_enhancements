@@ -1,0 +1,127 @@
+<ion-header class="ion-no-border ion-padding-top" style="padding-left: 5px !important;">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">BECOME A STYLISTS</ion-title>
+    <ion-buttons slot="start">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" routerLink="/tabs/tabs/my-stylin" routerDirection="back" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+  <ion-col size="12">
+    <ion-row >
+      <ion-col size="12" class="ion-text-center">
+        <img src='assets/imgs/Progress.svg'>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding">
+      <ion-col size="12" class="ion-text-center">
+        <ion-text><b>YOUR DETAILS</b></ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-text>Tell us more about yourself!</ion-text>
+      </ion-col>
+    </ion-row>
+    <form [formGroup]="stylistApplicationFormStep1" (keyup.enter)="goToStep2()" style="padding: 10px !important;" >
+      <ion-col size ="12">
+        <ion-item lines="full">
+          <ion-col size="2">
+            <ion-icon  src="assets/css/icon/stylist-application-name.svg" style="zoom: 1.5;"></ion-icon>
+          </ion-col>
+          <ion-col size="10" style="display: block;" class="ion-no-padding">
+            <ion-item class="ion-no-padding" lines="full">
+              <ion-input class="ion-no-padding" type="text" maxlength="50" formControlName="firstName" placeholder="First Name"></ion-input>
+            </ion-item>
+            <ng-container *ngIf="stylistApplicationFormStep1.controls.firstName.touched">
+              <ion-row class="ion-padding-left">
+                <ion-col size="12"  >
+                  <p ion-text no-margin  class="adjustments" color="danger" *ngIf="stylistApplicationFormStep1.controls.firstName.hasError('required')">This field is required</p>
+                  <p ion-text no-margin margin-bottom  class="adjustments" color="danger" *ngIf="stylistApplicationFormStep1.controls.firstName.hasError('maxLength')">First Name should not exceed 30 characters</p>
+                  <p ion-text no-margin  color="danger"  class="adjustments" *ngIf="stylistApplicationFormStep1.controls.firstName.hasError('pattern')">First Name should only contain letters</p>
+                </ion-col>
+              </ion-row>
+            </ng-container>
+            <ion-item class="ion-no-padding" lines="full">
+              <ion-input type="text" maxlength="50" formControlName="lastName" placeholder="Last Name"></ion-input>
+            </ion-item>
+            <ng-container *ngIf="stylistApplicationFormStep1.controls.lastName.touched">
+              <ion-row class="ion-padding-left" >
+                <ion-col size="12"  >
+                  <p ion-text no-margin  class="adjustments" color="danger" *ngIf="stylistApplicationFormStep1.controls.lastName.hasError('required')">This field is required</p>
+                  <p ion-text no-margin margin-bottom  class="adjustments" color="danger" *ngIf="stylistApplicationFormStep1.controls.lastName.hasError('maxLength')">Last Name should not exceed 30 characters</p>
+                  <p ion-text no-margin  color="danger"  class="adjustments" *ngIf="stylistApplicationFormStep1.controls.lastName.hasError('pattern')">Last Name should only contain letters</p>
+                </ion-col>
+              </ion-row>
+            </ng-container>
+          </ion-col>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-icon  src="assets/css/icon/birthday.svg" style="zoom:0.8;"></ion-icon>
+          <ion-input readonly="true" type="text" formControlName="birthday" placeholder="Birthday" (click)="openBirthdayModal()" class="ion-padding"></ion-input>
+        </ion-item>
+        <ion-item lines="full">
+          <!-- <ion-icon  src="assets/css/icon/gender.svg" style="zoom: 1;"></ion-icon>
+            <ion-select placeholder="Sex">
+              <ion-select-option value="f">Female</ion-select-option>
+              <ion-select-option value="m">Male</ion-select-option>
+              <ion-select-option value="m">Other</ion-select-option>
+            </ion-select> -->
+            <ion-icon  src="assets/css/icon/gender.svg" style="zoom: 0.8;"></ion-icon>
+            <ion-input readonly="true" type="text" maxlength="8" formControlName="gender" placeholder="Sex" (click)="presentGenderPromptAlert(selectedGender)" readonly></ion-input>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-icon  src="assets/css/icon/stylist-application-email.svg" style="zoom: 0.8;"></ion-icon>
+          <ion-input type="text" maxlength="100" formControlName="email" placeholder="Email"></ion-input>
+        </ion-item>
+        <ng-container *ngIf="stylistApplicationFormStep1.controls.email.touched">
+          <ion-text style="font-size: 13px;" color="danger"  *ngIf="stylistApplicationFormStep1.controls.email.hasError('required')" class="ion-padding-start">This field is required</ion-text>
+          <ion-text style="font-size: 13px;" color="danger" *ngIf="stylistApplicationFormStep1.controls.email.hasError('pattern')" class="ion-padding-start">Enter a valid email address</ion-text>
+          <ion-text style="font-size: 13px;" color="primary" *ngIf="!stylistApplicationFormStep1.controls.email.hasError('required') && !stylistApplicationFormStep1.controls.email.hasError('pattern') && emailExistence == false"
+          class="ion-padding-start">Email Address is available</ion-text>
+          <ion-text style="font-size: 13px;" color="danger"  *ngIf="!stylistApplicationFormStep1.controls.email.hasError('required') && !stylistApplicationFormStep1.controls.email.hasError('pattern') && emailExistence == true"
+          class="ion-padding-start">Email Address already exists</ion-text>
+        </ng-container>
+        <ion-item lines="full">
+          <ion-icon  src="assets/css/icon/stylist-application-location.svg" style="zoom: 0.8;"></ion-icon>
+          <ion-input type="text" formControlName="location" placeholder="City, State" (input)='getValue($event.target.value)' #searchInput (ionFocus)="clearFocus()" class="ion-padding"></ion-input>
+        </ion-item>
+        <ng-container *ngIf="autocompleteItems && autocompleteItems.length > 0">
+          <ion-item no-padding lines="full">
+            <ion-card class="ion-no-margin" style="border: 1px #e8e7e9 solid !important; border-radius: 0px !important;">
+              <ion-list lines="full">
+                <ion-item class="location-autocomp" *ngFor="let item of autocompleteItems" tappable (click)="geoCode(item)" padding-horizontal>{{ item }}</ion-item>
+              </ion-list>
+            </ion-card>
+          </ion-item>
+        </ng-container>
+        <ion-item lines="full">
+          <ion-icon  src="assets/css/icon/stylist-application-phone.svg" style="zoom: 0.8;"></ion-icon>
+          <ion-input type="text" maxlength="30" formControlName="phoneNumber" placeholder="Phone Number (optional)"></ion-input>
+        </ion-item>
+        <ng-container *ngIf="stylistApplicationFormStep1.controls.phoneNumber.touched">
+          <ion-row padding-left >
+            <ion-col col-12   class="adjustments">
+              <p ion-text no-margin  class="errorq" color="danger"  *ngIf="stylistApplicationFormStep1.controls.phoneNumber.hasError('pattern')">This field should be numbers only.</p>
+            </ion-col>
+          </ion-row>
+        </ng-container>
+        <ion-item lines="full">
+          <ion-icon  src="assets/css/icon/stylist-application-instagram.svg"style="zoom: 0.6;"></ion-icon>
+          <ion-input type="text" maxlength="30" formControlName="instagramUsername" placeholder="Instagram username" class="ion-padding"></ion-input>
+        </ion-item>
+        <ng-container *ngIf="stylistApplicationFormStep1.controls.instagramUsername.touched">
+             <ion-col size="12" class="ion-no-padding">
+              <ion-text style="font-size: 13px;" color="danger" *ngIf="stylistApplicationFormStep1.controls.instagramUsername.hasError('pattern')">Enter @ on the username</ion-text>
+             </ion-col>
+        </ng-container>
+        <ion-row class="ion-padding">
+          <ion-col size="12" class="ion-padding-top">
+            <ion-button expand="block" mode="md" strong="true" class="button-next" [disabled]="!stylistApplicationFormStep1.valid" (click)="goToStep2()">{{ 'Next' | uppercase }}</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </form>
+  </ion-col>
+</ion-content>

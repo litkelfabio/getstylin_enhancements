@@ -1,0 +1,99 @@
+<ion-content class="ion-padding-vertical">
+  <ion-grid>
+    <ion-row class="ion-margin-top ion-padding-top">
+      <ion-col size="12">
+        <ion-row>
+          <ion-col size="12" class="ion-text-center" >
+            <img id="logo" src='assets/imgs/GS.svg' height="120px" >
+          </ion-col>
+          <ion-col col-12 class="ion-text-center">
+            <img src='assets/imgs/Progress.svg'>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-12 class="ion-text-center">
+            <h5>{{ "Complete Your Profile" | uppercase }}</h5>
+            <p>Just a few details, and you're all set!</p>
+          </ion-col>
+        </ion-row>
+        
+          <form [formGroup]="registrationForm">
+              <ion-col size="12">
+                <ion-item lines="none">
+                  <ion-label position="floating" class="ion-padding-start" color="primary">Username</ion-label>
+                  <ion-input required type="text"formControlName="username" (input)='validateInfo($event.target.value)'></ion-input>
+                  </ion-item>
+                 <div class="ion-text-end ion-padding-horizontal ion-no-margin">
+                  <ng-container *ngIf="registrationForm.controls.username.touched">
+                    <p ion-text no-margin padding-left class="adjustments" *ngIf="registrationForm.controls.username.hasError('required')">This field is required</p>
+                    <p ion-text no-margin padding-left  class="adjustments" *ngIf="registrationForm.controls.username.hasError('pattern')">This username is invalid. You can only use alphanumeric characters and the period symbol (.)</p>
+                    <p ion-text no-margin padding-left  class="adjustments" *ngIf="registrationForm.controls.username.hasError('maxLength')">Username should not exceed 30 characters</p>
+                    <p ion-text no-margin padding-left  class="available-email" *ngIf="(!registrationForm.controls.username.hasError('required') && !registrationForm.controls.username.hasError('maxLength') && !registrationForm.controls.username.hasError('pattern')) && usernameExists === false">Username is available</p>
+                    <p ion-text no-margin padding-left  class="adjustments" *ngIf="(!registrationForm.controls.username.hasError('required') && !registrationForm.controls.username.hasError('maxLength')) && usernameExists === true">Username already exists</p>
+                  </ng-container>
+                 </div>
+                  
+                <!-- <ng-container>
+                  <div class="ion-text-end">
+                    <ion-text class="adjusments" color="danger">This field is required</ion-text>
+                  </div>
+                </ng-container>  -->
+                <ion-item lines="none">
+                  <ion-label position="floating" class="ion-padding-start" color="primary">First name</ion-label>
+                  <ion-input type="text" formControlName="first_name" ></ion-input>
+                </ion-item>
+                <div class="ion-text-end ion-padding-horizontal ion-no-margin">
+                  <ng-container *ngIf="registrationForm.controls.first_name.touched">
+                    <p ion-text no-margin padding-left  class="adjustments" *ngIf="registrationForm.controls.first_name.hasError('required')">This field is required</p>
+                    <p ion-text no-margin padding-left  class="adjustments" *ngIf="registrationForm.controls.first_name.hasError('maxLength')">First name should not exceed 30 characters</p>
+                    <p ion-text no-margin padding-left  class="adjustments" *ngIf="registrationForm.controls.first_name.hasError('pattern')">First name should only contain letters</p>
+                  </ng-container>
+                </div>
+                <!-- <ng-container>
+                  <div class="ion-text-end">
+                    <ion-text class="adjusments" color="danger">This field is required</ion-text>
+                  </div>
+                  <div class="ion-text-end">
+                    <ion-text class="adjusments" color="danger">Password must be at least 8 characters</ion-text>
+                  </div>
+                </ng-container> -->
+                <ion-item lines="none">
+                  <ion-label position="floating" class="ion-padding-start" color="primary">Last Name</ion-label>
+                  <ion-input type="text" formControlName="last_name"></ion-input>
+                </ion-item>
+                <div class="ion-text-end ion-padding-horizontal">
+                  <ng-container *ngIf="registrationForm.controls.last_name.touched">
+                    <p ion-text no-margin padding-left  class="adjustments" *ngIf="registrationForm.controls.last_name.hasError('required')">This field is required</p>
+                    <p ion-text no-margin padding-left  class="adjustments" *ngIf="registrationForm.controls.last_name.hasError('maxLength')">Last name should not exceed 30 characters</p>
+                    <p ion-text no-margin padding-left  class="adjustments" *ngIf="registrationForm.controls.last_name.hasError('pattern')">Last name should only contain letters</p>
+                  </ng-container> 
+                </div>
+                <ng-container>
+                  <!-- <div class="ion-text-end">
+                    <ion-text class="adjusments" color="danger">This field is required</ion-text>
+                  </div>
+                  <div class="ion-text-end">
+                    <ion-text class="adjusments" color="danger">Password must be at least 8 characters</ion-text>
+                  </div> -->
+                </ng-container>
+                <ion-item lines="none">
+                  <ion-button fill="clear" class="alert-btn" (click)="chooseGender(genderId)"></ion-button>
+                  <ion-label position="floating" class="ion-padding-start" color="primary">Sex</ion-label>
+                  <ion-input class="relative-input" readonly type="text" formControlName="gender_label" ></ion-input>
+                  <!-- <ion-label ion-text color="t-gold" floating class="floatingLabel" padding-left>Sex</ion-label>   -->
+                </ion-item>
+                
+                <ion-item lines="none">
+                  <ion-col size="12">
+                    <ion-row style="float: right;" class="ion-padding-top">
+                      <ion-button mode="ios" (click)="pushToAgreementsPage()" [disabled]="!registrationForm.valid">SUBMIT</ion-button>
+                    </ion-row>
+                  </ion-col>
+                </ion-item>
+              </ion-col>
+            </form>
+        
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

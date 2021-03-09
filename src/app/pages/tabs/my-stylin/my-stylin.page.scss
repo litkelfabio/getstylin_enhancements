@@ -1,0 +1,116 @@
+ion-label{
+    font-family: 'Raleway' !important;
+}
+ion-text{
+    font-family: 'Raleway' !important;
+}
+ion-button{
+    font-family: 'Raleway' !important;
+}
+b{
+    font-family: 'Raleway' !important;
+}
+ion-header{
+    ion-label{
+        font-size: 15px !important;
+        font-weight: 1000;
+    }
+    ion-icon{
+        zoom: 0.7;
+    }
+    .text-icon{
+        padding-left: 5px !important;
+    }
+    .text-end{
+        padding-right: 5px !important;
+    }
+}
+.points-icon{
+    zoom: 0.8 !important;
+}
+ion-content{
+    .edit{
+        font-size: 15px;
+    }
+    ion-button{
+        height: 38px;
+        border-radius: 0px !important;
+        font-size: 13px !important;
+    }
+    .name-text{
+        font-size: 20px !important;
+    }
+}
+.edit-text{
+    font-family: 'Raleway' !important;
+    font-size: 13px !important;
+}
+.info{
+    height: auto !important;
+    padding-bottom: 3px !important;
+}
+.info-text{
+    font-family: "Raleway" !important;
+    font-size: 15px;
+}
+.name-text{
+    font-size: 20px !important;
+}
+.about-row{
+    padding-top: 0px !important;
+    padding-left: 10px !important;
+}
+.style-points{
+    position: absolute;
+    top: -1px;
+    left: -8px;
+    zoom: 1.2;
+}
+ion-badge{
+    position: absolute;
+    right: 0px;
+}
+.badge-primary{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #b3a25d;
+    position: absolute;
+    top: 4px;
+    right: -10px;
+}
+.img-dashboard{
+    border-radius: 10px!important;
+    overflow: hidden;
+    
+}
+.spinner{
+    height: 125px;
+    border-radius: 10px !important;
+    background-image: url(./../../../../assets/imgs/empty-states/no-user-photo.png);
+    display: block;
+    // position: absolute;
+    // justify-content: center;
+    // align-items: center;
+    z-index: 999;
+    top: -2px;
+    width: 115px;
+}
+.spinner-circle{
+    position: absolute;
+    top: 41%;
+    left: 39%;
+}
+.loc-icon{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+// .img-container{
+//     background-color: gray !important;
+//     border-radius: 10px !important;
+// }
+.points-text{
+    font-size: 15px !important;
+}
+

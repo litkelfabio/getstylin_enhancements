@@ -1,0 +1,210 @@
+// ion-slides{
+//     display: flex;
+//     justify-content: left;
+//     align-items: center;
+// }
+// app-discover{
+//     ion-content{
+      
+//     }
+//     ion-item.item{
+//         width: 100% !important;
+//     }
+    
+// }
+// ion-item.item.ios.item-lines-none.ion-focusable.hydrated {
+//     width: 100% !important;
+// }
+app-discover{
+    .tags[scrollx=true], div[scrolly=true] {
+        position: relative;
+        overflow: hidden;
+      
+        ::-webkit-scrollbar {
+          display: none;
+        }
+      }
+      
+      .tags[scrollx=true] {
+        overflow-x: auto;
+      }
+      
+      .tags[scrolly=true] {
+        overflow-y: auto;
+      }
+}
+ion-icon{
+  &.big {
+    width: 50px;
+    height: 17px;
+    
+  }
+
+  &.bigger {
+    width: 100px;
+    height: 100px;
+  }
+
+  &.red {
+    color: red;
+  }
+  ion-input{
+    background-color: rgba(229, 228, 226, 0.2);
+  }
+  
+  
+}
+.empty-text{
+  font-family: 'Raleway' !important;
+}
+.img-container{
+  height: auto;
+  border-radius: 10px !important;
+  overflow: hidden;
+  ion-img{
+    height: 120px;
+      display: block !important;
+      object-fit: cover !important;
+      object-position: center !important;
+  }
+}
+.img-container2{
+  height: auto;
+  border-radius: 10px !important;
+  overflow: hidden;
+  ion-img{
+    height: 75px;
+      display: block !important;
+      object-fit: cover !important;
+      object-position: center !important;
+  }
+}
+
+.img-container2::after{
+  height: auto;
+  border-radius: 10px !important;
+  overflow: hidden;
+  ion-img{
+    height: 75px;
+      display: block !important;
+      object-fit: cover !important;
+      object-position: center !important;
+      // background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, #fff 100%) !important;
+      
+  }
+}
+
+.img-container3{
+  height: auto;
+  border-radius: 10px !important;
+  overflow: hidden;
+  ion-img{
+    height: 90px;
+      display: block !important;
+      object-fit: cover !important;
+      object-position: center !important;
+  }
+}
+.spinner2{
+  background-color: gray !important;
+  border-radius: 50%;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  height: 52px;
+  width: 52px;
+  top: 0px;
+  left: 10px;
+} 
+.spinner-circle{
+  top: 10px;
+  left: 0px;
+}
+.spinnerStyle{
+  background-color: gray !important;
+  border-radius: 10px;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  height: 120px;
+  width: 85px;
+  top: 0px;
+  left: 0px;
+}
+.spinner-circle-style{
+  top: 45px;
+  left: 0px;
+}
+.spinner-event{
+  background-color: gray !important;
+    border-radius: 10px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 90px;
+    width: 81px;
+    top: 0px;
+    left: 0px;
+}
+.spinner-event2{
+  background-color: gray !important;
+    border-radius: 10px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 90px;
+    width: 92px;
+    top: 0px;
+    left: 0px;
+}
+.spinner-circle-event{
+  top: 27px;
+  left: 0px;
+}
+.spinner-styleColumn{
+  background-color: gray !important;
+  border-radius: 10px;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  height: 76px;
+  width: 144px;
+  top: 0px;
+  left: 0px;
+}
+.spinner-circle-styleColumn{
+  top: 0px;
+  left: 0px;
+}
+.spinner-postResult{
+  background-color: gray !important;
+    border-radius: 10px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 120px;
+    width: 93px;
+    top: 0px;
+    left: 0px;
+}
+.spinner-circle-postResult{
+  top: 43px;
+  left: 0px;
+}
+.style-column-img{
+  position: absolute;
+  padding: 20px;
+  bottom: 0;
+  color: #fff;
+  width: 100%;
+  height: auto;
+  background: linear-gradient(180deg,rgba(0,0,0,0) 0,#000 100%);
+  // background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);
+}

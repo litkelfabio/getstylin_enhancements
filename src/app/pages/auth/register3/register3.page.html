@@ -1,0 +1,84 @@
+<ion-content class="ion-padding-horizontal">
+  <ion-col size="12">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center" >
+        <img id="logo" src='assets/imgs/GS.svg' height="120px" >
+      </ion-col>
+      <ion-col col-12 class="ion-text-center" >
+        <img src='assets/imgs/Progress2.svg' >
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12 class="ion-text-center">
+        <h5>{{ "Complete Your Profile" | uppercase }}</h5>
+        <p>Just a few details, and you're all set!</p>
+      </ion-col>
+    </ion-row>
+    <ion-col size="12">
+      <form [formGroup]="registrationForm">
+        <ion-col size="12">
+          <!-- <ion-item lines="none" (click)="openBirthdayModal()" > -->
+          <ion-item lines="none" class="form-items" >
+            <ion-label position="floating" color="primary" class="ion-padding-start">Birthday</ion-label>
+            <ion-input readonly type="text" formControlName="birthdate" tappable (click)="showDateInput()"></ion-input>
+            <!-- <ion-input required type="text" (click)="openBirthdayModal()"></ion-input> -->
+            </ion-item>
+          <ion-item lines="none" class="form-items">
+            <ion-label color="primary" position="floating" class="ion-padding-start">Location</ion-label>
+            <ion-input type="text" formControlName="location"  (input)='getValue($event.target.value)' (ionFocus)="clearFocus()"></ion-input>
+          </ion-item>
+          <ng-container *ngIf="autocompleteItems && autocompleteItems.length > 0">
+            <!-- <ion-item no-padding class="auto-complete-container" style="z-index: 99999;"> -->
+              <ion-card no-margin style="margin-top: 0px;">
+                <ion-list lines>
+                  <ion-item *ngFor="let item of autocompleteItems" tappable (click)="geoCode(item)" padding-horizontal>{{ item }}</ion-item>
+                </ion-list>
+              </ion-card>
+            <!-- </ion-item> -->
+          </ng-container>
+          <ion-item lines="none" class="form-items ion-padding-bottom">
+            <ion-label color="primary" position="floating" class="ion-padding-start">Say something about you</ion-label>
+            <ion-textarea rows="2" maxLength="150" cols="5" ></ion-textarea>
+          </ion-item>
+          <!-- <ion-item (click)="openFavoriteBrandModal()"> -->
+            <ion-item class="ion-padding-top" lines="none" class="form-items">
+            <ionic-selectable
+              placeholder="Favorite Brands"
+              item-content 
+              formControlName="brands_form"
+              [items]="brands"
+              itemValueField="id"
+              itemTextField="brand_name"
+              [canSearch]="true"
+              [hasInfiniteScroll]="true"
+              [isMultiple]="true"
+              (onSaveItem)="onSaveBrands($event)"
+              (onSearch)="searchBrands($event)"
+              (onInfiniteScroll)="getMoreBrands($event)"
+              (onChange)="brandChange($event)"
+              style="
+                background-color: rgba(196, 196, 196, 0.2);
+                padding-right: 20px;
+                padding-left: 20px;"
+              >
+            </ionic-selectable>
+            <!-- <ion-label class="ion-padding-start" *ngIf="items">Favorite Brands</ion-label> -->
+            <!-- <ion-input rows="2" maxLength="150" cols="5" (click)="openFavoriteBrandModal()" ></ion-input> -->
+          </ion-item>
+          <ion-item lines="none" class="button-item">
+            <ion-col size="12">
+              <ion-row style="float: right;" class="ion-padding-vertical">
+                <ion-button (click)="saveInfo()">{{ "Submit" | uppercase }}</ion-button>
+              </ion-row>
+            </ion-col>
+          </ion-item>
+          <ion-row class="ion-no-padding"> 
+            <ion-col class="ion-text-center ion-no-padding">
+              <ion-text color="primary" (click)="skipStep()">Skip this step</ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </form>
+    </ion-col>
+  </ion-col>
+</ion-content>

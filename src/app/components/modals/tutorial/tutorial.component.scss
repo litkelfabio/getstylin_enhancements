@@ -1,0 +1,110 @@
+ion-slides {
+    height: 100%;
+    // .swiper-container{
+    //     width: 100% !important; 
+    //       height: 100px !important;
+    //       margin: 0 15px !important;
+    //       padding: 8px 0px !important;
+    //   }
+}
+.tabs-text{
+    font-size: 10px;
+}
+
+ion-chip{
+    ion-label{
+        font-family: 'Raleway' !important;
+        font-size: 12px;
+    }
+}
+ion-text{
+    font-family: 'Raleway' !important;
+}
+ion-label{
+    font-family: 'Raleway' !important;
+}
+ion-segment{
+    border-radius: 0px !important;
+    ion-label{
+        font-size: 12px !important;
+    }
+}
+ion-segment-button{
+    margin: 0px !important;
+    border-color: white !important;
+    border-style: solid !important;
+    border-width: 1.5px !important;
+    background: rgba(179, 162, 93, 0.15);
+    height: 61px;
+    width: 90px;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-radius: 0px !important;
+    border-bottom-left-radius: 0 !important;
+}
+ion-progress-bar {
+    --buffer-background: lightgrey;
+    height: 4px;
+    --border-color: lightgrey;
+}
+.non-ralewayP{
+    font: 1em sans-serif !important;
+}
+ion-row{
+    ion-item{
+        ion-label{
+            font-size: 15px !important;
+        }
+    }
+}
+
+
+.slide4-segment{
+    margin: 0px !important;
+    border-color: white !important;
+    border-style: solid !important;
+    border-width: 1.5px !important;
+    background: rgba(179, 162, 93, 0.15);
+    height: 75px;
+    width: 90px;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-radius: 0px !important;
+    border-bottom-left-radius: 0 !important;
+}
+.footer-segment{
+    background-color: white !important;
+   margin: 0px;
+   border: 0px !important;
+    position: sticky;
+    top: 0% !important;
+    bottom: 0% !important;
+    z-index: 9999999999999; 
+    border-style: solid !important;
+    .tabs-button{
+        //margin: 0px !important;
+        --border-color: none !important;
+        background-color: white !important;
+        --height: 55px !important;
+        //border: 0px !important;
+        ion-label{
+            font-size: 8px !important;
+        }
+        ion-icon{
+            zoom: 1.2;
+        }
+    }
+    // @media only screen and (max-width : 360px ) {
+                
+    //     .footer-segment{
+    //         top: 91% !important;
+    //     }
+    
+// }
+}
+
+
+
+ 

@@ -1,0 +1,40 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title>USERNAME</ion-title>
+    <ion-buttons slot="start">
+      <ion-icon  src="assets/css/icon/back.svg" (click)="back()"></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-icon src="assets/css/icon/send.svg" (click)="updateMyUsername()" style="zoom: 1;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding">
+  
+  
+
+  <form [formGroup]="changeUsernameForm">
+    <ion-row>
+      <ion-item class="ion-no-padding">
+        <ion-icon src="assets/css/icon/account-info.svg" class="ion-padding-start ion-padding"></ion-icon>
+        <ion-input type="text" class="emailAdd ion-padding" placeholder="Username" formControlName="username" [readonly]="isSending" (input)='validateInfo($event.target.value)' (blur)="validateInfo($event.target.value)"></ion-input>
+      </ion-item>
+
+      <!-- This username is invalid. You can only use alphanumeric characters and the period symbol (.) -- this is an error state for username -->
+      <ng-container *ngIf="changeUsernameForm.controls.username.touched">
+        <ion-text class="adjustments" color="danger"  *ngIf="changeUsernameForm.controls.username.hasError('required')">This field is required.</ion-text>
+        <ion-text class="adjustments" color="danger"  *ngIf="changeUsernameForm.controls.username.hasError('pattern')">This username is invalid. You can only use alphanumeric characters and the period symbol (.)</ion-text>
+        <ion-text class="adjustments" color="danger"  *ngIf="changeUsernameForm.controls.username.hasError('maxLength')">Username should not exceed 30 characters.</ion-text>
+        <ion-text class="adjustments" color="medium"  *ngIf="!changeUsernameForm.controls.username.hasError('required') && !changeUsernameForm.controls.username.hasError('maxLength') && usernameExists == false && !changeUsernameForm.controls.username.hasError('pattern') && !isSameAsPrevious">Username is available.</ion-text>
+        <ion-text class="adjustments" color="danger"  *ngIf="!changeUsernameForm.controls.username.hasError('required') && !changeUsernameForm.controls.username.hasError('maxLength') && usernameExists == true && !submissionErrorMessage">This username is already taken.</ion-text>
+      </ng-container>
+      <!-- <ion-item no-padding lines="none" *ngIf="hasSubmissionErrors"> -->
+        <ion-text class="adjustments" *ngIf="hasSubmissionErrors" color="danger">{{ submissionErrorMessage }}</ion-text>
+      <!-- </ion-item> -->
+      <ion-text class="ion-padding-top ion-text-wrap" style="font-size: 13px; font-family: 'Raleway' !important;" color="medium ">Your unique username is your main identification (along with your unique email address) in this this app.</ion-text>
+      <!-- *ngIf="!changeUsernameForm.controls.username.hasError('pattern') && !changeUsernameForm.controls.username.hasError('required') && !changeUsernameForm.controls.username.hasError('maxLength')" -->
+    </ion-row>
+  </form>
+</ion-content>

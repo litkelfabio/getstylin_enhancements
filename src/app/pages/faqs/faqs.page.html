@@ -1,0 +1,77 @@
+<ion-header class="ion-padding ion-no-border">
+  <ion-toolbar>
+    <ion-title>FAQS</ion-title>
+    <ion-buttons (click)="back()">
+      <ion-icon src="assets/css/icon/back.svg"></ion-icon>
+    </ion-buttons> 
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf="faqs">
+  <ion-row *ngFor="let faqs of faqs" class="item-line" (click)="show(faqs)">
+    <ion-col size="11" class="ion-padding-top">
+      <ion-text class="question-name">{{faqs.question_name}}</ion-text>
+    </ion-col>
+    <ion-col size="1" class="ion-no-padding" *ngIf="!faqs.showDetails">
+      <ion-button fill="clear" class="ion-no-padding ion-no-margin">
+        <ion-icon name="add-outline" color="dark"></ion-icon>
+      </ion-button>
+    </ion-col>
+    <ion-col size="1" class="ion-no-padding" *ngIf="faqs.showDetails">
+      <ion-button fill="clear" class="ion-no-padding ion-no-margin">
+        <ion-icon name="remove-outline" color="dark"></ion-icon>
+      </ion-button>
+    </ion-col>
+    <ng-container *ngIf="faqs.showDetails">
+      <ion-text [innerHTML]="faqs.question_description" class="question-details ion-padding-bottom ion-no-margin-top object"></ion-text>
+    </ng-container>
+  </ion-row>
+
+</ion-content>
+<ion-content class="ion-padding" *ngIf="!faqs">
+  <ion-row>
+    <ion-col size="12" class="ion-padding-horizontal">
+      <ion-skeleton-text animated  style="width: 100%; height: 50px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-padding-horizontal">
+      <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-padding-horizontal">
+      <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-padding-horizontal">
+      <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-padding-horizontal">
+      <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-padding-horizontal">
+      <ion-skeleton-text animated  style="width: 100%; height: 50px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-padding-horizontal">
+      <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-padding-horizontal">
+      <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-padding-horizontal">
+      <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+</ion-content>

@@ -1,0 +1,40 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title>PROFILE</ion-title>
+    <ion-buttons slot="start">
+        <ion-icon src="assets/css/icon/back.svg" (click)="back()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <ion-col size="12">
+    <ion-item (click)="goToUsername()">
+      <ion-icon src="assets/css/icon/account-info.svg" class="ion-padding"></ion-icon>
+      <ion-label class="ion-text-wrap ion-padding-start">Username</ion-label>
+    </ion-item>
+    <ion-item (click)="goToEmail()">
+      <ion-icon src="assets/css/icon/inside-email-settings.svg" class="ion-padding"></ion-icon>
+      <ion-label class="ion-text-wrap ion-padding-start">Email address</ion-label>
+    </ion-item>
+
+    <ng-container *ngIf="hasApplied && status == 2">
+      <ion-item >
+        <ion-icon src="assets/css/icon/istyle.svg" class="ion-padding" ></ion-icon>
+        <ion-label class="ion-text-wrap ion-padding-start" color="medium">Become A Stylist (Pending Application)</ion-label>
+      </ion-item>
+    </ng-container>
+    <ng-container *ngIf="hasApplied && status == 3">
+      <ion-item >
+        <ion-icon src="assets/css/icon/istyle.svg" class="ion-padding" ></ion-icon>
+        <ion-label class="ion-text-wrap ion-padding-start" color="medium">Become A Stylist (Rejected Application)</ion-label>
+      </ion-item>
+    </ng-container>
+    <ng-container *ngIf="hasApplied && status == 4">
+      <ion-item >
+        <ion-icon src="assets/css/icon/istyle.svg" class="ion-padding" ></ion-icon>
+        <ion-label class="ion-text-wrap ion-padding-start" color="medium">Become A Stylist (Revoked Status)</ion-label>
+      </ion-item>
+    </ng-container>
+  </ion-col>
+</ion-content>

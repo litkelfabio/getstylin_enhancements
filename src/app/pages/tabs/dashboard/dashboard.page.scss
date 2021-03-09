@@ -1,0 +1,181 @@
+
+// .toolbar-ios {
+//   padding-left: 6px;
+//   padding-right: 6px;
+// }
+
+//   ion-card {
+//     margin: 12px 12px 32px 12px !important;
+
+//       p {
+//           font-family: 'Roboto', sans-serif;
+//           letter-spacing: 0.01em !important;
+//           font-size: --itemDescription !important;
+//           // font-size: 2vh !important;
+//           line-height: 16px !important;
+//       }
+//       ion-item {
+//           ion-avatar {
+//               min-height: 0 !important;
+//               img,
+//               img-loader {
+//                   height: 37px !important;
+//                   width: 37px !important;
+//                   border-radius: 50%;
+//                   background-position: center;
+//               }
+//           }
+//       }
+//       ion-note {
+//         // font-size: 2vh !important;
+//         font-size: --itemTimestamp !important;
+//       }
+//   }
+
+//   ion-buttons {
+//     margin: 0px;
+
+//     button {
+//       margin: 0.4rem 0.1rem !important;
+//     }
+//   }
+
+//   ion-content {
+//     .card-header {
+//       margin-bottom: 12px !important;
+//     }
+
+//       h6{
+//           letter-spacing: 0.01em;
+//       }
+//       .gray{
+//           background: #B6B7AD !important;
+//       }
+//       img {
+//           border-radius: 10px;
+//           width: 100% !important;
+//       }
+//       .loc{
+//           margin: 0 !important;
+//           font-size: --itemLocationStamp !important;
+//           width: 100%;
+//       }
+//       .left{
+//           padding-left: 24px !important;
+//       }
+//       .hours{
+//         // font-size: $font9 !important;
+//         font-size: --itemTimestamp !important;
+//         line-height: 9px;
+//         letter-spacing: 0.05em;
+//       }
+//       [col-6]{
+//           padding: 0 !important;
+//       }
+//     .spaceAdj{
+//         padding: 2px !important;
+//     }
+
+//     .horizontal-padded {
+//       padding: 2px 0px !important;
+//     }
+// }
+// #notification-blip {
+//   width: 8px;
+//   height: 8px;
+//   border-radius: 50%;
+//   background-color: --t-gold;
+//   position: absolute;
+//   top: 8px;
+//   right: 0px;
+// }
+
+// .photo-container {
+//   min-width: 100%;
+//   min-height: 100px;
+//   width: fit-content;
+//   max-height: fit-content;
+//   background-color: rgba(196, 196, 196, 0.2);
+//   border-radius: 10px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
+
+.badge-primary{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #b3a25d;
+    position: absolute;
+    top: 12px;
+    right: 0px;
+}
+.message-badge{
+    position: absolute;
+    top: 5px;
+    left: 25px;
+}
+.img-dashboard{
+    border-radius: 10px!important;
+    overflow: hidden;
+}
+.spinner{
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+}
+.spinner2{
+    background-color: gray !important;
+    border-radius: 50%;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 47px;
+    width: 48px;
+    top: 0px;
+    left: 0px;
+}
+.spinner-circle{
+    top: 8px;
+    left: 10px;
+}
+
+video{
+    border-radius: 10px !important;
+    max-width: 100%;
+    max-height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .card-content{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  
+.likebutton{
+    width: 30px;
+    height: 30px;
+    --padding-start: 0px;
+    --padding-end: 0px;
+        
+}
+.icon-like-size{
+    zoom: 2 !important;
+}
+
+.object {
+    animation: MoveUpDown 1.5s linear infinite;
+  }
+  
+  @keyframes MoveUpDown {
+    from{
+      transform: translateY(0%);
+      opacity: 1;
+    }
+    to{
+      transform: translateY(-10%);
+      opacity: 0;
+    }
+  }

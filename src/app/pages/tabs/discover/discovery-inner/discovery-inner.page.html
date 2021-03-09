@@ -1,0 +1,504 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar >
+    <ion-title *ngIf="isSubmitted == false">
+      <ion-text class="block">
+        <ng-container *ngIf="pageContext == 'categories'">{{ 'STYLE PICKS | '+ pageTitle | uppercase }}</ng-container>
+        <ng-container *ngIf="pageContext == 'tags'">{{ '#' + pageTitle | uppercase }}</ng-container>
+        <ng-container *ngIf="pageContext != 'categories' && pageContext != 'tags'  && isSubmitted == false">
+          {{ pageTitle | uppercase }}
+        </ng-container>
+      </ion-text>
+      <ng-container *ngIf="pageContext != 'categories' && pageContext != 'tags'  && isSubmitted == false && pageContext == 'stylecolumn'">
+        <ion-text  class="block">
+          <ion-text class="block">
+            <div class="sub-title">
+              <ion-label text-wrap text-center>{{ stylecolumnsCategoryName  | uppercase}}</ion-label>
+            </div>
+          </ion-text>
+        </ion-text>
+      </ng-container>
+    </ion-title>
+      <ion-buttons (click)="backDashboard()" *ngIf="isNotified">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.5; "></ion-icon>
+      </ion-buttons>
+      <ion-buttons slot="start"  (click)="back()" *ngIf="!isCity">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.5; "></ion-icon>
+      </ion-buttons>
+      <ion-buttons slot="start"(click)="cancelSearch()" *ngIf="isCity">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.5; "></ion-icon>
+      </ion-buttons>
+      <ion-title *ngIf="isSubmitted == true && !isCity">
+        {{ "Search Results" | uppercase }}
+      </ion-title>
+
+      <ion-title *ngIf="isSubmitted == true && isCity">
+        {{ searchQuery | uppercase }}
+      </ion-title> 
+  </ion-toolbar>
+</ion-header>
+<ng-progress #progressBar [color]="'#B3A25D'" [spinner]="false" [meteor]="false" [fixed]="true" [thick]="true"></ng-progress>
+<ion-content #contentWindow slot="fixes" class="ion-no-padding">
+  <ion-fab vertical = "bottom" horizontal = "end" slot="fixed" *ngIf="pageContext != 'categories' && pageContext != 'tags' && pageContext != 'stylists' && pageContext != 'posts' && isSubmitted == false && pageContext != 'events'">
+    <ion-fab-button color="light" (click)="goToModal()">
+      <ion-icon name = "add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-refresher #refresherRef slot="fixed" (ionRefresh)="doRefresh($event)" mode="md" >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+
+
+<!-- MESSAGE A USER -->
+  <!-- This part is only shown when a 'message' context is passed to the page. -->
+  <!-- This search bar is also present when stylists/users are viewed from DiscoverMain's search context. -->
+  <div class="ion-padding" *ngIf="(pageContext != 'stylists') && !pageIsLoading">
+    <!-- END MESSAGE A USER SEARCH BAR -->
+   
+  <!-- Stylist context -->
+ 
+  <!-- End Stylist context -->
+
+  <!-- Events context -->
+  <ng-container *ngIf="pageContext == 'events'">
+    <div>
+      <div *ngIf="!isCity" class="header-searchbar">
+        <div class="header-searchicon">
+          <ion-button *ngIf="!searchQuery" fill="clear" (click)="searchEventsSwitch()" id="clearEventSearchBox-btn" >
+            <ion-icon slot="icon-only" src="assets/css/icon/discover.svg" color="color-gray"></ion-icon>
+          </ion-button>
+
+          <ion-button id="clearEventSearchBox-btn" *ngIf="searchQuery" fill="clear" (click)="cancelSearch()">
+            <ion-icon slot="icon-only" src="assets/css/icon/close-history.svg" color="color-gray" style="zoom: 0.5 !important;"></ion-icon>
+          </ion-button>
+          <!-- <ion-icon *ngIf="!searchQuery" name="custom-search" color="color-gray" tappable (tap)="searchEventsSwitch()"></ion-icon>
+          <ion-icon *ngIf="searchQuery" name="custom-close" color="color-gray" tappable (tap)="cancelSearch()"></ion-icon> -->
+        </div>
+        <div class="header-searchbox" >
+          <ion-item class="ion-no-padding" lines="none" style="--background: #fafaf9">
+            <ion-input type="text" class="eventsAdjust ion-no-padding" placeholder='Search event or city' 
+            [(ngModel)]="searchQuery" (keyup)="searchEventsSwitch($event)"
+            (input)="suggestEvents($event)"></ion-input>
+          </ion-item>
+         <!--   <ion-list lines>
+            <ion-item *ngFor="let item of autoSuggest"  padding-horizontal>{{ item }}</ion-item>
+          </ion-list> -->
+          <ng-container *ngIf="toggleList && autoSuggest && autoSuggest.length > 0">
+            <!-- <ion-item no-padding class="auto-complete-container"> -->
+              <ion-card style="width: 100% !important; margin: 0px !important;" class="auto-complete-container">
+                <ion-list lines>
+                  <ion-item *ngFor="let item of autoSuggest" (click)="selectEvent(item.event_title)" padding-horizontal>{{ item.event_title }}
+                  </ion-item>
+                  <ion-item *ngFor="let item of autoSuggest" (click)="selectEvent(item.city)" padding-horizontal>
+                    {{item.city}}
+                  </ion-item>
+                </ion-list> 
+              </ion-card>
+            <!-- </ion-item> -->
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Results view -->
+    <!-- Show this section if the Search box is filled -->
+    <ng-container *ngIf="isSubmitted == true">
+      <!-- Loading -->
+      <div class="loading" *ngIf="pageIsLoading" text-center>
+        <!-- <ion-spinner color="t-gold"></ion-spinner> -->
+        <div class="padded-container">
+          <ion-grid id="search-grid-results" no-margin no-padding>
+            <ion-row no-margin no-padding>
+              <ion-col size="4" no-margin no-padding>
+                <div class="search-grid-item">
+                  <ion-skeleton-text animated style="width: 86px; height: 86px;"></ion-skeleton-text>
+                  <ion-skeleton-text rounded animated style="width: 80px;"></ion-skeleton-text>
+                </div>
+              </ion-col>
+
+              <ion-col size="4" no-margin no-padding>
+                <div class="search-grid-item">
+                  <ion-skeleton-text animated style="width: 86px; height: 86px;"></ion-skeleton-text>
+                  <ion-skeleton-text rounded animated style="width: 80px;"></ion-skeleton-text>
+                </div>
+              </ion-col>
+
+              <ion-col size="4" no-margin no-padding>
+                <div class="search-grid-item">
+                  <ion-skeleton-text animated style="width: 86px; height: 86px;"></ion-skeleton-text>
+                  <ion-skeleton-text rounded animated style="width: 80px;"></ion-skeleton-text>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </div>
+
+      <!-- Empty, query filled, submitted -->
+      <div class="empty" text-center *ngIf="!pageIsLoading && searchEvents.length == 0 && isSubmitted == true">
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <ion-text class="state-notice" style="font-family: 'Raleway' !important;">No events found.</ion-text>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <!-- Filled -->
+      <div class="filled padded-container" *ngIf="!pageIsLoading && searchEvents.length >0">
+        <ion-grid id="search-grid-results" no-margin no-padding>
+          <ion-row no-margin no-padding>
+            <ion-col col-4 no-margin no-padding *ngFor="let event of searchEvents; index as i">
+              <div class="search-grid-item" tappable (click)="viewEventDetails(event)">
+                <div text-center class="search-grid-banner" *ngIf="event.event__photo != 'no piksur'" [ngStyle]="{'background-image': 'url('+ event.photo +'), url(assets/imgs/empty-states/fallback.svg)'}"></div>
+                <div text-center class="search-grid-banner" *ngIf="event.event__photo == 'no piksur'" [ngStyle]="{'background-image': 'url(assets/imgs/empty-states/fallback.svg)'}"></div>
+                <div text-center class="search-grid-title"><span>{{ event.event_title }}</span></div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </ng-container>
+
+    <!-- Default View -->
+    <!-- Show this section if the Search box is empty -->
+    <!-- *ngIf="searchQuery == null || searchQuery.length == 0 || isSubmitted == false" -->
+    <ng-container *ngIf="searchQuery == null || searchQuery.length == 0 || isSubmitted == false">
+      <div class="padded-top padded-lr">
+        <span class="span-headers">{{ "Explore by City" | uppercase }}</span>
+      </div>
+
+      <div class="slide-container padded-container">
+        <!-- Loading -->
+        <div class="loading" *ngIf="pageIsLoading">
+          <ion-slides pager="true" [options]="slideEventSearch">
+            <ion-slide>
+              <ion-skeleton-text animated style="width: 92px; height: 92px;"></ion-skeleton-text>
+            </ion-slide>
+            <ion-slide>
+              <ion-skeleton-text animated style="width: 92px; height: 92px;"></ion-skeleton-text>
+            </ion-slide>
+            <ion-slide>
+              <ion-skeleton-text animated style="width: 92px; height: 92px;"></ion-skeleton-text>
+            </ion-slide>
+            <ion-slide>
+              <ion-skeleton-text animated style="width: 92px; height: 92px;"></ion-skeleton-text>
+            </ion-slide>
+            <ion-slide>
+              <ion-skeleton-text animated style="width: 92px; height: 92px;"></ion-skeleton-text>
+            </ion-slide>
+          </ion-slides>
+        </div>
+
+        <!-- Empty -->
+        <ng-container *ngIf="cities">
+          <div class="empty" text-center *ngIf="!pageIsLoading && cities.length == 0">
+            <ion-row class="ion-no-padding">
+              <ion-col class="ion-text-center ion-no-padding">
+                <ion-text class="state-notice">No city events found.</ion-text>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ng-container>
+
+        <!-- Filled -->
+        <ng-container *ngIf="cities">
+          <div *ngIf="!pageIsLoading && cities.length > 0">
+            <ion-slides pager [options]="slideEventSearch">
+              <ion-slide *ngFor="let city of cities">
+                <div (click)="getEventsByCity(city.city)" class="slide-item" [ngStyle]="{'background-image': 'linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6026785714285714) 0%), url('+city.photo+')'}">
+                  <div class="slide-label">
+                    <span text-wrap style="font-size: 10px;">{{ city.city | uppercase  }}</span>
+                  </div>
+                </div>
+              </ion-slide>
+            </ion-slides>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="padded-lr">
+        <span class="span-headers">{{ "Upcoming Events" | uppercase }}</span>
+      </div>
+
+      <div class="padded-lr">
+        <!-- Loading State -->
+        <div class="loading" *ngIf="pageIsLoading" text-center>
+          <ion-spinner color="t-gold"></ion-spinner>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty" text-center *ngIf="!pageIsLoading && events.length == 0">
+          <ion-row class="ion-no-padding">
+            <ion-col class="ion-text-center ion-no-padding">
+              <ion-text style="font-family: 'Raleway' !important;">No events found.</ion-text>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <!-- Loop here for all events -->
+        <div class="filled" text-center *ngIf="!pageIsLoading && events.length > 0">
+          <div class="events-container" *ngFor="let event of events; index as i" tappable (click)="viewEventDetails(event)">
+            <!-- [ngStyle]="{ 'background-image': 'linear-gradient(180deg, rgba(25, 25, 25, 0.5) -36.97%, rgba(25, 25, 25, 0) 85.26%) , url('+profileCoverPhoto+')' } -->
+            <div class="event-banner" *ngIf="event && event.photo" [ngStyle]="{ 'background-image': 'url('+ event.photo +'), url(assets/imgs/empty-states/fallback.svg)' }"></div>
+            <div class="event-banner" *ngIf="event && !event.photo"[ngStyle]="{ 'background-image': 'url(assets/imgs/empty-states/fallback.svg)' }"></div>
+            <div class="event-details">
+              <ion-grid no-padding no-margin>
+                <ion-row no-padding no-margin class="detail-heading">
+                  <ion-col col-9 no-padding no-margin text-left>
+                    <span class="span-headers">{{ event.event_title }}</span>
+                  </ion-col>
+                  <ion-col col-3 no-padding no-margin text-right>
+                    <span class="span-headers datestamp">{{ getFormatFromProvider(event.start_date) }}</span>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row no-padding no-margin class="detail-sub">
+                  <ion-col col-9 no-padding no-margin text-left>
+                    <div id="detail-container" [innerHTML]="event.stripped_description"></div>
+                  </ion-col>
+                  <ion-col col-3 no-padding no-margin text-right>
+                    <span>{{ event.city | uppercase }}</span>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+  <!-- End Events context -->
+     <!-- Tags context -->
+    
+     <ng-container *ngIf="pageContext == 'tags' || pageContext == 'categories' || pageContext == 'posts'">
+      <div class="padded-lr"> 
+        <ng-container *ngIf="posts">
+          <div>
+            <ngx-masonry [options]="{ gutter: 10 }" (itemsLoaded)='completeMasonry()' [ordered]="true" >
+              <div ngxMasonryItem class="grid-sizer grid-item" *ngFor="let post of posts; let i = index" tappable (click)="gotoDetails(post)">
+                <img [src]="post.user_post_pic_url" style="border-radius: 10px !important;" >
+                <!-- <img-loader src="{{ post.user_post_pic_url }}"
+                [ngStyle]="{
+                  'filter': 'brightness('+post.filter.brightness+')
+                  contrast('+post.filter.contrast+')
+                  saturate('+post.filter.saturation+')'
+                }"
+                fallbackUrl="{{ post.user_post_pic_url ? post.user_post_pic_url :'assets/imgs/empty-states/fallback.svg' }}"
+                fallbackAsPlaceholder="true">
+              </img-loader> -->
+              </div>
+            </ngx-masonry>
+          </div>
+        </ng-container>
+      </div>
+  
+      <ng-container *ngIf="posts && totalItems == 0">
+        <p ion-text text-center margin-top>No posts are available</p>
+      </ng-container>
+  
+      <!-- Skeleton Loader -->
+      <ng-container *ngIf="!posts">
+        <div margin-top text-center>
+          <!-- <ion-spinner color="t-gold"></ion-spinner> -->
+        </div>
+      </ng-container>
+    </ng-container>
+    <!-- End Tags context -->
+    <ng-container *ngIf="pageContext == 'stylecolumn'">
+      <ion-row>
+        <ion-col size="2" class="ion-no-padding">
+          <div class="header-searchicon">
+            <ion-button style="background-color: #fafaf9;" *ngIf="!styleColumnQuery" fill="clear" (click)="searchStyleColumnSwitch()" id="clearEventSearchBox-btn" >
+              <ion-icon slot="icon-only" src="assets/css/icon/discover.svg" color="color-gray"></ion-icon>
+            </ion-button>
+    
+            <ion-button id="clearEventSearchBox-btn" *ngIf="styleColumnQuery" fill="clear" (click)="cancelStyleSearch()">
+              <ion-icon slot="icon-only" src="assets/css/icon/close-history.svg" color="color-gray" style="zoom: 0.5 !important;"></ion-icon>
+            </ion-button>
+            <!-- <ion-icon *ngIf="!searchQuery" name="custom-search" color="color-gray" tappable (tap)="searchEventsSwitch()"></ion-icon>
+            <ion-icon *ngIf="searchQuery" name="custom-close" color="color-gray" tappable (tap)="cancelSearch()"></ion-icon> -->
+          </div>
+        </ion-col>
+        <ion-col size="10">
+          <div class="header-searchbox" >
+            <ion-item class="ion-no-padding" lines="none" style="--background: #fafaf9">
+              <ion-input type="text" class="eventsAdjust ion-no-padding" placeholder='Search topic' 
+              [(ngModel)]="styleColumnQuery" (keyup)="searchStyleColumnSwitch($event)"></ion-input>
+            </ion-item>
+          </div>
+        </ion-col>
+      </ion-row>
+      <!-- <ng-container *ngIf="styleColumnQuery == null || styleColumnQuery.length == 0 || isSubmitted == false">
+        <ion-text>No style question found</ion-text>
+      </ng-container> -->
+        <!-- Masonry grid -->
+     
+        <div class="padded-lr-grid">
+          <ion-grid id="question-grid">
+            <!-- Loading -->
+            <!-- <div class="loading" text-center *ngIf="pageIsLoading || !isMasornyisLoaded">
+              <ion-row>
+                <ion-col col-5>
+                  <ion-skeleton-text animated style="width:100px; height:186px;"></ion-skeleton-text>
+                </ion-col>
+    
+                <ion-col col-7>
+                  <ion-skeleton-text animated style="width:100%; height:90px;" ></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width:100%; height:90px;" ></ion-skeleton-text>
+                </ion-col>
+              </ion-row>
+            </div> -->
+    
+            <!-- Empty -->
+            <div class="empty" text-center *ngIf="!pageIsLoading && styleQuestions.length == 0 && styleColumnQuery.length != 0">
+              <ion-row>
+                <ion-col class="ion-text-center">
+                  <span class="state-notice">No style questions found.</span>
+                </ion-col>
+              </ion-row>
+            </div>
+    
+            <!-- Loop this section for all questions -->
+            <ng-container *ngIf="!pageIsLoading && styleQuestions.length > 0">
+              <div>
+                <ngx-masonry [options]="{ gutter: 10, fitWidth: false }" (itemsLoaded)='completeMasonry()' [ordered]="true" >
+                  <div ngxMasonryItem class="grid-sizer grid-item"  *ngFor="let question of styleQuestions">
+                    <div class="item"  [ngStyle]="{ 'background-image': 'url(' + question.photo_url + ')'}" style="border-radius: 10px !important;" (click)="goInsideStyle(question)">
+                      <div class="text-inner">
+                        <div class="text-question">
+                          <ion-label text-wrap>{{ (question.question.length > 20) ? (question.question | slice:0:39) + '...' : question.question }}</ion-label>
+                        </div>
+                      </div>
+                      <!-- <div class="scrim"></div> -->
+                      <img [src]="question.photo_url" style="padding:10px; border-radius: 10px !important;" onerror="this.src ='/assets/imgs/empty-states/fallback.jpg'">
+                      <!-- <img-loader [src]="question.photo_url" useImg fallbackUrl="{{ question.photo_url ? question.photo_url : 'assets/imgs/empty-states/fallback.svg' }}" fallbackAsPlaceholder="true"></img-loader> -->
+                    </div>
+                  </div>
+                </ngx-masonry>
+              </div>
+            </ng-container>
+          </ion-grid>
+        </div>
+        <!-- End masonry grid -->
+    </ng-container>
+  </div>
+  <div class="ion-no-padding">
+    <ng-container *ngIf="pageContext == 'messages' || pageContext == 'stylists' && isSubmitted == false">
+      <div id="message-header-searchbox" class="ion-no-padding">
+        <div id="message-header-child">
+          <div class="header-searchicon">
+            <ion-icon src="/assets/css/icon/discover.svg" style="zoom: 2;"></ion-icon>
+          </div>
+  
+          <div class="header-searchbox">
+            <ion-list lines="none">
+              <ion-item class="ion-no-padding" style="--background: #fafaf9">
+                <ion-input type="text" placeholder='Search for a user' [(ngModel)]="findMeAUser" (keyup)="finder(false, false, true, $event)"></ion-input>
+              </ion-item>
+            </ion-list>
+          </div>
+  
+          <div class="clearField-container" *ngIf="searching" tappable (click)="clearSearchField()">
+            {{ 'Clear' | uppercase }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="pageContext == 'stylists'">
+      <ng-container *ngIf="artists">
+        <ion-row *ngFor="let artist of artists" class="border-bottom-style ion-no-padding ion-margin">
+          <ion-col size="2" class="ion-no-padding ion-padding-bottom" >
+            <ion-avatar>
+              <!-- <ngx-progressive-img-loader
+                #imagePost
+                [height]="'45px'"
+                [width]="'45px'"
+                (imageLoaded)="onImgLoad($event)"
+                (thumbnailLoaded)="onThumbLoad($event)"
+                [img]="artist.user_profile_pic_url"
+                [thumbnail]="artist.user_profile_pic_url"
+                [placeholderBgColor]="'grey'"
+                [fallbackImg]="'/assets/css/imgs/empty-states/no-user-photo.png'"
+                [preserveAspectRatio]="true"
+                >
+              </ngx-progressive-img-loader> -->
+            <ion-img #image [src]="artist.user_profile_pic_url" (ionImgDidLoad)="isLoadedImg2(artist)" (ionError)="errorLoad(artist)" *ngIf="artist && artist.user_profile_pic_url && !artist.errorImage"></ion-img>
+            <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="artist.errorImage" ></ion-img>
+            <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="artist && !artist.user_profile_pic_url" ></ion-img>
+            <div *ngIf="!artist.isLoadedProfile" class="spinner2">
+              <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+            </div>
+            </ion-avatar>
+          </ion-col>
+          <ion-col size="6" class="ion-padding-top">
+            <ion-text>
+              <h4 (click)="goToProfile(artist)" class="ellipsis ion-no-margin">{{ artist.profile_first_name || artist.user_first_name }}  {{ artist.profile_last_name || artist.user_last_name }}</h4>
+              <ion-text *ngIf="artist.stylist == 1"  color="primary" style="font-weight: bold" class="ion-no-margin">STYLIST</ion-text>
+            </ion-text>
+          </ion-col>
+          <ion-col size="4" class="ion-padding-top">
+            <ion-button mode="ios"  expand='block' strong="true" size="small" class="ellipsis connectionControl" tappable (click)="connectUser(artist, 'unconnected')" *ngIf="artist.isFriend == 'unconnected'" [disabled]="profileInfo.id == artist.id">{{ "Connect" | uppercase }}</ion-button>
+            <ion-button mode="ios"  fill="outline" expand="block" strong="true" size="small" class="ellipsis connectionControl" tappable (click)="connectUser(artist, 'pending')" *ngIf="artist.isFriend === 'pending'" [disabled]="profileInfo.id == artist.id">{{ "Pending" | uppercase }}</ion-button>
+            <ion-button mode="ios"  fill="outline" expand="block" strong="true" size="small" class="ellipsis connectionControl" tappable (click)="connectUser(artist, 'connected')" *ngIf="artist.isFriend === 'connected'" [disabled]="profileInfo.id == artist.id">{{ "Disconnect" | uppercase }}</ion-button>
+          </ion-col>
+        </ion-row>
+        <ng-container *ngIf="totalItems == 0 && othercontext == 'stylist'">
+          <ion-text>
+            <p text-center class="ion-margin-top">No stylists are available</p>
+          </ion-text>
+        </ng-container>
+        <ng-container *ngIf="totalItems == 0 && othercontext != 'stylist'">
+          <ion-text>
+            <p text-center class="ion-margin-top">No users are available</p>
+          </ion-text>
+        </ng-container>
+      </ng-container>
+
+      <ion-row *ngIf="!artists">
+        <ng-container *ngFor="let skeleton of skeletons">
+          <ion-item   class="ion-margin-bottom ion-no-padding">
+            <ion-avatar slot="start" >
+              <ion-skeleton-text animate rounded width="37px" height="37px"></ion-skeleton-text>
+            </ion-avatar>
+          </ion-item>
+          <ion-item class="ion-margin-bottom ion-no-padding">
+            <ion-skeleton-text></ion-skeleton-text>
+          </ion-item>
+          <ion-item class="ion-margin-bottom ion-no-padding">
+          </ion-item>
+        </ng-container>
+      </ion-row>
+    </ng-container>
+  </div>
+  <div  *ngIf="pageIsLoading || !isMasornyisLoaded && (pageContext == 'stylecolumn' || pageContext == 'tags' || pageContext == 'categories' || pageContext =='posts')" class="ion-padding">
+    <ion-row>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width:100%; height:186px;"></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="6">
+          <ion-skeleton-text animated style="width:100%; height:200%;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>  
+    <ion-row>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width:100%; height:186px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>    
+    <ion-row>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width:100%; height:186px;"></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="6">
+          <ion-skeleton-text animated style="width:100%; height:100%;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>        
+  </div>
+
+
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" threshold="100px" style="display: block;">
+    <ion-infinite-scroll-content loadingSpinner="crescent">
+      <ion-text *ngIf="endText" style="font-family: 'Raleway' !important;">End of result.</ion-text>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

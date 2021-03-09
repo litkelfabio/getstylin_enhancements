@@ -1,0 +1,212 @@
+<ion-header class="ion-no-border ion-padding-top">
+  <ion-toolbar>
+    <ion-title class="ion-text-center" *ngIf="convo.isBlocked == false && convo.blockedBy == false" >{{ convo['other_first_name'] + ' ' + convo['other_last_name'] | uppercase}} <br>
+    <ion-text class="active-title" #activeText>Active {{ getMomentFormat(convo.update_at) | timeAgoV3 }} </ion-text>
+    </ion-title>
+    <ion-title *ngIf="convo.isBlocked == true || convo.blockedBy == true">GETSTYLIN' User</ion-title>
+    <ion-buttons slot="start" class="ion-padding">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" (click)="dismissModal()" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="end" class="ion-padding" disabled="isLoading" *ngIf="convo.blockedBy == false">
+      <ion-icon slot="icon-only" src="assets/css/icon/more.svg" (click)="goToModal()" style="zoom: 1.5;"></ion-icon>
+  </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-infinite-scroll *ngIf="!isLoading" #infiniteScroll (ionInfinite)="doInfinite($event)" position="top" threshold="1px">
+    <ion-infinite-scroll-content *ngIf="!completedInfinite"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <div class="centerLoading" *ngIf="isLoading">
+    <ion-spinner color="primary"></ion-spinner>
+  </div>
+  <div  class="centerLoading-text" *ngIf="isLoading">
+    <ion-text style="font-family: 'Raleway' !important;"><strong>Loading...</strong></ion-text>
+  </div>
+  <div id="thread" class="padded-lr" *ngIf="messages && messages.length > 0 && !isLoading && !isFaulted">
+    <ng-container *ngFor="let message of messages">
+      <div id="messageContainer">
+        <!-- user2 = you; user1 = other user -->
+        <div class="chatBubble theirs" *ngIf="message.user_id != yourId && message.message != ''">
+          <!-- Other user's go to the right. -->
+          <span class="spacingTest" ion-text>{{ message.message }}</span>
+        </div>
+        <div class="chatBubbleAttachment theirAttachment" [class.attachmentSpacing]="message.attachments.length > 0" *ngIf="message.attachments.length > 0 && message.user_id != yourId" tappable (click)="viewPhoto(message.attachments[0].link)">
+          <img [src]="win.Ionic.WebView.convertFileSrc(message.attachments[0].link)" crossorigin="anonymous"/>
+        </div>
+        <div class="timestamp--theirs" *ngIf="message.user_id != yourId">
+          <span>{{ formatTimestamp(message.created_at) }}</span>
+        </div>
+
+        <div class="chatBubble yours" *ngIf="message.user_id == yourId && message.message != ''">
+          <!-- Your own messages go to the left. -->
+          <span class="spacingTest" ion-text>{{ message.message }}</span>
+        </div>
+        <div class="chatBubbleAttachment yourAttachment" [class.attachmentSpacing]="message.attachments.length > 0" *ngIf="message.attachments.length > 0 && message.user_id == yourId" tappable (click)="viewPhoto(message.attachments[0].link)">
+          <ion-img [src]="win.Ionic.WebView.convertFileSrc(message.attachments[0].link)" crossorigin="anonymous" (ionImgDidLoad)="isLoadedImg(message)"></ion-img>
+          <ion-spinner *ngIf="!message.isLoadedAttachment" name="crescent"></ion-spinner>
+        </div>
+        <div class="timestamp--yours" *ngIf="message.user_id == yourId && message.created_at != 'Sending'">
+          <span>{{ formatTimestamp(message.created_at) }}</span>
+        </div>
+        <div class="timestamp--yours" *ngIf="message.user_id == yourId && message.created_at == 'Sending'">
+          <span>{{ message.created_at }}</span>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div *ngIf="messages.length == 0 && !isLoading" class="empty-state">
+    <ion-text>Say Hi to {{convo['other_first_name'] }} to start conversation.</ion-text>
+  </div>
+
+  <div *ngIf="isLoading">
+    <div class="ion-padding custom-skeleton">
+    <ion-row>
+      <ion-col size="12">
+        <ion-skeleton-text animated style="width: 130px;
+        height: 50px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        float: left;"></ion-skeleton-text>
+       </ion-col>
+       <ion-col size="12">
+        <ion-skeleton-text animated style="width: 130px;
+        height: 50px;
+        border-top-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        float: right;"></ion-skeleton-text>
+       </ion-col>
+        <ion-col size="12">
+          <ion-skeleton-text animated style="width: 130px;
+        height: 50px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        float: left;"></ion-skeleton-text>
+        </ion-col>
+        <ion-col size="12">
+          <ion-skeleton-text animated style="width: 130px;
+        height: 50px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        float: left;"></ion-skeleton-text>
+        </ion-col>
+        <ion-col size="12">
+          <ion-skeleton-text animated style="width: 130px;
+          height: 50px;
+          border-top-left-radius: 10px;
+          border-bottom-right-radius: 10px;
+          border-bottom-left-radius: 10px;
+          float: right;"></ion-skeleton-text>
+         </ion-col>
+         <ion-col size="12">
+          <ion-skeleton-text animated style="width: 130px;
+          height: 50px;
+          border-top-right-radius: 10px;
+          border-bottom-right-radius: 10px;
+          border-bottom-left-radius: 10px;
+          float: left;"></ion-skeleton-text>
+         </ion-col>
+         <ion-col size="12">
+          <ion-skeleton-text animated style="width: 130px;
+          height: 50px;
+          border-top-left-radius: 10px;
+          border-bottom-right-radius: 10px;
+          border-bottom-left-radius: 10px;
+          float: right;"></ion-skeleton-text>
+         </ion-col>
+         <ion-col size="12">
+          <ion-skeleton-text animated style="width: 130px;
+          height: 50px;
+          border-top-right-radius: 10px;
+          border-bottom-right-radius: 10px;
+          border-bottom-left-radius: 10px;
+          float: left;"></ion-skeleton-text>
+         </ion-col>
+         <ion-col size="12">
+          <ion-skeleton-text animated style="width: 130px;
+          height: 50px;
+          border-top-left-radius: 10px;
+          border-bottom-right-radius: 10px;
+          border-bottom-left-radius: 10px;
+          float: right;"></ion-skeleton-text>
+         </ion-col>
+         <ion-col size="12">
+          <ion-skeleton-text animated style="width: 130px;
+          height: 50px;
+          border-top-right-radius: 10px;
+          border-bottom-right-radius: 10px;
+          border-bottom-left-radius: 10px;
+          float: left;"></ion-skeleton-text>
+         </ion-col>
+    </ion-row>
+    </div>
+    </div>
+</ion-content>
+ 
+<ion-footer id='footer' *ngIf="!isLoading">
+  <div id="messageThreadControls">
+    <ng-container *ngIf="convo">
+      <div id="attachmentControls" *ngIf="photo && isSending == false">
+        <ion-item lines="none" class="ion-no-padding ion-no-margin">
+          <div style="position: relative; padding-top: 10px !important; padding-bottom: 10px !important;"> 
+            <img [src]="win.Ionic.WebView.convertFileSrc(messageAttachment)" class="attachment-preview">
+          </div>
+          <!-- <div item-start id="attachment-preview" [ngStyle]="{'background-image': 'url(' + win.Ionic.WebView.convertFileSrc(attachment['path']) + ')'}"></div> -->
+          
+        </ion-item>
+        <ion-button class="close-button" fill="clear"(click)="removeAttachment()">
+          <ion-icon name="close" class="close-icon"></ion-icon>
+        </ion-button>
+      </div>
+    </ng-container>
+
+    <!-- <ng-container *ngIf="convo">
+        <ion-grid no-margin no-padding *ngIf="!updatedState && (convo.blockedBy == false && convo.isBlocked == false)">
+          <ion-row no-margin no-padding>
+            <ion-col size='2' no-margin no-padding>
+              <div class="controlContainer grayed">
+                <button ion-button icon-only clear (click)="presentActionSheet()">
+                  <ion-icon name="messaging-icon"></ion-icon>
+                </button>
+              </div>
+            </ion-col>
+            <ion-col size='8' no-margin no-padding>
+              <div id="chat-input" #chatInput placeholder="Type a message" contenteditable="true" (input)="messageToSend = $event.target.innerText"></div>
+            </ion-col>
+            <ion-col size='2' no-margin no-padding>
+              <div class="controlContainer grayed">
+                <button ion-button clear icon-only (click)="sendMessage()" clear [disabled]="(messageToSend == '' && !photo) || isSending">
+                  <ion-icon name="send"></ion-icon>
+                </button>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+    </ng-container> -->
+
+    <ng-container *ngIf="convo">
+      <ion-row class="grayed" *ngIf="convo.blockedBy == false && convo.isBlocked == false">
+        <ion-col>
+          <ion-icon src="assets/css/icon/messaging-icon.svg" (click)="presentActionSheet()" class="messaging-icon" style="zoom: 1.6;color: darkgrey;"></ion-icon>
+      <ng-container *ngIf="(message != '' && photo) || !isSending">
+        <ion-icon src="assets/css/icon/send.svg" class="send-icon" style="zoom: 1.6;" (click)="sendMessage()"></ion-icon>
+      </ng-container>
+      <ng-container *ngIf="(message == '' && !photo) || isSending">
+        <ion-icon src="assets/css/icon/send-icon.svg" class="send-icon" style="zoom: 1.6;"></ion-icon>
+      </ng-container>
+          <ion-textarea (click)="scrollToView()" multiple="true" class="input-message" [(ngModel)]="message" placeholder="Type a message"></ion-textarea>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+
+    <ng-container *ngIf="convo">
+      <div id="blockedControls" *ngIf="updatedState || (convo.blockedBy == true || convo.isBlocked == true)">
+        <ion-text style="font-family:'Raleway' !important;">You can't reply to this conversation.</ion-text>
+      </div>
+    </ng-container>
+  </div>
+</ion-footer>

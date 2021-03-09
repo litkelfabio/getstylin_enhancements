@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "142152197065",
+    "firebase_url": "https://get-stylin-2019.firebaseio.com",
+    "project_id": "get-stylin-2019",
+    "storage_bucket": "get-stylin-2019.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142152197065:android:6ddfaacddb5b739e9bfe18",
+        "android_client_info": {
+          "package_name": "com.getstylin.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "142152197065-00lkmrdo01ldesqvpnn23muua2f179b8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getstylin.app",
+            "certificate_hash": "e07a30f4db443f5f277a3fca67f3a59d9cd1111b"
+          }
+        },
+        {
+          "client_id": "142152197065-vd0ifjge7njin09ccrld9m00b89ibssl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmCBX6lcSt89G7inBGZ8J6cv7CDUjo5Gc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "142152197065-vd0ifjge7njin09ccrld9m00b89ibssl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,280 @@
+<!-- <ion-header class="ion-no-border ion-padding-top">
+  <ion-toolbar>
+    <ion-title>REWARD BENEFITS</ion-title>
+    <ion-buttons slot="start" class="ion-padding">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" routerLink="/tabs/tabs/my-stylin/member-privileges" routerDirection="back" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="tier-switcher ion-padding">
+    <ion-segment>
+     <ion-segment-button>
+       <ion-icon src="assets/css/icon/rank.svg" ></ion-icon><br>
+       <ion-label ion-text color="t-gold" class="ranks">RISING STAR</ion-label>
+       <ion-label ion-text color="t-gold" class="ranks">O PTS</ion-label>
+     </ion-segment-button>
+     <ion-segment-button >
+       <ion-icon src="assets/css/icon/a-rising-star.svg" ></ion-icon><br>
+       <ion-label ion-text color="t-gold" class="ranks">SUPER STAR</ion-label>
+       <ion-label ion-text color="t-gold" class="ranks">5,000 PTS</ion-label>
+     </ion-segment-button>
+     <ion-segment-button>
+       <ion-icon src="assets/css/icon/icon-star.svg" ></ion-icon><br>
+       <ion-label ion-text color="t-gold" class="ranks">ICON</ion-label>
+       <ion-label ion-text color="t-gold" class="ranks">15,000 PTS</ion-label>
+     </ion-segment-button>
+     <ion-segment-button>
+         <ion-icon src="assets/css/icon/legend-star.svg" ></ion-icon><br>
+         <ion-label ion-text color="t-gold" class="ranks">LEGEND</ion-label>
+         <ion-label ion-text color="t-gold" class="ranks">20,000 PTS</ion-label>
+       </ion-segment-button>
+     </ion-segment>
+   </div>
+</ion-content> -->
+<ion-header class="ion-no-border ion-padding-top">
+  <ion-toolbar>
+    <ion-title>REWARDS BENEFITS</ion-title>
+    <ion-buttons slot="start" class="ion-padding">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" (click)="back()" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  
+  <!-- <ion-segment  [(ngModel)]="rewards" (ionChange)='changeRank()'>
+    <ion-segment-button  value="rising_star">
+      <ion-icon src="assets/css/icon/rising-star-white.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+      <ion-label class="ion-no-padding" style="color: white;">RISING STAR</ion-label>
+      <ion-label class="ion-no-padding" style="color: white;padding-bottom: 2px; padding-top: 0px !important;">0 PTS</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="super_star">
+      <ion-icon src="assets/css/icon/a-rising-star.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+      <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">SUPERSTAR</ion-label>
+      <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">5,000 PTS</ion-label>
+    </ion-segment-button>
+    <ion-segment-button  value="icon">
+      <ion-icon src="assets/css/icon/icon-star.svg" class="ion-padding-top" style="zoom: 0.7;"></ion-icon>
+      <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">ICON</ion-label>
+      <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">15,000 PTS</ion-label>
+    </ion-segment-button>
+    <ion-segment-button  value="legend">
+      <ion-icon src="assets/css/icon/legend-star.svg" style="zoom: 0.7;" class="ion-padding-top"></ion-icon>
+      <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">LEGEND</ion-label>
+      <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">20,000 PTS</ion-label>
+    </ion-segment-button>
+  </ion-segment> -->
+  <ion-segment  [(ngModel)]="rewards" (ionChange)='changeRank()'>
+    <ion-segment-button value="rising_star">
+      <!-- <ng-container *ngIf="rewards != rising_star">
+        <ion-icon src="assets/css/icon/rising-star-white.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+      <ion-label class="ion-no-padding" style="color:#B3A25D;">RISING STAR</ion-label>
+      <ion-label class="ion-no-padding" style="color:#B3A25D;padding-bottom: 2px; padding-top: 0px !important;">0 PTS</ion-label>
+      </ng-container>
+      <ng-container *ngIf="rewards == rising_star">
+        <ion-icon src="assets/css/icon/rising-star.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+      <ion-label class="ion-no-padding" style="color: white;">RISING STAR</ion-label>
+      <ion-label class="ion-no-padding" style="color: white;padding-bottom: 2px; padding-top: 0px !important;">0 PTS</ion-label>
+      </ng-container> -->
+      
+        <ng-container *ngIf="rewards == 'rising_star'">
+          <ion-icon src="assets/css/icon/rising-star-white.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+          <ion-label class="ion-no-padding" style="color: white;">RISING STAR</ion-label>
+          <ion-label class="ion-no-padding" style="color: white;padding-bottom: 2px; padding-top: 0px !important;">0 PTS</ion-label>
+        </ng-container>
+
+        <ng-container *ngIf="rewards != 'rising_star'">
+          <ion-icon src="assets/css/icon/rising-star.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+          <ion-label class="ion-no-padding" style="color: #B3A25D;">RISING STAR</ion-label>
+          <ion-label class="ion-no-padding" style="color: #B3A25D;padding-bottom: 2px; padding-top: 0px !important;">0 PTS</ion-label>
+        </ng-container>
+    
+    </ion-segment-button>
+
+    <ion-segment-button value="super_star" >
+
+      <ng-container *ngIf="rewards == 'super_star'">
+        <ion-icon src="assets/css/icon/a-rising-star-white.svg" class="ion-padding-top star-icon"  style="zoom: 0.7;"></ion-icon>
+      <ion-label class="ion-no-padding" style="color:white; font-size: 10px">SUPERSTAR</ion-label>
+      <ion-label class="ion-no-padding" style="color: white; font-size: 10px;padding-bottom: 2px;">5,000 PTS</ion-label>
+      </ng-container>
+
+      <ng-container *ngIf="rewards != 'super_star'">
+        <ion-icon src="assets/css/icon/a-rising-star.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+      <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">SUPERSTAR</ion-label>
+      <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">5,000 PTS</ion-label>
+      </ng-container>
+    
+    </ion-segment-button>
+    
+    <ion-segment-button value="icon">
+
+      <ng-container *ngIf="rewards != 'icon'">
+        <ion-icon src="assets/css/icon/icon-star.svg" class="ion-padding-top" style="zoom: 0.7;"></ion-icon>
+        <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">ICON</ion-label>
+        <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">15,000 PTS</ion-label>
+      </ng-container>
+      <ng-container *ngIf="rewards == 'icon'">
+        <ion-icon src="assets/css/icon/icon-star-white.svg" class="ion-padding-top" style="zoom: 0.7;"></ion-icon>
+        <ion-label class="ion-no-padding" style="color:white; font-size: 10px">ICON</ion-label>
+        <ion-label class="ion-no-padding" style="color: white; font-size: 10px;padding-bottom: 2px;">15,000 PTS</ion-label>
+      </ng-container>
+    </ion-segment-button>
+    <ion-segment-button value="legend">
+
+      <ng-container *ngIf="rewards != 'legend'">
+        <ion-icon src="assets/css/icon/legend-star.svg" style="zoom: 0.7;" class="ion-padding-top"></ion-icon>
+      <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">LEGEND</ion-label>
+      <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">20,000 PTS</ion-label>
+      </ng-container>
+      <ng-container *ngIf="rewards == 'legend'">
+        <ion-icon src="assets/css/icon/legend-star-white.svg" style="zoom: 0.7;" class="ion-padding-top"></ion-icon>
+      <ion-label class="ion-no-padding" style="color:white; font-size: 10px">LEGEND</ion-label>
+      <ion-label class="ion-no-padding" style="color: white; font-size: 10px;padding-bottom: 2px;">20,000 PTS</ion-label>
+      </ng-container>
+    </ion-segment-button>
+  </ion-segment>
+  
+  <ion-row>
+      <ion-col class="ion-no-padding">
+        <ion-card>
+          <ion-row class='privilege-header' >
+            <ion-col class='ion-text-center' size="2">
+              <ion-icon class='privilege-icon' *ngIf='rewards == "rising_star"' src="assets/css/icon/rising-star.svg"></ion-icon>
+              <ion-icon class='privilege-icon' *ngIf='rewards == "super_star"' src="assets/css/icon/a-rising-star.svg" ></ion-icon>
+              <ion-icon class='privilege-icon' *ngIf='rewards == "icon"' src="assets/css/icon/icon-star.svg"  ></ion-icon>
+              <ion-icon class='privilege-icon' *ngIf='rewards == "legend"' src="assets/css/icon/legend-star.svg" ></ion-icon>
+            </ion-col>
+            <ion-col size="10">
+              <h5 class="privilege-title">{{ isLoaded ? selectedTier['name'] : 'Something' | uppercase }} PRIVILEGE</h5>
+              <p style="font-size: 12px; margin: 0px 0px 10px 0px !important; color: white; font-family: 'Raleway' !important;" > {{ this.message }}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf='isLoaded'>
+            <ion-col class='ion-no-padding' col-12 >
+              <!-- <ion-list no-margin> -->
+                <ion-item *ngFor="let privilege of selectedTier['privileges']">
+                  <ion-icon margin-right md="md-checkmark" fill="green" class='check-icon' name="checkmark"></ion-icon>
+                  <ion-label style='font-size: 14px' class="ion-padding ion-no-padding-end privilege-name" >
+                    {{ privilege.privileges_name }}
+                  </ion-label> 
+                </ion-item>
+              <!-- </ion-list> -->
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-col>
+  </ion-row>
+  <ion-footer>
+    <ion-row>
+      <ion-col>
+        <h5 style="margin-top: 15px; margin-bottom: 15px ;">{{ 'Points to next tier' | uppercase }}</h5>
+      </ion-col>
+      <ion-col>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf='isLoaded'>
+      <ion-col size="12">
+        <ng-container *ngIf="selectedTier['value']=='0'">
+          <ng-container *ngIf="rewards == 'rising_star' && points >= 5000">
+            <ion-progress-bar [value]="(points / 5000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+          <ng-container *ngIf="rewards == 'rising_star' && points < 5000">
+            <ion-progress-bar [value]="(points / 5000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="selectedTier['value'] == '5000'">
+          <ng-container *ngIf="points < 5000">
+            <ion-progress-bar [value]="(points / 5000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+          <ng-container *ngIf="points >= 5000 && points < 15000">
+            <ion-progress-bar [value]="(points / 15000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+          <ng-container *ngIf="points >= 15000">
+            <ion-progress-bar [value]="(points / 15000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="selectedTier['value'] == '15000'">
+          <ng-container *ngIf="points >= 15000 && points < 20000 " >
+            <ion-progress-bar [value]="(points / 20000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+          <ng-container *ngIf="points >= 5000 && points < 15000 ">
+            <ion-progress-bar [value]="(points / 15000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+          <ng-container *ngIf="points < 5000">
+            <ion-progress-bar [value]="(points / 5000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+          <ng-container *ngIf="points >= 20000">
+            <ion-progress-bar [value]="(points / 20000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="selectedTier['value'] == '20000'">
+          <ng-container *ngIf="points >= 5000 && points < 15000">
+            <ion-progress-bar [value]="(points / 15000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+          <ng-container *ngIf="points >= 15000 && points < 20000">
+            <ion-progress-bar [value]="(points / 20000)" >&nbsp;</ion-progress-bar>
+          </ng-container>
+          <ng-container *ngIf="points < 5000">
+            <ion-progress-bar [value]="(points / 5000)">&nbsp;</ion-progress-bar>
+          </ng-container>
+          <ng-container *ngIf="points >= 20000">
+            <ion-progress-bar [value]="1" >&nbsp;</ion-progress-bar>
+          </ng-container>
+        </ng-container>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center">
+        <ng-container *ngIf="selectedTier['value']=='0'">
+          <h6 ion-text text-center class="customH6" *ngIf=" rewards == 'rising_star' && points >= 5000"  >You're a Rising Star</h6>
+          <h6 ion-text text-center class="customH6" *ngIf=" rewards == 'rising_star' && points < 5000"  >{{ points+' / 5000 PTS' }}</h6>
+        </ng-container>
+        <ng-container *ngIf="selectedTier['value'] == '5000'">
+          <ng-container *ngIf="points < 5000">
+            <h6 ion-text text-center class="customH6"  >{{ points+' / 5000 PTS' }}</h6>
+          </ng-container>
+          <ng-container *ngIf="points >= 5000 && points < 15000">
+            <h6 ion-text text-center class="customH6"  >{{ points+' / 15000 PTS' }}</h6>
+          </ng-container>
+          <ng-container *ngIf="points >= 15000">
+            <h6 ion-text text-center class="customH6"  >You're Super Star</h6>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="selectedTier['value'] == '15000'">
+          <ng-container *ngIf="points >= 15000 && points < 20000">
+            <h6 ion-text text-center class="customH6"  >{{ points+' / 20000 PTS' }}</h6>
+          </ng-container>
+          <ng-container *ngIf="points >= 5000 && points < 15000">
+            <h6 ion-text text-center class="customH6"  >{{ points+' / 15000 PTS' }}</h6>
+          </ng-container>
+          <ng-container *ngIf="points < 5000">
+            <h6 ion-text text-center class="customH6"  >{{ points+' / 5000 PTS' }}</h6>
+          </ng-container>
+          <ng-container *ngIf="points >= 20000">
+            <h6 ion-text text-center class="customH6"  >You're a Icon Star</h6>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="selectedTier['value'] == '20000'">
+          <ng-container *ngIf="points >= 5000 && points < 15000">
+            <h6 ion-text text-center class="customH6"  >{{ points+' / 15000 PTS' }}</h6>
+          </ng-container>
+          <ng-container *ngIf="points >= 15000 && points < 20000">
+            <h6 ion-text text-center class="customH6"  >{{ points+' / 20000 PTS' }}</h6>
+          </ng-container>
+          <ng-container *ngIf="points < 5000">
+            <h6 ion-text text-center class="customH6"  >{{ points+' / 5000 PTS' }}</h6>
+          </ng-container>
+          <ng-container *ngIf="points >= 20000">
+            <h6 ion-text text-center class="customH6"  >You're a Legend Star</h6>
+          </ng-container>
+        </ng-container>
+        
+        <!-- <h6 *ngIf='rewards == "legend"' ion-text text-center class="customH6">You’re a Legend!</h6> -->
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+  
+</ion-content>
+

@@ -1,0 +1,34 @@
+ion-input{
+    background-color: rgba(196, 196, 196, 0.2);
+}
+.adjustments{
+    font-size: 10px !important;
+    color: red;
+    margin-top: 5px;
+    margin-bottom: 2px;
+}
+.available-email{
+    font-size: 10px !important;
+    color: darkgrey;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+ion-text{
+    font-family: 'Raleway'!important;
+}
+p{
+    font-family: 'Raleway'!important;
+}
+ion-label{
+    font-family: 'Raleway'!important;
+}
+.alert-btn{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+}
+
+.relative-input{
+    position: relative; z-index: 1;
+}   

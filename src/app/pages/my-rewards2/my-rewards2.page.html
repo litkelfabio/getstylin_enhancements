@@ -1,0 +1,82 @@
+<ion-header class="ion-no-border ion-padding-vertical">
+  <ion-toolbar>
+    <ion-title>MY REWARDS</ion-title>
+    <ion-buttons slot="start" class="ion-padding">
+        <ion-icon src="assets/css/icon/back.svg" (click)="back()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+
+  <!-- <ion-row class="ion-padding-horizontal" style='background: rgba(179 162 93, 0.05);'>
+    <ion-col class='flex-items-center ion-no-padding ' size="6" >
+      <h5 ion-text color='white'>{{ 'my wallet' | uppercase }}</h5>
+    </ion-col>
+    <ion-col class='flex-items-end' size="6"  class="no-padding">
+      <h5 *ngIf="points" ion-text color='white'>{{ points + ' PTS' | uppercase }}</h5>
+      <h5 *ngIf="!points" class="fs-18" ion-text color='white' style="font-size: 15px !important;">{{ '0 PTS' | uppercase }}</h5>
+    </ion-col>
+  </ion-row> -->
+  <ng-container *ngIf="loading">
+    <div class="ion-padding custom-skeleton">
+      <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+    </div>
+  </ng-container>
+
+
+  <ng-container *ngIf="rewards.length  == 0 && !loading">
+    <ion-col size="12" class="ion-padding-horizontal">
+      <ion-row class="ion-padding-top">
+        <ion-col size="12" class="ion-text-center">
+          <img src="assets/css/icon/emptyRewards.png" style="zoom: 0.3;">
+        </ion-col>
+      </ion-row>
+     <ion-row class="ion-padding"> 
+      <ion-row class="ion-padding">
+        <ion-col size="12" class="ion-text-center">
+          <ion-text>Your rewards look a little empty. Let's go shopping!</ion-text>
+        </ion-col>
+          <ion-col size="12" class="ion-text-center ion-padding-top">
+            <ion-button expand="block" color="primary" fill="outline" (click)="goToRewardsPage()">GO TO REWARDS</ion-button>
+          </ion-col>
+      </ion-row>
+     </ion-row>
+    </ion-col>
+  </ng-container>
+
+  <ng-container *ngIf="rewards.length > 0 && !loading">
+   <ion-item *ngFor="let reward of rewards" class="ion-padding-horizontal ion-padding-bottom" (click)="gotoDetails(reward.id)" lines="full">
+      <ion-col size="12" >
+        <!-- <ngx-progressive-img-loader #thisImage
+            [height]="'200px'"
+            [width]="'100%'"
+            (imageLoaded)="onImgLoad($event)"
+            (thumbnailLoaded)="onThumbLoad($event)"
+            [img]="reward.photo"
+            [thumbnail]="reward.photo"
+            [placeholderBgColor]="'grey'" 
+            [preserveAspectRatio]="true"
+            class="borderImg">
+        </ngx-progressive-img-loader> --> 
+        <div class="img-container">
+          <ion-img #image id='image2' [src]="reward.photo" (ionImgDidLoad)="ionImgDidLoadRewards(reward)"  (ionError)="errorLoad(reward)" *ngIf="reward.photo &&!reward.errorImage"></ion-img>
+        <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="reward.errorImage" ></ion-img>
+        <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="reward && !reward.photo" ></ion-img>
+        <div *ngIf="!reward.isLoadedResult" class="spinner2">
+          <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+        </div>
+        </div>
+        <ion-row class="ion-padding-vertical">
+          <ion-col>
+            <strong><ion-text [innerHTML]="reward.promo"></ion-text> on <ion-text [innerHTML]="reward.name"></ion-text></strong>
+            </ion-col>
+          </ion-row>
+      </ion-col>
+   </ion-item>
+  </ng-container>
+
+
+</ion-content>

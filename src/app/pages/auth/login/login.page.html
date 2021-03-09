@@ -1,0 +1,201 @@
+<!-- <ion-content class="ion-padding" class="scroll-content">
+	<ion-grid class="ion-padding-horizontal">
+		<ion-row class="ion-no-padding">
+			<ion-col size="12" class="ion-text-center" >
+				<img id="logo" src='assets/imgs/GS.svg' >
+			</ion-col>
+
+			<ion-col size="12" class="ion-text-center">
+				<ion-text>
+					<h6 class="no-margin">LOG IN</h6>
+				</ion-text>
+			</ion-col>
+
+			<ion-col size="12" class="ion-no-padding">
+					<form [formGroup]="loginForm"> -->
+						<!-- EMAIL : START -->
+						<!-- <ion-item #input (tap)='tapped($event)' class="ion-no-padding" lines="none">
+							<ion-label ion-text color="t-gold" position="floating" padding-left>Email or Username</ion-label>
+							<ion-input type="text" formControlName="email"></ion-input>
+							
+						</ion-item> -->
+						<!-- <ion-item lines="none">
+							<ion-label position="floating">Email or Username</ion-label>
+							<ion-input></ion-input>
+						</ion-item> -->
+						<!-- <ng-container *ngIf="loginForm.controls.email.touched">
+							<p text-right ion-text no-margin padding-left class="adjusments" color="danger" *ngIf="loginForm.controls.email.hasError('required')">This field is required</p>
+						</ng-container> -->
+						<!-- EMAIL : END -->
+						<!-- PASSWORD : START -->
+						<!-- <ion-item class="ion-no-padding" lines="none">
+							<ion-label ion-text color="t-gold" position="floating" padding-left>Password</ion-label>
+							<ion-input type="{{ passwordType }}" formControlName="password" clearOnEdit="false" (ionChange)="changeIsSubmit()"  class="passwordfield"></ion-input>
+							 -->
+							<!-- <ion-button class="eye" ion-button clear item-end *ngIf="!loginForm.controls.password.hasError('required')" tappable (click)="togglePassword()"> -->
+								<!-- <ion-icon name="{{ passwordIcon }}" class="eye" slot="icon-only" *ngIf="!loginForm.controls.password.hasError('required')" tappable (click)="togglePassword()"></ion-icon> -->
+							<!-- </ion-button> -->
+							<!-- <div class="eye" item-end  *ngIf="!loginForm.controls.password.hasError('required')" tappable (click)="togglePassword()">
+								<ion-icon name="{{ passwordIcon }}"></ion-icon>
+							</div> -->
+						<!-- </ion-item>
+						<ng-container *ngIf="loginForm.controls.password.touched">
+							<p ion-text class="adjusments" no-margin text-right padding-left color="danger" *ngIf="loginForm.controls.password.hasError('required')">This field is required</p>
+							<p ion-text  class="adjusments" no-margin text-right padding-left color="danger" *ngIf="loginForm.controls.password.hasError('minlength')">Password must be at least 8 characters</p>
+						</ng-container> -->
+						<!-- PASSWORD : END -->
+						<!-- <ion-item  class="ion-no-padding ion-text-right" lines="none">
+							<button type="button" ion-button clear color="t-gold" tappable (click)="goToForgotPassword()">Forgot Password?</button>
+							<p ion-text tappable (click)="goToForgotPassword()"><span ion-text color="t-gold">Forgot Password?</span></p>
+						</ion-item>
+						<ion-item class="ion-no-padding" lines="none">
+								 <button mode="ios" type="submit" ion-button strong block small tappable [disabled]="!loginForm.valid && emailExistence == false">{{ "Submit" | uppercase }}</button> -->
+							<!-- <ion-button mode="ios" class="adjustBttn" ion-button strong small item-end (click)="login()" [disabled]="!loginForm.valid">{{ "Submit" | uppercase }}</ion-button>
+						</ion-item>
+					</form>
+			</ion-col> --> 
+
+			<!-- <ion-col size="12" class="ion-text-center">
+				<ion-text class="ion-text-center">
+					<h6 class="ion-text-center ion-no-margin">OR LOG IN WITH</h6>
+				</ion-text>
+				
+			</ion-col>
+			<ion-col size="12" class="ion-text-center">
+				<ion-row>
+					<ng-container *ngIf="whatPlatformVersion < 13 && whatPlatform === true">
+						<ion-col col-12 class="ion-text-center">
+							<ion-icon src="assets/css/icon/google.svg" tappable (click)="loginGoogle()" ></ion-icon>
+							<ion-icon src="assets/css/icon/fb.svg"tappable (click)="loginFacebook()"></ion-icon> -->
+							<!-- <ion-icon name="custom-apple" tappable (click)="loginApple()"></ion-icon> -->
+						<!-- </ion-col>
+					</ng-container>
+					<ng-container *ngIf="whatPlatformVersion > 13 && whatPlatform === true">
+						<ion-col size="12" class="ion-text-center">
+							<ion-icon src="assets/css/icon/google.svg" tappable (click)="loginGoogle()" ></ion-icon> -->
+							<!-- <ion-icon name="custom-facebook" tappable (click)="loginFacebook()"></ion-icon> -->
+							<!-- <ion-icon src="assets/css/icon/appleid_button_4x.svg" tappable (click)="loginApple()"></ion-icon>
+						</ion-col>
+					</ng-container>
+					<ng-container *ngIf="whatPlatform === false">
+						<ion-col size="12" text-center>
+							<ion-icon src="assets/css/icon/google.svg" tappable (click)="loginGoogle()" ></ion-icon>
+							<ion-icon src="assets/css/icon/fb.svg" tappable (click)="loginFacebook()"></ion-icon> -->
+							<!-- <ion-icon name="custom-apple" tappable (click)="loginApple()"></ion-icon> -->
+						<!-- </ion-col>
+					</ng-container>
+				</ion-row>
+			</ion-col>
+			<ion-col size="12" text-center class="signUp">
+				<p ion-text>Don't have an account yet? <span ion-text color="t-gold" tappable (click)="goToRegistration()">Sign up</span> </p>
+			</ion-col>
+		</ion-row>
+	</ion-grid> -->
+	<!-- <ion-footer text-center>
+		<ion-toolbar>
+			<p ion-text>Don't have an account yet? <span ion-text color="t-gold" tappable (click)="goToRegistration()">Sign up</span> </p>
+		</ion-toolbar>
+	  </ion-footer> -->
+<!-- </ion-content> -->
+<ion-content class="scroll-content ion-padding-vertical" >
+	<ion-grid>
+		<ion-row class="ion-margin-top ion-margin-bottom">
+			<ion-col size="12">
+				<ion-row class="ion-padding-top ">
+					<ion-col size="12" class="ion-text-center ion-no-padding" >
+						<img id="logo" src='assets/imgs/GS.svg' >
+						<h6 class="ion-no-margin" style="font-size: 13px;">LOG IN</h6>
+					</ion-col>
+				</ion-row>
+				<ion-row class="form-content">
+					<ion-col size="12" class="col-form ion-no-padding">
+						<form [formGroup]="loginForm"  class="ion-no-padding">
+							<ion-col size="12" class="ion-no-padding" >
+								<ion-item lines="none">
+									<ion-label position="floating" class="input-label">Email or Username</ion-label>
+									<ion-input (keyup.enter)="login()" required type="text" formControlName="email" class="inputs" ></ion-input>
+								  </ion-item>
+								<ng-container *ngIf="loginForm.controls.email.touched">
+									<div class="ion-text-end ion-padding-horizontal">
+										<ion-text class="adjusments" color="danger" *ngIf="loginForm.controls.email.hasError('required')">This field is required</ion-text>
+									</div>
+								</ng-container> 
+								<ion-item lines="none">
+									<ion-label position="floating" class="input-label">Password</ion-label>
+									<ion-input (keyup.enter)="login()"  [type]="showPassword ? 'text' : 'password'" formControlName="password"></ion-input>
+									<ion-icon [name] ="passwordToggleIcon" class="eye-icon" style="zoom: 1; color: darkgrey;"
+									(click)="togglePassword()">
+									</ion-icon>
+									
+								</ion-item>
+								<ng-container *ngIf="loginForm.controls.password.touched">
+									<div class="ion-text-end ion-padding-horizontal">
+										<ion-text class="adjusments" color="danger" *ngIf="loginForm.controls.password.hasError('required')">This field is required</ion-text>
+									</div>
+									<div class="ion-text-end ion-padding-horizontal">
+										<ion-text class="adjusments" color="danger" *ngIf="loginForm.controls.password.hasError('minlength')">Password must be at least 8 characters</ion-text>
+									</div>
+								</ng-container>
+							</ion-col>
+							<ion-item lines="none">
+								<ion-col class="ion-no-padding">
+									<ion-button style="float: right;" fill="clear" (click)="goToForgotPassword()">
+										<ion-text style="font-size: 13px; font-family: 'Raleway'!important;"  class="forgotBtn" >Forgot Password?</ion-text>
+									</ion-button>
+								</ion-col>
+							</ion-item>
+							<ion-item lines="none">
+								<ion-col size="12" class="ion-no-padding">
+									<ion-row style="float: right;">
+										<ion-button type="submit" [disabled]="!loginForm.valid" style="height: 31px; font-family: 'Raleway'!important;" (click)="login()" color="primary" class="adjustBttn">SUBMIT</ion-button>
+									</ion-row>
+								</ion-col>
+							</ion-item>
+						</form>
+						
+					</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col size="12" class="ion-text-center">
+						<ion-text class="ion-text-center">
+							<h6 class="ion-text-center ion-no-margin">OR LOG IN WITH</h6>
+						</ion-text>
+						
+					</ion-col>
+					<ion-col size="12" class="ion-text-center">
+						<ion-row>
+							<ion-col col-12 class="ion-text-center" style="zoom: 2.0;">
+								<ion-icon src="assets/css/icon/google.svg" tappable (click)="loginGoogle()" ></ion-icon>
+								<ion-icon src="assets/css/icon/fb.svg"tappable (click)="loginFacebook()"></ion-icon>
+								<ion-icon *ngIf="versionDataNumber > 13 && isIos" src="assets/css/icon/appleid_button_4x.svg" tappable (click)="loginApple()"></ion-icon>
+								<!-- <ion-icon  src="assets/css/icon/appleid_button_4x.svg" tappable (click)="loginApple()"></ion-icon> -->
+							</ion-col>
+							<!-- <ng-container  && whatPlatform === true">
+								
+							</ng-container>
+							<ng-container  && whatPlatform === true">
+								<ion-col size="12" class="ion-text-center" style="zoom: 2.0;">
+									<ion-icon src="assets/css/icon/google.svg" tappable (click)="loginGoogle()" ></ion-icon>
+									<ion-icon src="assets/css/icon/fb.svg" tappable (click)="loginFacebook()"></ion-icon>
+									<ion-icon src="assets/css/icon/appleid_button_4x.svg" tappable (click)="loginApple()"></ion-icon>
+								</ion-col>
+							</ng-container>
+							<ng-container *ngIf="whatPlatform === false">
+								<ion-col size="12" class="ion-text-center" style="zoom: 2.0;">
+									<ion-icon src="assets/css/icon/google.svg" tappable (click)="loginGoogle()" ></ion-icon>
+									<ion-icon src="assets/css/icon/fb.svg" tappable (click)="loginFacebook()"></ion-icon>
+									<ion-icon name="custom-apple" tappable (click)="loginApple()"></ion-icon>
+								</ion-col>
+							</ng-container> -->
+						</ion-row>
+					</ion-col>
+					<ion-col size="12" class="signUp ion-text-center">
+						<ion-text class="no-account-text">Don't have an account yet? <ion-text color="primary" (click)="goToRegistration()">Sign up</ion-text> </ion-text>
+					</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+	
+	
+</ion-content>

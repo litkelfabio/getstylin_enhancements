@@ -1,0 +1,183 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar class="ion-padding-top">
+    <ion-title  class="ion-text-center">
+      {{ "edit profile" | uppercase }}
+    </ion-title>
+    <ion-buttons slot="start" (click)="back()">
+      <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.7;"></ion-icon>
+  </ion-buttons>
+  <ion-buttons slot="end" (click)="saveUserInfo()">
+    <ion-icon slot="icon-only" src="assets/css/icon/send.svg" style="zoom: 0.8;"></ion-icon>
+</ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center">
+  <form *ngIf="profileInfo" [formGroup]="editProfileForm">
+    <ion-row  (click)="presentActionSheet()">
+      <ion-col class="ion-text-center center">
+        <ion-avatar class="ion-text-center">
+          <!-- <ngx-progressive-img-loader #thisImage
+            [height]="'100px'"
+            [width]="'100px'"
+            [img]="profile_image_url"
+            [thumbnail]="profile_image_url"
+            [placeholderBgColor]="'grey'"
+            [preserveAspectRatio]="true"
+            [placeholderImg]="'assets/css/imgs/placeholder.png'"
+            [fallbackImg]="'assets/css/imgs/placeholder.png'"
+            class="br-50"
+          >
+          </ngx-progressive-img-loader> -->
+          <!-- {{ profile_image_url }} -->
+          <!-- <ion-img src="assets/css/imgs/placeholder.png" *ngIf="!profileInfo.profile_profile_pic && !profile_image_url"></ion-img>
+          <ion-img [src]="profile_image_url" *ngIf=" profileInfo.profile_profile_pic || profile_image_url"></ion-img> -->
+
+          <!-- <img-loader backgroundSize="cover"  *ngIf="profile_image_url" spinner="true"
+                  src="{{ profile_image_url }}" 
+                  fallbackUrl="assets/css/imgs/empty-states/no-user-photo.png" 
+                  [fallbackAsPlaceholder]="true" style="border-radius: 50%;"></img-loader> -->
+            <ion-img #image [src]="profileInfo.profile_image_url" (ionImgDidLoad)="imgLoaded(profileInfo)" (ionError)="errorLoad(profileInfo)" *ngIf="(profileInfo.profile_image_url && !profileInfo.errorImage) || (profileInfo.profile_profile_pic && !profileInfo.errorImage)"></ion-img>
+            <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="profileInfo.errorImage" ></ion-img>
+            <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="(!profileInfo.profile_profile_pic && !profileInfo.errorImage)" ></ion-img>
+            <!-- <div *ngIf="!profileInfo.isLoadedImage">
+              <ion-spinner name="crescent"></ion-spinner>
+            </div> -->
+        </ion-avatar>
+      </ion-col>
+    </ion-row>
+    <input #imgupload class="d-none" type="file" (change)="imgChange($event)" accept="image/jpeg,image/png"/>
+      <ion-item lines="full">
+        <ion-icon src="assets/css/icon/updated-name.svg" class="name-icon"></ion-icon>     
+        <ion-label class="ion-padding-horizontal" color="primary" position="floating">First Name <span style="color:red"> *</span></ion-label>
+        <ion-input type="text" formControlName="first_name"></ion-input>
+        
+      </ion-item>
+      <ng-container *ngIf="editProfileForm.controls.first_name.touched">
+        <ion-row class="ion-padding-start">
+          <ion-col class="ion-text-start" >
+            <ion-text  class="adjustments ion-padding-start" color="danger" *ngIf="editProfileForm.controls.first_name.hasError('required')">This field is required</ion-text>
+            <ion-text  class="adjustments ion-padding-start" color="danger" *ngIf="editProfileForm.controls.first_name.hasError('maxLength')">First name should not exceed 30 characters</ion-text>
+            <ion-text color="danger ion-padding-start"  class="adjustments" *ngIf="editProfileForm.controls.first_name.hasError('pattern')">First name should only contain letters</ion-text>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+      <ion-item lines="full">
+        <ion-label class="ion-padding-horizontal" color="primary" position="floating">Last Name <span style="color:red"> *</span></ion-label>
+        <ion-input type="text" formControlName="last_name"></ion-input>
+      </ion-item>
+      <ng-container *ngIf="editProfileForm.controls.last_name.touched">
+        <ion-row class="ion-padding-start">
+          <ion-col class="ion-text-start" >
+            <ion-text  class="adjustments ion-padding-start" color="danger" *ngIf="editProfileForm.controls.last_name.hasError('required')">This field is required</ion-text>
+            <ion-text  class="adjustments ion-padding-start" color="danger" *ngIf="editProfileForm.controls.last_name.hasError('maxLength')">Last name should not exceed 30 characters</ion-text>
+            <ion-text  class="adjustments ion-padding-start" color="danger" *ngIf="editProfileForm.controls.last_name.hasError('pattern')">Last name should only contain letters</ion-text>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+      <ion-item lines="full">
+        <ion-icon src="assets/css/icon/updated-bday.svg" class="name-icon"></ion-icon>
+        <ion-button fill="clear" class="alert-btn" (click)="showDateInput()"></ion-button>   
+        <ion-label  class="ion-padding-horizontal" color="primary" position="floating">Birthday <span style="color:red"> *</span></ion-label>
+        <ion-input class="relative-input" readonly type="text" formControlName="birthdate" ></ion-input>
+      </ion-item>
+      <ng-container *ngIf="editProfileForm.controls.gender_label.touched">
+        <ion-row class="ion-padding-start">
+          <ion-col class="ion-padding-start">
+            <ion-text  class="adjustments ion-padding-start" color="danger" *ngIf="editProfileForm.controls.gender_label.hasError('required') && editProfileForm.controls.gender.hasError('required')">This field is required</ion-text>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+      <ion-item lines="full" >
+        <ion-button fill="clear" class="alert-btn"  (click)="chooseGender(genderId)"></ion-button>  
+        <ion-icon  src="assets/css/icon/gender.svg" style="zoom: 1;" class="name-icon"></ion-icon>
+        <ion-label  class="ion-padding-horizontal" color="primary" position="floating">Sex <span style="color:red"> *</span></ion-label>
+        <ion-input class="relative-input" readonly type="text" formControlName="gender_label"></ion-input>  
+        <!-- <ion-select>
+            <ion-select-option value="f">Female</ion-select-option>
+            <ion-select-option value="m">Male</ion-select-option>
+            <ion-select-option value="m">Other</ion-select-option>
+          </ion-select> -->
+      </ion-item>
+      <ion-item lines="full">
+        <ion-icon src="assets/css/icon/updated-location.svg" class="name-icon"></ion-icon>     
+        <ion-label class="ion-padding-horizontal" color="primary" position="floating">Location</ion-label>
+        <ion-input type="text" formControlName="location"  (ionInput)='getValue($event.target.value)' #searchInput (ionFocus)="clearFocus()"></ion-input>
+      </ion-item>
+      <ng-container *ngIf="autocompleteItems && autocompleteItems.length > 0">
+        <!-- <ion-item no-padding> -->
+          <ion-card no-margin style="width: 100% !important; margin: 0px !important;">
+            <ion-list lines>
+              <ion-item *ngFor="let item of autocompleteItems"  (click)="geoCode(item)" padding-horizontal>{{ item }}</ion-item>
+            </ion-list>
+          </ion-card>
+        <!-- </ion-item> -->
+      </ng-container>
+      <ion-item lines="none">
+        <ion-icon  src="assets/css/icon/updated-edit.svg" class="name-icon" style="zoom: 1;"></ion-icon>
+        <ion-label color="primary" position="floating" class="ion-padding-horizontal">Tell us about yourself</ion-label>
+        <ion-textarea rows="5" padding-end formControlName="about" (ionChange)="characterCount($event)" maxLength="150"></ion-textarea>
+      </ion-item>
+      <ion-item lines="full" >
+          <ion-text  color="medium" class="adjustments">{{ aboutLength > 0 ? aboutLength : 0 }} / 150</ion-text>
+      </ion-item>
+    
+        <ion-item lines="full" *ngFor="let clothing of clothings; let i = index">
+          <ion-button fill="clear" (click)="chooseSize(clothing, i, 'show')" class="alert-btn"></ion-button>
+          <ng-container *ngIf="clothing.clothing_type != 'Bottoms'">
+            <ion-icon src="assets/css/icon/{{clothing.clothing_type | lowercase}}.svg" class="brand-icon" slot="start"></ion-icon>
+          </ng-container> 
+          <ng-container *ngIf="clothing.clothing_type == 'Bottoms'">
+            <ion-icon class="brand-icon" slot="start" src="assets/css/icon/updated-bottoms.svg"></ion-icon>
+          </ng-container>
+          <ng-container *ngIf="clothing.clothing_type == 'Dresses'">
+            <ion-icon class="brand-icon" slot="start" src="assets/css/icon/dress.svg"></ion-icon>
+          </ng-container>
+          <ion-label  class="ion-padding-horizontal" color="primary" position="floating">{{ clothing.clothing_type }}</ion-label>
+          <!-- <ion-input #input readonly="true" type="text" (ionFocus)="chooseSize(clothing, i, 'show')" formControlName="clothingField_{{i}}" ></ion-input> -->
+          <ion-input class="relative-input" #input type="text" formControlName="clothingField_{{i}}" ></ion-input>
+        </ion-item>
+  
+      <!-- <ion-item lines="full">
+        <ion-icon src="assets/css/icon/updated-blazer.svg" class="name-icon"></ion-icon>     
+        <ion-label class="ion-padding-horizontal" color="primary" position="floating">Blazers/Jackets</ion-label>
+        <ion-input></ion-input>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-icon src="assets/css/icon/updated-bottoms.svg" class="name-icon"></ion-icon>     
+        <ion-label class="ion-padding-horizontal" color="primary" position="floating">Bottoms</ion-label>
+        <ion-input></ion-input>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-icon src="assets/css/icon/updated-shoe.svg" class="name-icon"></ion-icon>     
+        <ion-label class="ion-padding-horizontal" color="primary" position="floating">Shoes</ion-label>
+        <ion-input></ion-input>
+      </ion-item> -->
+     
+        <ion-item lines="full" *ngIf="brands && brands.length > 0">
+          <ion-icon src="assets/css/icon/brands.svg" class="brand-icon" slot="start"></ion-icon>     
+          <ion-label class="ion-padding-horizontal" color="primary" position="floating">Favorite Brands</ion-label>
+          <ionic-selectable 
+                  [items]="brands"
+                  itemValueField="id"
+                  itemTextField="brand_name"
+                  [canSearch]="true"
+                  [hasInfiniteScroll]="true"
+                  [isMultiple]="true"
+                  (onSaveItem)="onSaveBrands($event)"
+                  (onSearch)="searchBrands($event)"
+                  (onInfiniteScroll)="getMoreBrands($event)"
+                  (onChange)="brandChange($event)"
+                  formControlName="brands_form"
+                  style="
+                    font-family: 'Raleway' !important;
+                    padding-right: 20px;
+                    padding-left: 40px;"
+                  >
+                </ionic-selectable>
+        </ion-item>
+   
+      
+    </form>
+</ion-content>
+

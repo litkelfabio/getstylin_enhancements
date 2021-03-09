@@ -1,0 +1,59 @@
+<ion-header class="ion-padding ion-no-border">
+  <ion-toolbar>
+    <ion-title>Talk To Us</ion-title>
+    <ion-buttons (click)="back()">
+      <ion-icon src="assets/css/icon/back.svg"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding-vertical content">
+  <ion-row>
+    <ion-col class="ion-text-center">
+      <ion-img src="/assets/imgs/talk.png"></ion-img>
+    </ion-col>
+  </ion-row>
+  <form [formGroup]="talkForm">
+    <ion-item>
+      <ion-label position="stacked" color="primary">Name <span style="color: red;">*</span></ion-label>
+      <input class="name-input" type="text" formControlName="contact_name" placeholder="Enter your Name"
+        style="width: 100%; padding-bottom: 10px !important;" />
+    </ion-item>
+    <ng-container *ngIf="talkForm.controls.contact_name.touched">
+      <ion-text class="error-text ion-padding-start" *ngIf="talkForm.controls.contact_name.hasError('required')">Please
+        enter your name</ion-text>
+    </ng-container>
+    <ion-item>
+      <ion-label position="stacked" color="primary">Email <span style="color: red;">*</span></ion-label>
+      <input class="name-input" type="email" formControlName="contact_email" placeholder="Enter your Email"
+        style="width: 100%; padding-bottom: 10px !important;" />
+    </ion-item>
+    <ng-container *ngIf="talkForm.controls.contact_email.touched">
+      <ion-text class="error-text ion-padding-start" *ngIf="talkForm.controls.contact_email.hasError('required')">Please
+        enter your email</ion-text>
+      <ion-text class="error-text ion-padding-start" *ngIf="talkForm.controls.contact_email.hasError('pattern')">Please
+        enter your valid email</ion-text>
+    </ng-container>
+    <ion-item>
+      <ion-label position="stacked" color="primary">Your Message <span style="color: red;">*</span></ion-label>
+      <!-- <textarea id="text-area" (keyup.enter)="responsiveButton()" (keyup)="autoGrow($event)" type="text" placeholder="What do you want to tell to us?"
+        formControlName="contact_message" class="ion-padding-bottom"></textarea> -->
+      <textarea rows='8' type="text" placeholder="What do you want to tell to us?"
+        formControlName="contact_message" class="ion-padding-bottom"></textarea>
+      <!-- <input class="name-input" type="email" (oninput)="autoGrow($event)" formControlName="contact_message" placeholder="Enter your Message" style="width: 100%; padding-bottom: 10px !important;"/> -->
+    </ion-item>
+    <ng-container *ngIf="talkForm.controls.contact_message.touched">
+      <ion-text class="error-text ion-padding-start" *ngIf="talkForm.controls.contact_message.hasError('required')">
+        Please enter your message</ion-text>
+    </ng-container>
+  </form>
+  <!-- <ion-footer class="send-button" [ngClass]="{hiddenButton: focusArea}">
+    <ion-button [disabled]="!talkForm.valid"  (keyup.enter)="sendMessage()" strong="true"
+      fill="outline" color="primary" expand="block" mode="ios">SEND MESSAGE</ion-button>
+  </ion-footer> -->
+  <!-- <ion-content> -->
+    <ion-button id="send" [disabled]="!talkForm.valid" class="send-button"  (click)="sendMessage()" strong="true"
+        fill="outline" color="primary" expand="block" mode="ios">SEND MESSAGE</ion-button>
+  <!-- </ion-content> -->
+</ion-content>
+

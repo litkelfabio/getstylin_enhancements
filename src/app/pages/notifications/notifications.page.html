@@ -1,0 +1,145 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">NOTIFICATIONS</ion-title>
+    <ion-buttons slot="start" class="ion-padding-left" (click)="back()">
+      <ion-icon  src="assets/css/icon/back.svg" ></ion-icon>
+  </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ng-progress #progressBar [color]="'#B3A25D'" [spinner]="false" [fixed]="true" [meteor]="false" [thick]="true"></ng-progress>
+<ion-content>
+  <ion-refresher #refresherRef slot="fixed" (ionRefresh)="doRefresh($event)" mode="md" >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-container *ngIf="items && (items.length <= 0) && isLoaded">
+    <div class="container">
+      <div class="center">
+        <ion-img src="assets/css/icon/notification.svg" style="height: 50px; width: 50px;"></ion-img>
+      </div>
+      <ion-row>
+        <ion-col class="ion-text-center">
+            <ion-text style="font-family: 'Raleway' !important;">You have no notifications</ion-text>
+        </ion-col>
+      </ion-row>
+    </div>
+</ng-container>
+  <ng-container *ngIf="isLoaded">
+    <!-- <ng-container *ngIf="total_items > 0">
+      <ion-row>
+        <ion-col class="ion-no-padding">
+          <ion-button fill=clear size="small" strong="true" style="float: right;" (click)="confirmMessage(1)">
+            {{'clear all' | uppercase}}
+          </ion-button>
+          <ion-button fill=clear size="small" strong="true" style="float: left;" (click)="confirmMessage(2)">
+            {{'mark all as read' | uppercase}}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ng-container> -->
+    <ng-container *ngIf="items && (items.length != 0)">
+      <ng-container *ngFor="let item of items; index as i">
+        <div class="item-row" [class.unread]="!item.read_at" [class.read]="item.read_at">
+          <ion-row>
+            <ion-col class='ion-align-self-center ion-padding-vertical' size='2' (click)='gotoProfile(item)'  no-line no-padding>
+              <ion-avatar item-start class="profile-img">
+                <ion-img *ngIf="item && item.owner_user_id != 1 && item.user_profile_photo"
+                  [src]="item.user_profile_photo" fallbackUrl="assets/css/imgs/placeholder.png"
+                  fallbackAsPlaceholder="true"></ion-img>
+                <ion-img useImg *ngIf="item && item.owner_user_id != 1 && !item.user_profile_photo"
+                  src="assets/css/imgs/placeholder.png"></ion-img>
+                <ion-img useImg *ngIf="item && item.owner_user_id == 1" src="assets/imgs/icon-getstylin.png"></ion-img>
+              </ion-avatar>
+            </ion-col>
+            <ion-col class='ion-align-self-center' size='8' (click)="doSomething(item, i)" text-wrap col no-padding no-lines>
+              <h6 class="ion-no-margin" *ngIf="item.data == 'You are now connected with ' || item.type == 'connect_to' && item.type != 'welcome'" ion-text>
+                <strong *ngIf="item && item.owner_user_id != 1">{{ item.user_first_name }} {{ item.user_last_name }}</strong>
+                {{ (item.data.length > 40)? (item.data | slice:0:40)+'..':(item.data) }}
+                <ion-note >{{ getMomentFormat(item.created_at) | timeAgoV2 }}</ion-note>
+              </h6>
+              <h6 class="ion-no-margin" *ngIf="item.data != 'You are now connected with ' &&  item.type != 'connect_to' && item.type != 'welcome'" ion-text>
+                <strong *ngIf="item && item.owner_user_id != 1">{{ item.user_first_name }}
+                  {{ item.user_last_name }}</strong><span [innerHTML]="item.data"></span>
+                <!-- {{ (item.data.length > 40)? (item.data | slice:0:40)+'..':(item.data) }} -->
+                <ion-note >{{ getMomentFormat(item.created_at) | timeAgoV2 }}</ion-note>
+                
+              </h6>
+              <h6 class="ion-no-margin" *ngIf="item.type == 'welcome'" ion-text>
+                {{ item.data }} <strong>{{ item.user_first_name }} {{ item.user_last_name }}</strong>!
+                <ion-note >{{ getMomentFormat(item.created_at) | timeAgoV2 }}</ion-note>
+            
+              </h6>
+            </ion-col>
+            <ion-col class='ion-align-self-center' (click)="doSomething(item, i)"
+              *ngIf="item && item.owner_user_id != 1 && (item.input_a != 'pending' && item.input_a != 'connected' && item.input_a != 'unconnected')"
+              class="right" col-3 no-padding no-lines>
+              <!-- <p class="notif-pic" color="" *ngIf="item && item.input_a == 'deleted'" ion-text>N/A</p> -->
+              <ion-row *ngIf="item && item.input_a == 'deleted'">
+                <ion-col class="ion-text-end ion-padding-top">
+                  <img src="assets/css/imgs/empty-states/delete.png">
+                </ion-col>
+              </ion-row>
+              <img class="notif-pic" useImg *ngIf="item.type != 'connect_to' && item.input_a != 'deleted' && item.type != 'welcome' && item.type != 'followed_question' && item.type != 'answer_reply'"
+                [src]="item.input_a" fallbackUrl="assets/imgs/empty-states/no-user-photo.png" fallbackAsPlaceholder="true">
+              <!-- </ion-img> -->
+              <!-- <img-loader useImg *ngIf="item && item.owner_user_id == 1" src="assets/imgs/icon-getstylin.png"></img-loader> -->
+              <!-- <button *ngIf="item.type == 'connect_to' && item.data == 'You are now connected with '" mode="ios" ion-button outline strong small block tappable (click)="doSomething(item)">{{ "View" | uppercase }}</button>
+                    <button *ngIf="item.type == 'connect_to' && item.data == ' wants to connect with you!'" mode="ios" ion-button strong small block tappable (click)="doSomething(item)">{{ "View" | uppercase }}</button> -->
+            </ion-col>
+          </ion-row>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="!isLoaded">
+    <ion-row>
+      <ion-col size="12" class="ion-padding-horizontal">
+        <ion-skeleton-text animated  style="width: 100%; height: 50px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-padding-horizontal">
+        <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-padding-horizontal">
+        <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-padding-horizontal">
+        <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-padding-horizontal">
+        <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-padding-horizontal">
+        <ion-skeleton-text animated  style="width: 100%; height: 50px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-padding-horizontal">
+        <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-padding-horizontal">
+        <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-padding-horizontal">
+        <ion-skeleton-text animated style="width: 100%; height: 50px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content>
+      <ion-text *ngIf="endText" style="font-family: 'Raleway' !important;">No more notifications to load</ion-text>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

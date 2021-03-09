@@ -1,0 +1,33 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Ionic Facebook
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="ion-padding" *ngIf="isLoggedIn === true">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>Hi, {{users.name}}</ion-card-subtitle>
+        <ion-card-title>{{users.email}}</ion-card-title>
+      </ion-card-header>
+      <img src="{{users.picture.data.url}}" width="100" alt="{{users.name}}" />
+      <ion-card-content>
+        <p>
+          <ion-button expand="full" color="secondary" (click)="logout()">
+            Logout
+            <ion-icon name="log-out"></ion-icon>
+          </ion-button>
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div class="ion-padding" *ngIf="isLoggedIn === false">
+    <ion-button expand="full" color="primary" (click)="fbLogin()">
+      Login with
+      <ion-icon name="logo-facebook"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>

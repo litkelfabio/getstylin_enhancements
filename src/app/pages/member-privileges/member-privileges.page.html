@@ -1,0 +1,341 @@
+<ion-header class="ion-no-border ion-padding-top">
+  <ion-toolbar>
+    <ion-title>MY REWARDS</ion-title>
+    <ion-buttons slot="start" class="ion-padding">
+        <ion-icon src="assets/css/icon/back.svg" (click)="back()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-no-padding">
+  <ion-row class="ion-padding">
+    <ion-col size="12">
+      <ion-row style="justify-content: center;">
+        <ion-item lines="none" >
+          <ion-icon src="assets/css/icon/style-points-gold.svg"></ion-icon>
+          <ion-spinner name="dots" *ngIf="!isLoaded"></ion-spinner>
+          <ion-text *ngIf="isLoaded"><strong class="profile-points">{{points}}</strong></ion-text>
+        </ion-item>
+      </ion-row>
+      <ion-row style="justify-content: center;">
+        <ion-text class="title"><b>{{current_rank.description}}</b></ion-text>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="ion-text-center ion-padding-bottom">
+          <ion-text class="subtitle">Get more style points by joining the different Style Challenges. 
+            Learn more about your progress and the different rewards below.</ion-text>
+        </ion-col>
+      </ion-row>
+      <!-- <div class="tier-switcher ion-padding">
+        <ion-segment>
+         <ion-segment-button>
+           <ion-icon src="assets/css/icon/rank.svg" ></ion-icon><br>
+           <ion-label ion-text color="t-gold" class="ranks">RISING STAR</ion-label>
+           <ion-label ion-text color="t-gold" class="ranks">O PTS</ion-label>
+         </ion-segment-button>
+         <ion-segment-button >
+           <ion-icon src="assets/css/icon/a-rising-star.svg" ></ion-icon><br>
+           <ion-label ion-text color="t-gold" class="ranks">SUPER STAR</ion-label>
+           <ion-label ion-text color="t-gold" class="ranks">5,000 PTS</ion-label>
+         </ion-segment-button>
+         <ion-segment-button>
+           <ion-icon src="assets/css/icon/icon-star.svg" ></ion-icon><br>
+           <ion-label ion-text color="t-gold" class="ranks">ICON</ion-label>
+           <ion-label ion-text color="t-gold" class="ranks">15,000 PTS</ion-label>
+         </ion-segment-button>
+         <ion-segment-button>
+             <ion-icon src="assets/css/icon/legend-star.svg" ></ion-icon><br>
+             <ion-label ion-text color="t-gold" class="ranks">LEGEND</ion-label>
+             <ion-label ion-text color="t-gold" class="ranks">20,000 PTS</ion-label>
+           </ion-segment-button>
+         </ion-segment>
+       </div> -->
+
+
+       <ion-segment  [(ngModel)]="rewards">
+        <ion-segment-button [disabled]="!isLoaded" value="rising_star" (click)="rewardButton()">
+          <!-- <ng-container *ngIf="rewards != rising_star">
+            <ion-icon src="assets/css/icon/rising-star-white.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+          <ion-label class="ion-no-padding" style="color:#B3A25D;">RISING STAR</ion-label>
+          <ion-label class="ion-no-padding" style="color:#B3A25D;padding-bottom: 2px; padding-top: 0px !important;">0 PTS</ion-label>
+          </ng-container>
+          <ng-container *ngIf="rewards == rising_star">
+            <ion-icon src="assets/css/icon/rising-star.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+          <ion-label class="ion-no-padding" style="color: white;">RISING STAR</ion-label>
+          <ion-label class="ion-no-padding" style="color: white;padding-bottom: 2px; padding-top: 0px !important;">0 PTS</ion-label>
+          </ng-container> -->
+          
+            <ng-container *ngIf="rewards == 'rising_star'">
+              <ion-icon src="assets/css/icon/rising-star-white.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+              <ion-label class="ion-no-padding" style="color: white;">RISING STAR</ion-label>
+              <ion-label class="ion-no-padding" style="color: white;padding-bottom: 2px; padding-top: 0px !important;">0 PTS</ion-label>
+            </ng-container>
+
+            <ng-container *ngIf="rewards != 'rising_star'">
+              <ion-icon src="assets/css/icon/rising-star.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+              <ion-label class="ion-no-padding" style="color: #B3A25D;">RISING STAR</ion-label>
+              <ion-label class="ion-no-padding" style="color: #B3A25D;padding-bottom: 2px; padding-top: 0px !important;">0 PTS</ion-label>
+            </ng-container>
+        
+        </ion-segment-button>
+
+        <ion-segment-button [disabled]="this.points < 5000" value="super_star" (click)="rewardButton()">
+
+          <ng-container *ngIf="rewards == 'super_star'">
+            <ion-icon src="assets/css/icon/a-rising-star-white.svg" class="ion-padding-top star-icon"  style="zoom: 0.7;"></ion-icon>
+          <ion-label class="ion-no-padding" style="color:white; font-size: 10px">SUPERSTAR</ion-label>
+          <ion-label class="ion-no-padding" style="color: white; font-size: 10px;padding-bottom: 2px;">5,000 PTS</ion-label>
+          </ng-container>
+
+          <ng-container *ngIf="rewards != 'super_star'">
+            <ion-icon src="assets/css/icon/a-rising-star.svg" class="ion-padding-top"  style="zoom: 0.7;"></ion-icon>
+          <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">SUPERSTAR</ion-label>
+          <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">5,000 PTS</ion-label>
+          </ng-container>
+        
+        </ion-segment-button>
+        
+        <ion-segment-button [disabled]="this.points < 15000" value="icon" (click)="rewardButton()">
+
+          <ng-container *ngIf="rewards != 'icon'">
+            <ion-icon src="assets/css/icon/icon-star.svg" class="ion-padding-top" style="zoom: 0.7;"></ion-icon>
+            <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">ICON</ion-label>
+            <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">15,000 PTS</ion-label>
+          </ng-container>
+          <ng-container *ngIf="rewards == 'icon'">
+            <ion-icon src="assets/css/icon/icon-star-white.svg" class="ion-padding-top" style="zoom: 0.7;"></ion-icon>
+            <ion-label class="ion-no-padding" style="color:white; font-size: 10px">ICON</ion-label>
+            <ion-label class="ion-no-padding" style="color: white; font-size: 10px;padding-bottom: 2px;">15,000 PTS</ion-label>
+          </ng-container>
+        </ion-segment-button>
+        <ion-segment-button [disabled]="this.points < 20000" value="legend">
+
+          <ng-container *ngIf="rewards != 'legend'">
+            <ion-icon src="assets/css/icon/legend-star.svg" style="zoom: 0.7;" class="ion-padding-top"></ion-icon>
+          <ion-label class="ion-no-padding" style="color:#B3A25D; font-size: 10px">LEGEND</ion-label>
+          <ion-label class="ion-no-padding" style="color: #B3A25D; font-size: 10px;padding-bottom: 2px;">20,000 PTS</ion-label>
+          </ng-container>
+          <ng-container *ngIf="rewards == 'legend'">
+            <ion-icon src="assets/css/icon/legend-star-white.svg" style="zoom: 0.7;" class="ion-padding-top"></ion-icon>
+          <ion-label class="ion-no-padding" style="color:white; font-size: 10px">LEGEND</ion-label>
+          <ion-label class="ion-no-padding" style="color: white; font-size: 10px;padding-bottom: 2px;">20,000 PTS</ion-label>
+          </ng-container>
+        </ion-segment-button>
+      </ion-segment>
+
+      
+       <!-- <ion-row class="ion-padding-top">
+         <ion-col size="6" class="ion-text-left ion-padding-top">
+           <ion-text><strong>POINTS TO NEXT TIER</strong></ion-text>
+         </ion-col>
+         <ion-col size="6" class="ion-text-right ion-padding-top">
+          <ion-text color="primary"><strong>VIEW BENEFITS</strong></ion-text>
+        </ion-col> (click)='goToViewPrevilege()'
+       </ion-row> -->
+       <ng-container *ngIf="isLoaded">
+        <div [ngSwitch]="rewards">
+          <!-- RISING STAR PROGRESS -->
+          <div *ngSwitchCase="'rising_star'" class="padded-lr">
+            <ion-row class="ion-padding-vertical">
+              <ion-col size="6" class="ion-text-left ion-padding-top">
+                <ion-text><strong>POINTS TO NEXT TIER</strong></ion-text>
+              </ion-col>
+              <ion-col size="6" class="ion-text-right ion-padding-top">
+               <ion-text color="primary" (click)='goToViewPrevilege()'><strong>VIEW BENEFITS</strong></ion-text>
+             </ion-col> 
+            </ion-row>
+            <ion-row>
+              <ion-col class="ion-text-center">
+                <ion-progress-bar [value]="points < 5000 ? (points / 5000) : 1">&nbsp;</ion-progress-bar>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="ion-text-center">
+                <h6 class="ion-no-margin ion-margin-top">{{ regexPoints(points < 5000 ? points : 5000) }} / 5,000 PTS</h6>
+              </ion-col>
+            </ion-row>
+          </div>
+          <!-- END RISING STAR PROGRESS -->
+    
+    
+          <!-- SUPERSTAR PROGRESS -->
+          <div *ngSwitchCase="'super_star'" class="padded-lr">
+            <ion-row class="ion-padding-vertical">
+              <ion-col size="6" class="ion-text-left ion-padding-top">
+                <ion-text><strong>POINTS TO NEXT TIER</strong></ion-text>
+              </ion-col>
+              <ion-col size="6" class="ion-text-right ion-padding-top">
+               <ion-text color="primary" (click)='goToViewPrevilege()'><strong>VIEW BENEFITS</strong></ion-text>
+             </ion-col> 
+            </ion-row>
+            <ion-row>
+              <ion-col class="ion-text-center">
+                <ion-progress-bar [value]="points < 15000 ? (points / 15000) : 1">&nbsp;</ion-progress-bar>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="ion-text-center">
+                <h6 class="ion-no-margin ion-margin-top">{{ regexPoints(points < 15000 ? points : 15000) }} / 15,000 PTS</h6>
+              </ion-col>
+            </ion-row>
+          </div>
+          <!-- END SUPERSTAR PROGRESS -->
+    
+          <!-- ICON PROGRESS -->
+          <div *ngSwitchCase="'icon'" class="padded-lr">
+            <ion-row class="ion-padding-vertical">
+              <ion-col size="6" class="ion-text-left ion-padding-top">
+                <ion-text><strong>POINTS TO NEXT TIER</strong></ion-text>
+              </ion-col>
+              <ion-col size="6" class="ion-text-right ion-padding-top">
+               <ion-text color="primary" (click)='goToViewPrevilege()'><strong>VIEW BENEFITS</strong></ion-text>
+             </ion-col> 
+            </ion-row>
+            <ion-row>
+              <ion-col class="ion-text-center">
+                <ion-progress-bar [value]="points < 20000 ? (points / 20000) : 1">&nbsp;</ion-progress-bar>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="ion-text-center">
+                <h6 class="ion-no-margin ion-margin-top">{{ regexPoints(points < 20000 ? points : 20000) }} / 20,000 PTS</h6>
+              </ion-col>
+            </ion-row>
+          </div>
+          <!-- END ICON PROGRESS -->
+    
+          <!-- LEGEND PROGRESS -->
+          <div *ngSwitchCase="'legend'" class="padded-lr">
+            <ion-row class="ion-padding-vertical">
+              <ion-col size="6" class="ion-text-left ion-padding-top">
+                <ion-text><strong>POINTS TO NEXT TIER</strong></ion-text>
+              </ion-col>
+              <ion-col size="6" class="ion-text-right ion-padding-top">
+               <ion-text color="primary" (click)='goToViewPrevilege()'><strong>VIEW BENEFITS</strong></ion-text>
+             </ion-col> 
+            </ion-row>
+            <ion-row>
+              <ion-col class="ion-text-center">
+                <ion-progress-bar [value]="points < 20000 ? (points / 20000) : 1">&nbsp;</ion-progress-bar>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="ion-text-center">
+                <h6 class="ion-no-margin ion-margin-top">Congratulations! You’re a Legend!</h6>
+              </ion-col>
+            </ion-row>
+          </div>
+        </div>
+        </ng-container>
+       <!-- <ion-row class="ion-padding-vertical"> <h6 ion-text text-center class="customH6">Congratulations! You’re a Legend!</h6>
+         <ion-progress-bar type="ios" value="0.5"></ion-progress-bar>
+       </ion-row>
+       <ion-row>
+         <ion-col size="12" class="ion-text-center">
+           <ion-text class="points">118 / 5,000 PTS</ion-text>
+         </ion-col>
+       </ion-row> -->
+    </ion-col>
+  </ion-row>
+  <ion-row style='background:rgba(179, 162, 93, 0.15)' (click)="goToMyClaimedRewards()">
+    <ion-col class='flex-items-center ion-no-padding' size="10" >
+      <ion-row (click)="goToMyClaimedRewards()">
+        <ion-col class="ion-padding-start" size="11" style="padding: 19px 0px; height: 55px;">
+          <img style='width: 20px; height: 20px; margin-right: 8px; float: left;margin-left: 25px;' src="assets/css/icon/gold-gift.png"  (click)="goToMyClaimedRewards()">
+          <ion-text style="padding:10px 0p;" color='white'><strong>{{ 'My rewards' | uppercase }}</strong></ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+    <ion-col class='flex-items-end ' size="2" class="ion-no-padding" style="padding: 19px 5px;">
+      <ion-icon no-padding class="big" src="/assets/css/icon/back-reverse.svg" style="width: 30px; height: 25px; float:right;"></ion-icon>
+    </ion-col>
+   </ion-row>
+   
+
+   <ng-container *ngIf="style_challenges">
+    <ion-row class="ion-padding-horizontal ion-padding-top">
+      <ion-col size="12">
+        <ion-text><strong>STYLE CHALLENGES</strong> </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding-start ion-padding-bottom">
+      <ion-col>
+        <ion-text class="subtitle">
+          Take part in fun and amazing challenges.
+         </ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ng-container *ngIf="style_challenges_count == 0">
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-text style="font-family: 'Raleway' !important;">No Style Challenges available</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+ 
+
+  <ng-container *ngIf="style_challenges_count !=0">
+    <ion-row class=" slideChallenges">
+      <ion-col size="12" class="mb-20 ion-padding-horizontal">
+        <ion-slides pager="true" [options]="slideReward">
+          <ng-container *ngFor="let carousel of style_challenges;let i = index ">
+            <ng-container *ngIf="carousel.isShow == '1'">
+              <ion-slide>
+                <!-- <img src="{{ carousel.photo }}" alt="" style="border-radius: 10px; height: 150px; width: 100%;"> -->
+               <div>
+                <!-- <ngx-progressive-img-loader class="img-border"
+                #imagePost
+                [height]="'150px'"
+                [width]="'100%'"
+                (imageLoaded)="onImgLoad($event)"
+                (thumbnailLoaded)="onThumbLoad($event)"
+                [img]="carousel.photo"
+                [thumbnail]="carousel.photo"
+                [placeholderBgColor]="'grey'" 
+                [preserveAspectRatio]="true"
+                [overlayTint]="'rgba(0,0,0,0)'"
+                 >
+                </ngx-progressive-img-loader> --> 
+                <div class="img-container">
+                  <ion-img #image id='image2' (ionImgDidLoad)="ionImgDidLoadStyleChallenges(carousel)" [src]="carousel.photo" (ionImgDidLoad)="ionImgDidLoad()" (ionError)="errorLoad(carousel)" *ngIf="carousel.photo &&!carousel.errorImage"></ion-img>
+                <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="carousel.errorImage" ></ion-img>
+                <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="carousel && !carousel.photo" ></ion-img>
+                <div *ngIf="!carousel.isLoadedStyleChallenges" class="spinner">
+                  <ion-spinner  name="crescent" class="spinner-circle-style-challenges"></ion-spinner>
+                </div>
+              </div>
+                <ion-row>
+                  <ion-col class="ion-text-start">
+                    <ion-text class="title-text"><strong>{{carousel.challenge_title}}</strong></ion-text>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="6" class="ion-text-start">
+                    <ion-button fill="outline" color="primary" expand=" block" (click)="goToStyleChallenges(carousel.id)">LEARN MORE</ion-button>
+                  </ion-col>
+                </ion-row>
+               </div>
+                <!-- <div class="img-thumbnail-holder rounded h-150 w-100-per"
+                [ngStyle]="{'background-image': 'url('+ carousel.photo +')' }">
+  
+                </div> -->
+                <!-- <-loader
+                  useImg
+                  *ngIf="style && style.photo"
+                  src="{{ style.photo }}"
+                  fallbackUrl="assets/imgs/empty-states/fallback.svg"
+                  allbackAsPlaceholder="true"></img-loader>
+                  <img-loader
+                  useImg
+                  *ngIf="style && !style.photo"
+                  src="assets/imgs/empty-states/fallback.svg"></img-loader> -->
+              </ion-slide>
+            </ng-container>
+          </ng-container>
+        </ion-slides>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+</ng-container>
+
+</ion-content>

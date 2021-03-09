@@ -1,0 +1,307 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title >
+      <ion-text class="block">{{"style column" |uppercase}}</ion-text>
+      <ng-container *ngIf="styleName != ''">
+        <ion-text class="block">
+          <div class="sub-title">
+            <ion-label text-wrap text-center>{{ styleName | uppercase}}</ion-label>
+          </div>
+        </ion-text>  
+      </ng-container>
+    </ion-title>
+      
+    <ion-buttons slot="start" class="ion-padding-left" *ngIf="isNotified" (click)="backDashboard()">
+      <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.5; padding-left: 20px;"></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="start" class="ion-padding-left" (click)="back()" *ngIf="!isNotified">
+      <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.5; padding-left: 20px;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ng-progress #progressBar [color]="'#B3A25D'" [spinner]="false" [meteor]="false" [fixed]="true" [thick]="true"></ng-progress>
+<ion-content class="ion-padding-top" *ngIf="!error">
+  <ion-refresher #refresherRef slot="fixed" (ionRefresh)="doRefresh($event)" mode="md" >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div id="fullQuestion-container">
+    <ion-row >
+      <ng-container *ngIf="pageIsLoading">
+        <ion-col class="ion-text-center">
+          <ion-skeleton-text animated style="width:100%; height:150px;border-radius: 10px;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width:100%; height:50px;"></ion-skeleton-text>
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="!pageIsLoading">
+        <ion-col size="12">
+          <ion-row>
+            <ion-col class="ion-text-center ion-padding-horizontal">
+              <div id="question-cover" [ngStyle]="{ 'background-image': 'linear-gradient(rgba(0, 0, 0, 0.5) 100%, rgba(0, 0, 0, 0.5) 100%), url(' + questionData.photo_url + ')'}" (click)="viewPhoto(questionData.photo_url, questionData.question)" >
+                <div id="question-text">
+                  {{ questionData.question }}
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="ion-text-start ion-padding-horizontal">
+              <ng-container id="question-description" *ngIf="questionData.description"> 
+                <ion-text>{{ questionData.description }}</ion-text> 
+              </ng-container>
+              <ng-container id="question-description" *ngIf="!questionData.description">
+                No description is given for this question.
+              </ng-container>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="ion-text-start ion-padding text">
+             <div>
+              <ion-text class="custom-text" color="medium">Posted by {{ postedBy }}</ion-text>
+             </div>
+             <div>
+              <ion-text color="medium">{{ getMomentFormatFromProvider(questionData.created_at, 'MMMM DD, YYYY') | uppercase }}</ion-text>
+             </div>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+    <ion-row style="padding: 0px 10px !important;"> 
+      <ion-col class="ion-no-padding">
+        <ng-container  >
+          <div id="response-entryField-container" [hidden]="isReply == true || isEdit == true">
+            <!-- <ion-grid >
+              <ion-row > -->
+                <ion-col size="10" no-margin no-padding autosize>
+                  <ion-textarea #answerField [disabled]="isSending" [(ngModel)]="myResponse" class="comment-entry-inputField" rows="1" maxLength="500" placeholder="Add your answer"></ion-textarea >
+                </ion-col>
+    
+                <ion-col size="2" no-margin no-padding>
+                  <ion-button fill="clear"  [disabled]="!myResponse || isSending == true" (click)="postResponse()"><ion-icon src="assets/css/icon/send.svg"></ion-icon></ion-button>
+                </ion-col>
+              <!-- </ion-row>
+            </ion-grid> -->
+          </div>
+          <!-- <ion-row  [hidden]="isReply == true || isEdit == true">
+            <ion-col class="ion-text-start ion-padding">
+              <ion-button [disabled]="!myResponse || isSending == true" (click)="postResponse()" fill="clear"><ion-icon class="send-icon" src="assets/css/icon/send.svg"></ion-icon></ion-button>
+              <ion-textarea #answerField [(ngModel)]="myResponse" class="comment-entry-inputField" rows="1" maxLength="500" placeholder="Add your answer"></ion-textarea >
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="ion-text-center">
+              <ng-container><ion-text class="custom-text" style="font-size: 13px;">There are no answers for this question yet.</ion-text></ng-container>
+            </ion-col>
+          </ion-row> -->
+        </ng-container>
+        <ion-row no-padding>
+          <div id="response-container">
+            <!-- Loading -->
+            <!-- <div class="loading" *ngIf="commentsAreLoading" text-center>
+              <ion-spinner color="t-gold" *ngIf="pageIsLoading"></ion-spinner>
+            </div> -->
+            <!-- Empty -->
+            <!-- Filled -->
+            <div class="filled" *ngIf="!pageIsLoading && responses.length > 0">
+              <ion-text class="answer-title"><b >{{ 'Answers' | uppercase }}</b> ({{ responseCount }})</ion-text>
+            </div>
+          </div>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <!-- Comment Tree -->
+            <!-- <div id="comment-tree"> -->
+              <!-- Comments - Filled state -->
+              <!-- Loop here for comments -->
+              <ng-container *ngIf="responses.length > 0">
+                <ion-item *ngFor="let response of responses" lines="none" class="ion-padding-bottom">
+                  <ion-col size="2" class="ion-no-padding" style="height: 96% !important;">
+                    <ion-avatar class="ion-no-margin">
+                      <ion-img #image [src]="response.response.user_profile_pic_url" (ionImgDidLoad)="isLoadedImg2(response)" (ionError)="errorLoadAvatar(response)" *ngIf="response.response.user_profile_pic_url &&!response.errorImage"></ion-img>
+                      <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="response.errorImage" ></ion-img>
+                      <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="response && !response.response.user_profile_pic_url" ></ion-img>
+                      
+                      <div *ngIf="!response.isLoadedProfile" class="spinner2">
+                        <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+                      </div>
+                      <!-- <ng-container *ngIf="response.response.user_profile_pic_url">
+                        <img class="thumbnail"  [src]="response.response.user_profile_pic_url">
+                      </ng-container>
+                      <ng-container *ngIf="!response.response.user_profile_pic_url">
+                        <img class="thumbnail" [src]="'assets/css/imgs/placeholder.png'">
+                      </ng-container> -->
+                    </ion-avatar>
+                  </ion-col>
+                    <ion-col size="10" class="ion-padding-start" >
+                      <ion-label class="name-text" (click)="goToProfile(response.response)"><strong>{{ response.response.user_first_name }} {{ response.response.user_last_name }}</strong></ion-label>
+                      <ion-text (click)="showFull(response)" id="commentSection" class="response-comment" [ngClass]="{'show-less': !response.showMore}" *ngIf="response.response.comment.length > 31">{{ response.response.comment }}</ion-text>
+                      <ion-text id="commentSection" class="response-comment" [ngClass]="{'show-less': !response.showMore}" *ngIf="response.response.comment.length <= 31">{{ response.response.comment }}</ion-text>
+                      <ion-text *ngIf="!response.showMore && response.response.comment.length > 31" color="primary" style="font-size: 13px;" (click)="showFull(response)">See more</ion-text>
+                      <ion-text color="medium" class="more"> {{ getMoment(response.response.created_at) | timeAgoV2 }}</ion-text>  
+                      <ion-text (click)="toggleReply(response)" class="more" color="primary"> <strong>&nbsp;&nbsp;&nbsp;Reply</strong></ion-text>
+                      <ion-text class="more" color="primary" (click)="toggleEdit(response)" *ngIf="profileInfo['id']== response.response.userId"><strong>&nbsp;&nbsp;&nbsp;Edit</strong></ion-text>
+                      <ion-text class="more" color="primary" (click)="presentDeletePrompt(response)" *ngIf="profileInfo['id'] == response.response.userId"><b>&nbsp;&nbsp;&nbsp;Delete</b></ion-text>
+                      <ion-label class="view" *ngIf="response.replyCount == 1"  (click)="presentCommentTree(response)">View {{ response.replyCount }} reply</ion-label>
+                      <ion-label *ngIf="response.replyCount > 1"  class="view" (click)="presentCommentTree(response)">View {{ response.replyCount }} replies</ion-label>
+                      <!-- <ion-label class="view">View reply</ion-label> -->
+                    </ion-col>
+                </ion-item>
+              </ng-container>
+
+              <!-- <ng-container *ngIf="responses.length > 0">
+                <div class="comment-parent" *ngFor="let response of responses">
+                  <ion-grid no-margin no-padding>
+                    <ion-row no-margin no-padding>
+                      <ion-col col-2 class="thumbnail-container" tappable (click)="goToProfile(response.response)">
+                        <div class="owner-thumbnail" *ngIf="response.response.user_profile_pic_url" [ngStyle]="{ 'background-image': 'url(' + response.response.user_profile_pic_url + ')'}"></div>
+                        <div class="owner-thumbnail" *ngIf="!response.response.user_profile_pic_url" [ngStyle]="{ 'background-color': '#999999'}"></div>
+                      </ion-col>
+                      <ion-col col-10>
+                        <div class="comment-owner" tappable (click)="goToProfile(response.response)">
+                          <span ion-text class="owner-name">{{ response.response.user_first_name }} {{ response.response.user_last_name }}</span>
+                        </div>
+                        <div class="comment-text">
+                          <p>
+                            {{ response.response.comment }}
+                          </p>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+  
+                    <ion-row no-margin no-padding>
+                      <ion-col size="2">&nbsp;</ion-col>
+                      <ion-col size="10">
+                        <div class="comment-parent-controls">
+                          <span ion-text class="control-item timestamp">{{ getMoment(response.response.created_at) | timeAgoV2 }}</span>
+                          <span ion-text class="control-item" tappable (click)="toggleReply(response)">Reply</span>
+                          <span ion-text class="control-item" tappable (click)="toggleEdit(response)" *ngIf="profileInfo['id']== response.response.userId">Edit</span>
+                          <span ion-text class="control-item" tappable (click)="presentDeletePrompt(response)" *ngIf="profileInfo['id'] == response.response.userId">Delete</span>
+                        </div>
+                      </ion-col>
+                      <ion-col size="2">&nbsp;</ion-col>
+                      <ion-col size="10">
+                        <div class="response-tree-trigger">
+                          <ion-label *ngIf="response.replyCount == 1" tappable (tap)="presentCommentTree(response)">View {{ response.replyCount }} reply</ion-label>
+                          <ion-label *ngIf="response.replyCount > 1" tappable (tap)="presentCommentTree(response)">View {{ response.replyCount }} replies</ion-label>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+              </ng-container> -->
+            <!-- </div> -->
+            <!-- End Comment Tree -->
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ng-container *ngIf="!pageIsLoading && responses.length == 0">
+    <ion-row class="ion-padding-top">
+      <ion-col class="ion-text-center ion-padding-top">
+        <ion-text>There are no answers for this question yet.</ion-text>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+  <ng-container *ngIf="pageIsLoading">
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-spinner></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+  <!-- <ng-container *ngIf="commentsAreLoading" text-center>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-spinner color="primary" *ngIf="pageIsLoading"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ng-container> -->
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <!-- <ion-infinite-scroll-content showWhen="android"></ion-infinite-scroll-content> -->
+    <ion-infinite-scroll-content class="loadingspinner"  loadingSpinner="crescent" loadingText="Loading comments..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+<ion-footer *ngIf="(isReply == true || isEdit == true) &&!error">
+  <ng-container *ngIf="isReply == true || isEdit == true">
+    <div id="replying-to"  >
+      <ion-item lines="none">
+        <div item-start id="snippet">
+          <ng-container *ngIf="isReply == true">
+            <span *ngIf="replyingTo['name'] != profileInfo['profile_first_name']">Replying to <b>{{ replyingTo['name'] }}</b></span>
+            <span *ngIf="replyingTo['name'] == profileInfo['profile_first_name']">Replying to <b>yourself</b></span>
+            <div><ion-label>{{ replyingTo['comment'] }}</ion-label></div>
+          </ng-container>
+  
+          <ng-container *ngIf="isEdit == true">
+            <span>Editing comment</span>
+            <div><ion-label>{{ editingWhich['comment'] }}</ion-label></div>
+          </ng-container>
+        </div>
+  
+        <div item-end id="control">
+          <ion-button  fill="clear" size="small" *ngIf="isReply == true" (click)="toggleReply(null, true)"><ion-icon name="close-outline" color="pitchblack"></ion-icon></ion-button>
+          <ion-button  fill="clear" size="small" *ngIf="isEdit == true" (click)="toggleEdit(null, true)"><ion-icon name="close-outline" color="pitchblack"></ion-icon></ion-button>
+        </div>
+      </ion-item>
+    </div>
+  </ng-container>
+
+  <!-- End Replying to n Container -->
+
+  <div class="comment-entry-post">
+    <ion-grid class="ion-no-margin ion-no-padding">
+      <ion-row class="ion-no-margin ion-no-padding text-center">
+        <ion-col size="2">
+          <div class="comment-entry-item text-center" >
+            <div class="comment-entry-user-photo" *ngIf="profileInfo['profile_profile_pic']" [ngStyle]="{ 'background-image': 'url('+ profileInfo['profile_profile_pic'] +')'}"></div>
+            <div class="comment-entry-user-photo" *ngIf="!profileInfo['profile_profile_pic']" [ngStyle]="{ 'background-color': '#999999'}"></div>
+          </div>
+        </ion-col>
+
+        <ion-col size="8">
+          <div class="comment-entry-item">
+            <!-- <div id="comment-input" placeholder="Add comment..." contenteditable="true" (input)="messageToSend = $event.target.innerText"></div> -->
+            <div class="comment-entry-inputField text-left" autosize text-left>
+              <ion-textarea #commentField [(ngModel)]="commentText" [disabled]="isSending" class="comment-entry-inputField" rows="1" maxLength="500" placeholder="Add reply"></ion-textarea>
+              <!-- <textarea #commentField name="comment" class="comment-entry-inputField" rows="1" maxLength="500" placeholder="Add comment..."></textarea> -->
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="2">
+          <div class="comment-entry-item">
+            <div class="comment-entry-sendBtn">
+              <ion-button  fill="clear" icon-only *ngIf="isReply == true" (click)="postResponse(true)" [disabled]="isSending || !commentText"><ion-icon src="assets/css/icon/send.svg" slot="end"></ion-icon></ion-button>
+              <ion-button  fill="clear" icon-only *ngIf="isEdit == true" (click)="editResponse()" [disabled]="isSending || !commentText"><ion-icon src="assets/css/icon/send.svg" slot="end"></ion-icon></ion-button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <!-- <ion-toolbar class="ion-no-padding footer">
+    <ion-col size="12">
+      <ion-item lines="none">
+        <ion-avatar style="background-color: grey;" slot="start"></ion-avatar>
+        <ion-input placeholder="Add comment..."></ion-input>
+        <ion-icon src="assets/css/icon/send-icon.svg" slot="end"></ion-icon>
+      </ion-item>
+    </ion-col>
+  </ion-toolbar> -->
+</ion-footer>
+
+<ion-content *ngIf="error" class="ion-no-padding">
+  <div style="display: flex; justify-content: center;align-items: center; height: 100%;">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <img src="assets/css/imgs/empty-states/delete.png" style="width: 50% !important;">
+      </ion-col>
+      <ion-col size="12" class="ion-text-center">
+        <ion-text style="font-weight: 15px; font-family: 'Raleway' !important;">This question is no longer available.</ion-text>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>

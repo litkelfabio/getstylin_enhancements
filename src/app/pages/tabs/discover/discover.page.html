@@ -1,0 +1,818 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title>{{ "Discover" | uppercase }}</ion-title>
+    
+  </ion-toolbar>
+</ion-header>
+<ng-progress #progressBar [color]="'#B3A25D'" [meteor]="false" [spinner]="false" [fixed]="true" [thick]="true"></ng-progress>
+<ion-content #contentWindow class="ion-no-padding "slot="fixes" *ngIf="isLoaded">
+ 
+  <div class="header-searchbar">
+    <div class="header-childbar">
+      <div class="header-searchicon">
+        <ion-icon style="zoom: 2;" *ngIf="!searching" src="/assets/css/icon/discover.svg" tappable (click)="search(searchQuery, 'Enter')" color="color-gray"></ion-icon>
+        <ion-icon style="zoom: 1;" *ngIf="searching" src="/assets/css/icon/close.svg" tappable (click)="clearSearchField($event)"></ion-icon>
+      </div>
+      <div class="header-searchbox">
+        <ion-item class="ion-no-padding" lines="none" style="--background: #fafaf9">
+          <ion-input type="text" placeholder='Search user, style, event or question' [(ngModel)]='searchQuery' (keyup.enter)="search($event)"></ion-input>
+        </ion-item>
+      </div>
+    </div>
+  </div>
+  <ion-refresher #refresherRef slot="fixed" (ionRefresh)="doRefresh($event)" mode="md" >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <ng-container *ngIf="!searching">
+    <div class="">
+      <ion-row class="ion-no-padding">
+        <ion-col size="12">
+           <ion-row>
+              <ion-col size="6" class="">
+                <span style="padding: 0px 6px;">{{ "Meet our Stylists" | uppercase }}</span>
+              </ion-col>
+              <ion-col size="6" class=" text-right">
+                <div *ngIf="total_artists_page > 1" class="padded-right"><ion-icon class="big" src="/assets/css/icon/next.svg" color="primary" tappable (click)="pushInnerStylists(null , true)"></ion-icon></div>
+              </ion-col>
+           </ion-row>
+           <ion-row class="StylistCateg">
+            <ion-slides pager="true" [options]="slideOpts">
+              <ng-container *ngIf="!artists">
+                <ng-container *ngFor="let item of skeletonItem">
+                  <ion-slide>
+                    <ion-avatar slot="start">
+                      <ion-skeleton-text animated height="66.12px" width="66.12px" class="ion-no-margin rounded" ></ion-skeleton-text>
+                      <h5 class="ellipsis"><ion-skeleton-text></ion-skeleton-text></h5>
+                    </ion-avatar>
+                  </ion-slide>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngFor="let artist of artists" class="ion-padding-top">
+                <ion-slide (click)="goToProfile(artist)">
+                  <ion-avatar class='borderImg' slot="start">
+                    <ion-img #image [src]="artist.user_profile_pic_url" (ionImgDidLoad)="isLoadedArtist(artist)" (ionError)="errorLoadArtist(artist)" *ngIf="artist.user_profile_pic_url &&!artist.errorImage"></ion-img>
+                    <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="artist.errorImage" ></ion-img>
+                    <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="artist && !artist.user_profile_pic_url" ></ion-img>
+                    <div *ngIf="!artist.isLoadedProfileArtist" class="spinner2">
+                      <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+                    </div>
+                    <!-- <img-loader backgroundSize="cover"  *ngIf="artist && artist.user_profile_pic_url" spinner="true"
+                    src="{{ artist.user_profile_pic_url }}" 
+                    fallbackUrl="assets/css/imgs/empty-states/no-user-photo.png" 
+                    [fallbackAsPlaceholder]="true"></img-loader> -->
+                    <!-- <ngx-progressive-img-loader
+                      #imagePost
+                      [height]="'60px'"
+                      [width]="'60px'"
+                      (imageLoaded)="onImgLoad($event)"
+                      (thumbnailLoaded)="onThumbLoad($event)"
+                      [img]="artist.user_profile_pic_url"
+                      [thumbnail]="artist.user_profile_pic_url"
+                      [placeholderBgColor]="'grey'"
+                      [preserveAspectRatio]="true"
+                      class="borderImg"
+                       >
+                    </ngx-progressive-img-loader> -->
+                    <h5 class="ellipsis">{{ artist.user_display_name }}</h5>
+                  </ion-avatar>
+                </ion-slide>
+              </ng-container>
+            </ion-slides>
+            <ng-container *ngIf="artists && total_artists  === '0'">
+              <!-- <p class="emptyText">No stylists yet.</p> -->
+              <ion-row>
+                <ion-col class="ion-text-center empty-text">
+                  <ion-text>No stylists yet.</ion-text>
+                </ion-col>
+              </ion-row>
+            </ng-container>
+           </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+
+     <!-- Browse Tags -->
+  <div class="">
+    <ion-grid  class="ion-padding ion-no-margin ion-padding-bottom fixed">
+      <ion-row class="ion-no-padding ion-no-margin ion-padding-bottom">
+        <ion-col size="6" class="ion-no-padding ion-no-margin">
+          <span>{{ "Popular Tags" | uppercase }}</span>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="">
+        <div scrollX="true" class="tags">
+          <ng-container *ngIf="!tags || !tagsUpper || !tagsLower">
+            <ion-skeleton-text animated style="width: 100px; height: 20px; border-radius: 50px;" ></ion-skeleton-text>
+            <ion-skeleton-text class="ion-padding-horizontal" animated style="width: 100px; height: 20px; border-radius: 80px;" ></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100px; height: 20px; border-radius: 30px;" ></ion-skeleton-text>
+            <!-- <ion-skeleton-text animated style="width: 100px; height: 20px; border-radius: 50px;" ></ion-skeleton-text> -->
+          </ng-container>
+
+          <ng-container *ngIf="tags && tagsUpper && tagsLower">
+            <div style="margin-bottom: 10px">
+              <ng-container *ngFor="let tag of tagsUpper;let i = index">
+                <button class="tag-items" (click)="pushTag(tag)">
+                  {{ tag.tag_name }}
+                </button>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="tags && tagsUpper && tagsLower && total_tags === '0'">
+            <!-- <p class="emptyText">No tags are available.</p> -->
+            <ion-row>
+              <ion-col class="ion-text-center empty-text">
+                <ion-text>No tags are available.</ion-text>
+              </ion-col>
+            </ion-row>
+          </ng-container>
+        </div>
+        <div scrollX="true" class="tags">
+          <ng-container *ngIf="!tags || !tagsUpper || !tagsLower">
+            <ion-skeleton-text animated style="width: 100px; height: 20px; border-radius: 50px;" ></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100px; height: 20px; border-radius: 50px;" ></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100px; height: 20px; border-radius: 50px;" ></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100px; height: 20px; border-radius: 50px;" ></ion-skeleton-text>
+          </ng-container>
+          <ng-container *ngIf="tags && tagsUpper && tagsLower">
+            <div>
+              <ng-container *ngFor="let tag of tagsLower;let i = index">
+                <button class="tag-items" (click)="pushTag(tag)">
+                  {{ tag.tag_name }}
+                </button>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="tags && tagsUpper && tagsLower && total_tags === '0'">
+            <p class="emptyText">No tags are available.</p>
+          </ng-container>
+        </div>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <!-- End Browse Tags -->
+
+  <!-- Browse Styles -->
+  <div class="">
+    <ion-grid class="fixed ion-no-padding ion-no-margin ">
+      <ion-row class="ion-no-padding ion-no-margin ion-padding-bottom">
+        <ion-col size="6" class="no-padding no-margin">
+          <span style="padding: 0px 14px;"> {{ "Browse Styles" | uppercase }}</span>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="browseStyle">
+        <ion-slides pager="true" [options]="slideBrowseStyle">
+          <ng-container *ngIf="!styles">
+            <ng-container *ngFor="let item of skeletonItem">
+              <ion-slide>
+                <ion-skeleton-text class="style-skeleton" animated style="width: 72px; height: 135px;"></ion-skeleton-text>
+              </ion-slide>
+            </ng-container>
+          </ng-container>
+         
+          <ng-container *ngFor="let style of styles">
+            <ion-slide tappable (click)="viewStyles(style.id, style.style_name)">
+              <div>
+                <!-- <ngx-progressive-img-loader
+                      #imagePost
+                      [height]="'135px'"
+                      [width]="'100%'"
+                      (imageLoaded)="onImgLoad($event)"
+                      (thumbnailLoaded)="onThumbLoad($event)"
+                      [img]="style.photo"
+                      [thumbnail]="style.photo"
+                      [placeholderBgColor]="'grey'"
+                      [preserveAspectRatio]="true"
+                      class="borderImgBrowse block"
+                       >
+                </ngx-progressive-img-loader> -->
+                <div class="img-container">
+                <ion-img #image id='image2' [src]="style.photo" (ionImgDidLoad)="ionImgDidLoadStyle(style)" (ionError)="errorLoad(style)" *ngIf="style.photo &&!style.errorImage"></ion-img>
+                <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="style.errorImage" ></ion-img>
+                <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="style && !style.photo" ></ion-img>
+                <div *ngIf="!style.isLoadedStyle" class="spinnerStyle">
+                  <ion-spinner  name="crescent" class="spinner-circle-style"></ion-spinner>
+                </div>
+              </div> 
+                <ion-row>
+                  <ion-col>
+                    <h5>{{ style.style_name }}</h5>
+                  </ion-col>
+                </ion-row>
+              </div>
+            </ion-slide>
+          </ng-container>
+        </ion-slides>
+          
+        <ng-container *ngIf="styles && total_styles === '0'">
+          <!-- <p class="emptyText">No styles are available yet.</p> -->
+          <ion-row>
+            <ion-col class="ion-text-center empty-text">
+              <ion-text>No styles are available yet.</ion-text>
+            </ion-col>
+          </ion-row>
+        </ng-container>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <!-- End Browse Styles -->
+
+   <!-- Browse Events -->
+   <ng-container *ngIf="events.length > 0">
+    <div class="padded-container">
+      <ion-grid class="fixed ion-no-padding ion-no-margin">
+        <ion-row class="ion-no-padding ion-no-margin ion-padding-top ion-padding-bottom">
+          <ion-col size="6" class="ion-no-padding ion-no-margin" >
+            <span style="padding: 0px 14px;">{{ "Browse Events" | uppercase }}</span>
+          </ion-col>
+  
+          <ion-col size="6" class="ion-no-padding ion-no-margin" style="text-align: right; padding-right: 40px;">
+            <div *ngIf="events && events.length > 0" >
+              <ion-icon slot="end" src="/assets/css/icon/next.svg" class="big" tappable (click)="pushEvents()"></ion-icon>
+            </div>
+          </ion-col>
+        </ion-row>
+  
+        <ion-row class="browseEvents">
+          <ion-slides pager="true" [options]="slideBrowseEvent" class="browseEventStyles">
+            <ng-container *ngIf="events.length == 0">
+              <ng-container *ngFor="let item of skeletonItem">
+                <ion-slide>
+                  <ion-skeleton-text class="style-skeleton" animated style="width: 76px; height: 92px;"></ion-skeleton-text>
+                </ion-slide>
+              </ng-container>
+            </ng-container>
+  
+            <ng-container *ngFor="let event of events">
+              <ion-slide (click)="viewEventDetails(event)" >
+                <div>
+                  <!-- <ngx-progressive-img-loader
+                        #imagePost
+                        [height]="'92px'"
+                        [width]="'100%'"
+                        (imageLoaded)="onImgLoad($event)"
+                        (thumbnailLoaded)="onThumbLoad($event)"
+                        [img]="event.photo"
+                        [thumbnail]="event.photo"
+                        [placeholderBgColor]="'grey'"
+                        [preserveAspectRatio]="true"
+                        class="borderImgBrowseEvent"
+                        [overlayTint]="'rgba(0,0,0,0)'"
+                         >
+                  </ngx-progressive-img-loader> -->
+                  <div class="img-container3">
+                    <ion-img #image [src]="event.photo" (ionImgDidLoad)="ionImgDidLoadEvent(event)" (ionError)="errorLoadEvent(event)" *ngIf="event.photo &&!event.errorImage"></ion-img>
+                  <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="event.errorImage" ></ion-img>
+                  <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="event && !event.photo" ></ion-img>
+                  <div *ngIf="!event.isLoadedEvent" class="spinner-event">
+                    <ion-spinner  name="crescent" class="spinner-circle-event"></ion-spinner>
+                  </div>
+                </div> 
+                  <ion-row>
+                    <ion-col>
+                      <h5>{{ event.event_title }}</h5>
+                    </ion-col>
+                  </ion-row>
+                </div>
+              </ion-slide>
+            </ng-container>
+          </ion-slides>
+  
+          <ng-container *ngIf="events && total_events === '0'">
+            <!-- <p class="emptyText">No events yet.</p> -->
+            <ion-row>
+              <ion-col class="ion-text-center empty-text">
+                <ion-text>No events yet.</ion-text>
+              </ion-col>
+            </ion-row>
+          </ng-container>
+        </ion-row>
+      </ion-grid>
+    </div>
+   </ng-container>
+   
+  <!-- End Browse Events -->
+ <!-- Browse Style Columns -->
+ <div class="padded-container">
+  <ion-grid class="fixed ion-no-padding ion-no-margin ion-padding-bottom">
+    <ion-row class="ion-no-padding ion-no-margin ion-padding-bottom">
+      <ion-col size="6" class="ion-no-padding ion-no-margin" >
+      <ion-text style="padding:0px 14px">{{ "Style Column" | uppercase }}</ion-text>
+      </ion-col>
+
+      <ion-col size="6" class="ion-no-padding ion-no-margin text-right">
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-padding-bottom styleColumn" >
+      <!-- Skeleton Loader -->
+      <ng-container *ngIf="!styleColumns">
+        <ng-container>
+          <ion-slides pager="true" [options]="slideBrowseStyleColumun" class="styleColumn">
+            <ion-slide *ngFor="let item of skeletonItem">
+              <ion-skeleton-text class="style-skeleton" animated style="width: 125px; height: 92px;"></ion-skeleton-text>
+            </ion-slide>
+          </ion-slides>
+        </ng-container>
+      </ng-container>
+      <ion-slides pager="true" [options]="slideBrowseStyleColumun" class="styleColumn">
+        <ng-container *ngFor="let styleColumn of styleColumns">
+          <ion-slide tappable (click)="pushStyleColumn(styleColumn, 'category')">
+            <div >
+              <!-- <ngx-progressive-img-loader 
+                  class="styleColumn"
+                  #imagePost
+                  [height]="'80px'"
+                  [width]="'100%'"
+                  [img]="styleColumn.photo_url"
+                  [thumbnail]="styleColumn.photo_url"
+                  [preserveAspectRatio]="true"
+                  [placeholderImg]="'/assets/css/imgs/empty-states/fallback.svg'"
+                   >
+              </ngx-progressive-img-loader> -->
+              <div class="img-container2" style="position: relative;">
+                <ion-img  #imageStyle id="imageStyle" [src]="styleColumn.photo_url" (ionImgDidLoad)="ionImgDidLoadStyleColumn(styleColumn)" (ionError)="errorLoadStyleColumn(styleColumn)" *ngIf="styleColumn.photo_url &&!styleColumn.errorImage"></ion-img>
+              <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="styleColumn.errorImage" ></ion-img>
+              <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="styleColumn && !styleColumn.photo_url" ></ion-img>
+              <div class="style-column-img"></div>
+              <div *ngIf="!styleColumn.isLoadedStyleColumn" class="spinner-styleColumn">
+                <ion-spinner  name="crescent" class="spinner-circle-styleColumn"></ion-spinner>
+              </div>
+            </div> 
+            
+              <!-- <div class="container block"  [ngStyle]="{'background-image': 'linear-gradient(transparent, rgba(0, 0, 0, 0.85) 100%), url('+styleColumn.photo_url+')'}"></div> -->
+                <ion-row>
+                  <ion-col>
+                    <h5>{{ styleColumn.name }}</h5>
+                  </ion-col>
+                </ion-row>
+            </div>
+            <!-- <ion-list lines="none">
+              <ion-item>
+                
+              </ion-item>
+              <ion-item>
+                
+              </ion-item>
+            </ion-list> -->
+          </ion-slide>
+        
+        </ng-container>
+      </ion-slides>
+      <ng-container *ngIf="styleColumns && total_styleColumns === '0'">
+        <!-- <p class="emptyText">No questions asked yet.</p> -->
+        <ion-row>
+          <ion-col class="ion-text-center empty-text">
+            <ion-text>No questions asked yet.</ion-text>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
+</div>
+<!-- End Browse Style Columns -->
+  </ng-container>
+
+  <ng-container *ngIf="searching">
+    
+    <ng-container *ngIf="total_stylist_results !== '0' ||
+    total_user_results !== '0' ||
+    total_post_results !== '0' ||
+    total_events_results !== '0' ||
+    total_question_results  !== '0' ">
+    
+    <div class="container">
+      
+        <ion-row [hidden]="stylistResults && total_stylist_results == 0" class="StylistCateg ion-no-padding ion-no-margin ion-padding-top ion-padding-bottom">
+          <ion-col size="6" class="ion-no-padding ion-no-margin">
+            <span style="padding-left: 14px;">{{ "Stylists" | uppercase }}</span>
+          </ion-col>
+
+          <ion-col size="6" class="ion-no-padding ion-no-margin text-right">
+            <div *ngIf="total_stylist_page > 1" class="padded-right">
+              <ion-icon src="/assets/css/icon/next.svg" class="big" tappable (click)="pushInnerStylists(searchQuery, true)"></ion-icon>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row [hidden]="stylistResults && total_stylist_results == 0" class="StylistCateg">
+          <!-- Skeleton Loader -->
+          <ion-slides pager="true" [options]="slideOpts1" >
+            <ng-container *ngIf="!stylistResults">
+              <ng-container *ngFor="let item of skeletonItem">
+                <ion-slide>
+                  <ion-avatar item-start>
+                    <ion-skeleton-text height="66.12px" animated width="66.12px" class="no-margin" rounded></ion-skeleton-text>
+                    <h5 class="ellipsis"><ion-skeleton-text></ion-skeleton-text></h5>
+                  </ion-avatar>
+                </ion-slide>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngFor="let stylistResult of stylistResults">
+              <ion-slide (click)="goToProfile(stylistResult)">
+                <ion-avatar slot="start">
+                  <!-- <ngx-progressive-img-loader
+                    #imagePost
+                    [height]="'60px'"
+                    [width]="'60px'"
+                    (imageLoaded)="onImgLoad($event)"
+                    (thumbnailLoaded)="onThumbLoad($event)"
+                    [img]="stylistResult.user_profile_pic_url"
+                    [thumbnail]="'assets/imgs/empty-states/no-user-photo.png'"
+                    [placeholderBgColor]="'grey'"
+                    [preserveAspectRatio]="true"
+                    [fallbackImg]="'assets/imgs/empty-states/no-user-photo.png'"
+                    class="borderImg"
+                     >
+                  </ngx-progressive-img-loader> -->
+                  <!-- <img-loader backgroundSize="cover"
+                    src="{{ stylistResult.user_profile_pic_url }}" 
+                    fallbackUrl="assets/css/imgs/empty-states/no-user-photo.png" 
+                    [fallbackAsPlaceholder]="true"></img-loader> -->
+                    <ion-img #image [src]="stylistResult.user_profile_pic_url" (ionImgDidLoad)="isLoadedStylistResult(stylistResult)" (ionError)="errorLoadStylistResult(stylistResult)" *ngIf="stylistResult.user_profile_pic_url &&!stylistResult.errorImage"></ion-img>
+                    <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="stylistResult.errorImage" ></ion-img>
+                    <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="stylistResult && !stylistResult.user_profile_pic_url" ></ion-img>
+                    <div *ngIf="!stylistResult.isLoadedstylistResult" class="spinner2">
+                      <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+                    </div>
+                  <h5 class="ellipsis">{{ stylistResult.user_display_name }}</h5>
+                </ion-avatar>
+              </ion-slide>
+            </ng-container>
+          </ion-slides>
+
+          <ng-container *ngIf="stylistResults && total_stylist_results == 0">
+            <!-- <p>No stylists found.</p> -->
+            <ion-row>
+              <ion-col class="ion-text-center empty-text">
+                <ion-text>No stylists found.</ion-text>
+              </ion-col>
+            </ion-row>
+          </ng-container>
+        </ion-row>
+
+        <!-- Searching of User -->
+        <ion-row [hidden]="userResults && total_user_results === '0'" class="StylistCateg ion-no-padding ion-no-margin">
+          <ion-col size="6" class="ion-no-padding ion-no-margin ion-padding-top">
+            <span style="padding-left: 14px;">{{ "Users" | uppercase }}</span>
+          </ion-col>
+
+          <ion-col size="6" class="ion-no-padding ion-no-margin text-right">
+            <div *ngIf="userResults && total_user_page > 1" class="padded-right">
+              <ion-icon class="ion-no-padding" src="/assets/css/icon/next.svg" color="gold" tappable (click)="pushInnerStylists(searchQuery)" style="zoom: 3;"></ion-icon>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row [hidden]="userResults && total_user_results === '0'" class="StylistCateg ion-padding-bottom">
+          <!-- <ion-slides pager slidesPerView="4.5" spaceBetween="3"> -->
+          <ion-slides pager="true" [options]="slideOpts">
+            <ng-container *ngIf="!userResults">
+              <ng-container *ngFor="let item of skeletonItem">
+                <ion-slide>
+                  <ion-avatar slot="start">
+                    <ion-skeleton-text height="66.12px" animated width="66.12px" class="no-margin" rounded></ion-skeleton-text>
+                    <h5 class="ellipsis">
+                      <ion-skeleton-text></ion-skeleton-text>
+                    </h5>
+                  </ion-avatar>
+                </ion-slide>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngFor="let userResult of userResults">
+              <ion-slide (click)="goToProfile(userResult)">
+                <ion-avatar slot="start"> 
+                  <!-- <ngx-progressive-img-loader
+                    [height]="'60px'"
+                    [width]="'60px'"
+                    (imageLoaded)="onImgLoad($event)"
+                    (thumbnailLoaded)="onThumbLoad($event)"
+                    [img]="userResult.user_profile_pic_url"
+                    [thumbnail]="userResult.user_profile_pic_url"
+                    [placeholderBgColor]="'grey'"
+                    [preserveAspectRatio]="true"
+                    [fallbackImg]="'assets/imgs/empty-states/no-user-photo.png'"
+                    class="borderImg"
+                     >
+                  </ngx-progressive-img-loader> -->
+                  <!-- <ion-img src="{{userResult.user_profile_pic_url}}"></ion-img> -->
+                  <!-- <img-loader backgroundSize="cover"
+                    src="{{userResult.user_profile_pic_url}}" 
+                    fallbackUrl="assets/css/imgs/empty-states/no-user-photo.png" 
+                    [fallbackAsPlaceholder]="true"></img-loader> -->
+                  <ion-img #image [src]="userResult.user_profile_pic_url" (ionImgDidLoad)="isLoadeduserResult(userResult)"  (ionError)="errorLoadUserResult(userResult)" *ngIf="userResult && userResult.user_profile_pic_url && !userResult.errorImageUserResult"></ion-img>
+                  <ion-img  #image2 src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="userResult.errorImageUserResult" ></ion-img>
+                  <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="userResult && !userResult.user_profile_pic_url" ></ion-img>
+                  <div *ngIf="!userResult.isLoadedUserResult" class="spinner2">
+                    <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
+                  </div>
+                  <h5 class="ellipsis">{{userResult.user_display_name}}</h5>
+                </ion-avatar>
+              </ion-slide>
+            </ng-container>
+          </ion-slides>
+
+          <ng-container *ngIf="userResults && total_user_results === '0'">
+            <!-- <p>No user found.</p> -->
+            <ion-row>
+              <ion-col class="ion-text-center empty-text">
+                <ion-text>No user found.</ion-text>
+              </ion-col>
+            </ion-row>
+          </ng-container>
+        </ion-row>
+        <!-- End of User Searching -->
+
+              <!-- Posts Search -->
+              <div class="">
+                <ion-grid slot="fixed" class="ion-no-padding ion-no-margin">
+                  <ion-row [hidden]="postResults && total_post_results === '0'" class="ion-no-padding ion-no-margin ion-padding-top ion-padding-bottom">
+                    <ion-col size="6" class="ion-no-padding ion-no-margin">
+                      <span style="padding-left: 14px;">{{ "Posts" | uppercase }}</span>
+                    </ion-col>
+      
+                    <ion-col size="6" class="ion-no-padding ion-no-margin text-right">
+                      <div *ngIf="total_post_page > 1" class="padded-right">
+                        <ion-icon src="/assets/css/icon/next.svg" class="big"  tappable (click)="pushInnerPosts(searchQuery)"></ion-icon>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+      
+                  <ion-row class="browseStyleSearch browseStyle2 ion-padding-bottom " [hidden]="postResults && total_post_results === '0'">
+                    <ion-slides pager [options]="slideBrowseStylePost" class="ion-padding-bottom" >
+                      <ng-container *ngIf="!postResults">
+                        <ng-container *ngFor="let item of skeletonItem">
+                          <ion-slide>
+                            <ion-skeleton-text class="style-skeleton" animated width="73px" height="139px"></ion-skeleton-text>
+                          </ion-slide>
+                        </ng-container>
+                      </ng-container>
+      
+                      <ng-container *ngFor="let postResult of postResults">
+                        <ion-slide tappable (click)="goToPost(postResult)">
+                          <div class="img-container">
+                            <ion-img #image [src]="postResult.user_post_pic_url" (ionImgDidLoad)="ionImgDidLoadPostResult(postResult)" (ionError)="errorLoadPostResult(postResult)" *ngIf="postResult.user_post_pic_url &&!postResult.errorImage" [ngStyle]="{ 'filter': 'brightness('+postResult.filter.brightness+') contrast('+postResult.filter.contrast+') saturate('+postResult.filter.saturation+')' }"></ion-img>
+                            <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="postResult.errorImage" ></ion-img>
+                            <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="postResult && !postResult.user_post_pic_url" ></ion-img>
+                            <div *ngIf="!postResult.isLoadedPostResult" class="spinner-postResult">
+                              <ion-spinner  name="crescent" class="spinner-circle-postResult"></ion-spinner>
+                            </div>
+                          </div>
+                          <!-- <img-loader class="post-item" useImg *ngIf="postResult.user_post_pic_url" [src]="postResult.user_post_pic_url" fallbackUrl="assets/imgs/empty-states/no-user-photo.png" fallbackAsPlaceholder="true" [ngStyle]="{ 'filter': 'brightness('+postResult.filter.brightness+') contrast('+postResult.filter.contrast+') saturate('+postResult.filter.saturation+')' }"></img-loader>
+                          <img-loader class="post-item" useImg *ngIf="!postResult.user_post_pic_url" [src]="'assets/imgs/empty-states/no-user-photo.png'" fallbackUrl="assets/imgs/empty-states/no-user-photo.png" fallbackAsPlaceholder="true"></img-loader> -->
+                        </ion-slide>
+                        <h5 class="ellipsis">{{ postResult.style_name }}</h5>
+                      </ng-container>
+                    </ion-slides>
+                   
+                    <ng-container *ngIf="postResults && total_post_results === '0'">
+                      <!-- <p>No posts found.</p> -->
+                      <ion-row>
+                        <ion-col class="ion-text-center empty-text">
+                          <ion-text>No posts found.</ion-text>
+                        </ion-col>
+                      </ion-row>
+                    </ng-container>
+                  </ion-row>
+                </ion-grid>
+              </div>
+              <!-- Events Search -->
+              <div class="">
+                <ion-grid slot="fixed" class="no-padding no-margin">
+                  <ion-row [hidden]="eventResults && total_events_results  === '0'" class="ion-no-padding ion-no-margin ion-padding-top ion-padding-bottom">
+                    <ion-col size="6" class="ion-no-padding ion-no-margin">
+                      <span style="padding-left: 14px;">{{ "Events" | uppercase }}</span>
+                    </ion-col>
+
+                    <ion-col size="6" class="ion-no-padding ion-no-margin text-right">
+                      <div *ngIf="total_events_page > 1" class="padded-right">
+                        <ion-icon src="/assets/css/icon/next.svg" class="big"  tappable (click)="pushEvents(searchQuery)"></ion-icon>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+
+                  <ion-row [hidden]="eventResults && total_events_results  === '0'" padding-bottom class="browseEvents">
+                    <ion-slides pager="true" [options]="slideEventSearch" class="ion-padding-bottom">
+                      <ng-container *ngIf="!eventResults">
+                        <ng-container *ngFor="let item of skeletonItem">
+                          <ion-slide>
+                            <ion-skeleton-text class="style-skeleton" style="width: 76px; height: 92px;"></ion-skeleton-text>
+                          </ion-slide>
+                        </ng-container>
+                      </ng-container>
+
+                      <ng-container *ngFor="let eventResult of eventResults">
+                        <ion-slide>
+                          <!-- <img [src]="eventResult.photo" tappable (click)="viewEventDetails(eventResult)"> -->
+                          <div>
+                            <div class="img-container3">
+                              <ion-img (click)="viewEventDetails(eventResult)" #image [src]="eventResult.photo" (ionImgDidLoad)="ionImgDidLoadEventResult(eventResult)" (ionError)="errorLoadEventResult(eventResult)" *ngIf="eventResult.photo &&!eventResult.errorImage"></ion-img>
+                            <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="eventResult.errorImage" ></ion-img>
+                            <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="eventResult && !eventResult.photo" ></ion-img>
+                            <div *ngIf="!eventResult.isLoadedEventResult" class="spinner-event2">
+                              <ion-spinner  name="crescent" class="spinner-circle-event"></ion-spinner>
+                            </div>
+                          </div> 
+                            <h5>{{ eventResult.event_title }}</h5>
+                          </div>
+                        </ion-slide>
+                      </ng-container>
+                    </ion-slides>
+
+                    <ng-container *ngIf="eventResults && total_events_results  === '0'">
+                      <!-- <p>No events found.</p> -->
+                      <ion-row>
+                        <ion-col class="ion-text-center empty-text">
+                          <ion-text>No events found.</ion-text>
+                        </ion-col>
+                      </ion-row>
+                    </ng-container>
+                  </ion-row>
+                </ion-grid>
+              </div>   
+              <!-- Style Column Search -->
+        <ion-row>
+          <ion-col>
+            <div class="">
+              <ion-grid slot="fixed" class="ion-no-padding ion-no-margin">
+                <ion-row [hidden]="questionResults && total_question_results  === '0'" class="ion-no-padding ion-no-margin">
+                  <ion-col size="6" class="ion-no-padding ion-no-margin">
+                    <span style="padding-left: 14px;">{{ "Style Column" | uppercase }}</span>
+                  </ion-col>
+
+                  <!-- <ion-col size="6" class="ion-no-padding ion-no-margin text-right" >
+                    <div *ngIf="total_question_page > 1" class="padded-right">
+                      <ion-icon src="/assets/css/icon/next.svg" class="big" ></ion-icon>
+                    </div>
+                  </ion-col> -->
+                </ion-row>
+
+                <ion-row [hidden]="questionResults && total_question_results  === '0'" class="padding-bottom browseStyle2">
+                  <ng-container *ngIf="!questionResults">
+                    <ion-slides pager="true" [options]="slideStyleColumnSearch" class="styleColumn">
+                      <ion-slide>
+                        <ion-skeleton-text class="style-skeleton" animated style="width: 110px; height: 92px;"></ion-skeleton-text>
+                      </ion-slide>
+                    </ion-slides>
+                  </ng-container>
+
+                  <ng-container *ngIf="questionResults">
+                    <ion-slides pager="true" [options]="slideStyleColumnSearch" padding-bottom class="styleColumn ">
+                      <ng-container *ngFor="let questionResult of questionResults">
+                        <ion-slide tappable (click)="pushStyleColumn(questionResult)">
+                          <div>
+                            <div class="img-container2" style="position: relative;">
+                             <ion-img  #imageStyle id="imageStyle" [src]="questionResult.photo_url" (ionImgDidLoad)="ionImgDidLoadQuestionResult(questionResult)" (ionError)="errorLoadQuestionResult(questionResult)" *ngIf="questionResult.photo_url &&!questionResult.errorImage"></ion-img>
+                            <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="questionResult.errorImage" ></ion-img>
+                            <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="questionResult && !questionResult.photo_url" ></ion-img>
+                            <div class="style-column-img"></div>
+                            <div *ngIf="!questionResult.isLoadedQuestionResult" class="spinner-styleColumn">
+                              <ion-spinner  name="crescent" class="spinner-circle-styleColumn"></ion-spinner>
+                            </div>
+                          </div> 
+                            <!-- <div class="container" [ngStyle]="{'background-image': 'linear-gradient(transparent, rgba(0, 0, 0, 0.85) 100%), url('+questionResult.photo_url+')'}"></div> -->
+                            <ion-row>
+                              <ion-col>
+                                <h5 class="ion-text-center">{{ questionResult.question }}</h5>
+                              </ion-col>
+                            </ion-row>
+                          </div>
+                        </ion-slide>
+                      </ng-container>
+                    </ion-slides>
+                  </ng-container>
+
+                  <ng-container *ngIf="questionResults && total_question_results  === '0'">
+                    <!-- <p>No questions found.</p> -->
+                    <ion-row>
+                      <ion-col class="ion-text-center empty-text">
+                        <ion-text>No questions found.</ion-text>
+                      </ion-col>
+                    </ion-row>
+                  </ng-container>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </ion-col>
+        </ion-row>
+            
+    </div>
+    </ng-container>
+    <ng-container *ngIf=" total_stylist_results == 0 &&
+                total_user_results === '0' &&
+                total_post_results === '0' &&
+                total_events_results === '0' &&
+                total_question_results  === '0' ">
+      <!-- <p ion-text style="text-align: center; line-height: 24px;">No Search Results<br/> Try using a different search query.</p> -->
+      <ion-row class="ion-padding-top">
+        <ion-col class="ion-text-center">
+          <ion-text class="empty-text">No Search Results</ion-text><br>
+          <ion-text class="empty-text"> Try using a different search query.</ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+  </ng-container>
+
+</ion-content>
+<ion-content *ngIf="!isLoaded">
+  <div class="header-searchbar">
+    <div class="header-childbar">
+      <div class="header-searchicon">
+        <ion-icon style="zoom: 2;" *ngIf="!searching" src="/assets/css/icon/discover.svg" tappable (click)="search(searchQuery, 'Enter')" color="color-gray"></ion-icon>
+        <ion-icon style="zoom: 1;" *ngIf="searching" src="/assets/css/icon/close.svg" tappable (click)="clearSearchField($event)"></ion-icon>
+      </div>
+      <div class="header-searchbox">
+        <ion-item class="ion-no-padding" lines="none" style="--background: #fafaf9">
+          <ion-input type="text" placeholder='Search user, style, event or question' [(ngModel)]='searchQuery' (keyup)="search($event)"></ion-input>
+        </ion-item>
+      </div>
+    </div>
+  </div>
+  <ion-row class="ion-padding-start" >
+    <ion-skeleton-text animated style="width: 90%; height: 45px;"></ion-skeleton-text>
+  </ion-row>
+  <ion-row class="ion-padding-horizontal" >
+    <ion-col size="2">
+      <ion-skeleton-text animated style="width: 50px; height: 50px; border-radius: 50%;"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="2">
+      <ion-skeleton-text animated style="width: 50px; height: 50px;border-radius: 50%"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="2">
+      <ion-skeleton-text animated style="width: 50px; height: 50px;border-radius: 50%"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="2">
+      <ion-skeleton-text animated style="width: 50px; height: 50px;border-radius: 50%"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="2">
+      <ion-skeleton-text animated style="width: 50px; height: 50px;border-radius: 50%"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="2">
+      <ion-skeleton-text animated style="width: 50px; height: 50px;border-radius: 50%"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-padding-horizontal" >
+    <ion-skeleton-text animated style="width: 90%; height: 45px;"></ion-skeleton-text>
+  </ion-row>
+  <ion-row class="ion-padding-start" >
+    <ion-col size="4">
+      <ion-skeleton-text animated style="width: 100%; height: 100%; border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="3">
+      <ion-skeleton-text animated style="width: 100%; height: 100%; border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="5">
+      <ion-skeleton-text animated style="width: 100%; height: 100%; border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-padding-start" >
+    <ion-col size="3">
+      <ion-skeleton-text animated style="width: 100%; height: 100%; border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="3">
+      <ion-skeleton-text animated style="width: 100%; height: 100%; border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="4">
+      <ion-skeleton-text animated style="width: 100%; height: 100%; border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="2">
+      <ion-skeleton-text animated style="width: 100%; height: 100%; border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-padding-horizontal ion-padding-top" >
+    <ion-skeleton-text animated style="width: 90%; height: 45px;"></ion-skeleton-text>
+  </ion-row>
+  <ion-row class="ion-padding-horizontal" >
+    <ion-col size="3">
+      <ion-skeleton-text animated style="width: 70px; height: 150px;border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="3">
+      <ion-skeleton-text animated style="width: 70px; height: 150px;border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="3" >
+      <ion-skeleton-text animated style="width: 70px; height: 150px;border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+    <ion-col size="3">
+      <ion-skeleton-text animated style="width: 70px; height: 150px;border-radius: 10px;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-padding-start" >
+    <ion-skeleton-text animated style="width: 90%; height: 45px;"></ion-skeleton-text>
+  </ion-row>
+  <ion-row class="ion-padding-horizontal" >
+   <ion-col size="4">
+    <ion-skeleton-text animated style="width: 110px; height: 80px;border-radius: 10px;"></ion-skeleton-text>
+   </ion-col>
+   <ion-col size="4">
+    <ion-skeleton-text animated style="width: 110px; height: 80px;border-radius: 10px;"></ion-skeleton-text>
+   </ion-col>
+   <ion-col size="4">
+    <ion-skeleton-text animated style="width: 110px; height: 80px;border-radius: 10px;"></ion-skeleton-text>
+   </ion-col>
+  </ion-row>
+</ion-content>
+

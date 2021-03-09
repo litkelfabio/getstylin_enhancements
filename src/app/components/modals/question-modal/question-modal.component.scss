@@ -1,0 +1,30 @@
+ion-content{
+    // --overflow: hidden !important;
+    // height: max-content !important;
+    .center{
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    ion-icon{
+        zoom: 0.7;
+    }
+    ion-input{
+        font-size: 15px !important;
+    }
+    .send-icon{
+        position: absolute;
+        top: 12px !important;
+        right: 17px !important;
+    }
+}
+.remove-icon{
+    position: absolute;
+    top: 0px;
+    left: 35px;
+    background-color: #B3A25D;
+    border-radius: 50%;
+}
+ion-textarea{
+    font-size: 16px;
+}

@@ -1,0 +1,458 @@
+/* CARD ICONS */
+
+ion-icon {
+    mask-size: contain;
+      mask-position: 50% 50%;
+      mask-repeat: no-repeat;
+      min-width: 0 !important;
+    &[class*="custom-"] {
+      mask-size: contain;
+      mask-position: 50% 50%;
+      mask-repeat: no-repeat;
+      min-width: 0 !important;
+      /* height: 34px !important; */
+    }
+    &[class*="custom-apple"] {
+        content: url('/appleid_button_4x.svg');
+    }
+    &[class*="custom-facebook"] {
+        content: url('/fb.svg');
+    }
+    &[class*="custom-google"] {
+        content: url('./icon/google.svg');
+    }
+    &[class*="custom-notif"] {
+        content: url('/notif.svg');
+    }
+    &[class*="custom-back"] {
+        content: url('/back.svg');
+    }
+    &[class*="custom-back-reverse"] {
+        content: url('/back-reverse.svg');
+    }
+    &[class*="custom-send"] {
+        content: url('/send.svg');
+    }
+    /* PROFILE ICONS : START */
+    &[class*="custom-name"] {
+        content: url('/updated-name.svg');
+    }
+    &[class*="custom-birthday"] {
+        content: url('/updated-bday.svg');
+    }
+    &[class*="custom-Tops"] {
+        content: url('/updated-top.svg');
+    }
+    &[class*="custom-Dresses"] {
+        content: url('/updated-dress.svg');
+    }
+    &[class*="custom-Blazers/Jackets"] {
+        content: url('/updated-blazer.svg');
+    }
+    &[class*="custom-Bottoms"] {
+        content: url('/updated-bottoms.svg');
+    }
+    &[class*="custom-Shoes"] {
+        content: url('/updated-shoe.svg');
+    }
+    /* PROFILE ICONS : END */
+    &[class*="custom-gender"] {
+        content: url('/updated-sex.svg');
+    }
+    &[class*="custom-description"] {
+        content: url('/updated-edit.svg');
+    }
+    &[class*="custom-brands"] {
+        content: url('/brands.svg');
+    }
+    &[class*="custom-dashboard"] {
+        content: url('/dashboard.svg');
+    }
+    &[class*="custom-profile"] {
+        content: url('/profile.svg');
+    }
+    &[class*="custom-upload"] {
+        content: url('/upload.svg');
+    }
+    &[class*="custom-upload-active"] {
+        content: url('/upload-active.svg');
+    }
+    &[class*="custom-message"] {
+        content: url('/message.svg');
+    }
+    &[class*="reward1"] {
+        content: url('/reward1.svg');
+    }
+    &[class*="reward-active"] {
+        content: url('/rewards-active.svg');
+    }
+    // &[class*="custom-reward"] {
+    //     content: url('/rewards-icon.png');
+    // }
+    &[class*="custom-search"] {
+        content: url('/discover.svg');
+    }
+    &[class*="custom-post"] {
+        content: url('/posts.svg');
+    }
+    &[class*="custom-favorites"] {
+        content: url('/favorites.svg');
+    }
+    &[class*="custom-rank"] {
+        content: url('/rank.svg');
+    }
+    &[class*="custom-arrow"] {
+        content: url('/next.svg');
+    }
+    &[class*="custom-location"] {
+        content: url('/location.svg');
+    }
+    &[class*="custom-style"] {
+        content: url('/style.svg');
+    }
+    &[class*="custom-istyle"] {
+        content: url('/istyle.svg');
+    }
+    &[class*="custom-crop"] {
+        content: url('/adjust-icon.svg');
+    }
+    &[class*="custom-bright"] {
+        content: url('/brightness.svg');
+    }
+    &[class*="custom-contrast"] {
+        content: url('/contrast.svg');
+    }
+    &[class*="custom-addbutton"] {
+        content: url('/square.svg');
+    }
+    &[class*="custom-caption"] {
+        content: url('/caption.svg');
+    }
+    &[class*="custom-hashtag"] {
+        content: url('/hashtag.svg');
+    }
+    &[class*="custom-geo"] {
+        content: url('/geo.svg');
+    }
+    &[class*="custom-edit"] {
+        content: url('/edit.svg');
+        height: 15px;
+    }
+    &[class*="custom-notifs"] {
+        content: url('/notifs.svg');
+    }
+    &[class*="custom-faqs"] {
+        content: url('/faqs.svg');
+    }
+    &[class*="custom-likes"] {
+        content: url('/likes.svg');
+    }
+    &[class*="custom-likes-selected"] {
+        content: url('/icon/likes-selected.svg');
+    }
+    &[class*="custom-dislike"] {
+        content: url('/dislike.svg');
+    }
+    &[class*="custom-dislike-selected"] {
+        content: url('/dislike-selected.svg');
+    }
+    &[class*="custom-comments"] {
+        content: url('/comments.svg');
+    }
+    &[class*="custom-saturation"] {
+        content: url('/saturation.svg');
+    }
+    &[class*="custom-more"] {
+        content: url('/more2.svg');
+    }
+    &[class*="custom-smlike"] {
+        content: url('/smlike.svg');
+    }
+    &[class*="custom-smdis"] {
+        content: url('/smdis.svg');
+    }
+    &[class*="custom-smcomments"] {
+        content: url('/smcomments.svg');
+    }
+    &[class*="custom-searchf"] {
+        content: url('/searchf.svg');
+    }
+    &[class*="custom-connectf"] {
+        content: url('/connect.svg');
+    }
+    &[class*="custom-tutorial"] {
+        content: url('/tutorial-icon.svg');
+    }
+    &[class*="custom-settings"] {
+        content: url('/account-settings.svg');
+    }
+    &[class*="custom-help"] {
+        content: url('/help.svg');
+    }
+    &[class*="custom-logout"] {
+        content: url('/logout.svg');
+    }
+    &[class*="custom-account-profile"] {
+        content: url('/account-info.svg');
+    }
+    &[class*="custom-notification"] {
+        content: url('/account-notif.svg');
+    }
+    &[class*="custom-privacy"] {
+        content: url('/account-privacy.svg');
+    }
+    &[class*="custom-security"] {
+        content: url('/account-security.svg');
+    }
+    &[class*="custom-about"] {
+        content: url('/account-about.svg');
+    }
+    &[class*="custom-privacy-icon"] {
+        content: url('/privacy-icon.svg');
+    }
+    &[class*="custom-privacy-icon-2"] {
+        content: url('/privacy-icon-2.svg');
+    }
+    &[class*="custom-activity-icon"] {
+        content: url('/activity-icon.svg');
+    }
+    &[class*="custom-blockeduser-settings"] {
+        content: url('/blockeduser-icon.svg') !important;
+    }
+    &[class*="custom-muteduser-settings"] {
+        content: url('/muteduser-icon.svg') !important;
+    }
+    &[class*="custom-save-modal"] {
+        content: url('/save-modal.svg');
+    }
+    &[class*="custom-save-modal-active"] {
+        content: url('/save-modal-active.svg');
+    }
+    &[class*="custom-fb-modal"] {
+        content: url('/fb-modal.svg');
+    }
+    &[class*="custom-ig-modal"] {
+        content: url('/ig-modal.svg');
+    }
+    &[class*="custom-mail-modal"] {
+        content: url('/mail-modal.svg');
+    }
+    &[class*="custom-twitter-modal"] {
+        content: url('/twitter-modal.svg');
+    }
+    &[class*="custom-privacy-modal"] {
+        content: url('/privacy-modal.svg');
+    }
+    &[class*="custom-privacy-active-modal"]{
+        content: url('/active-public-modal.svg');
+    }
+    &[class*="custom-block"]{
+        content: url('/block-icon.svg');
+    }
+    &[class*="custom-blocked"]{
+        content: url('/blocked-icon.svg');
+    }
+    &[class*="custom-mute"]{
+        content: url('/mute-icon.svg');
+    }
+    &[class*="custom-muted"]{
+        content: url('/muted-icon.svg');
+    }
+    &[class*="custom-skip"]{
+        content: url('/skip.svg');
+    }
+    &[class*="custom-close-prompt"]{
+        content: url('/close-prompt.svg');
+    }
+    &[class*="custom-close"]{
+        content: url('/close.svg');
+
+    }
+    &[class*="custom-question-button"]{
+        content: url('/question-button.svg');
+
+    }
+    &[class*="custom-check-white"]{
+        content: url('/check-white.png');
+
+    }
+    &[class*="custom-question-icon"]{
+        content: url('/new-sms-icon.svg');
+
+    }
+    &[class*="custom-attachment-button"]{
+        content: url('/attachment-image-icon.svg');
+
+    }
+    &[class*="custom-send-button"]{
+        content: url('/send-icon.svg');
+
+    }
+    &[class*="custom-favorites-active"] {
+        content: url('/favorites-active.svg');
+    }
+    &[class*="custom-post-active"] {
+        content: url('/posts-active.svg');
+    }
+    &[class*="custom-share-fb"] {
+        content: url('/new-fb.svg');
+    }
+    &[class*="custom-share-ig"] {
+        content: url('/new-ig.svg');
+    }
+    &[class*="custom-share-twitter"] {
+        content: url('/new-twitter.svg');
+    }
+    &[class*="custom-share-email"] {
+        content: url('/new-email.svg');
+    }
+    &[class*="custom-connect-request"] {
+        content: url('/connect-req.svg');
+    }
+    &[class*="custom-side-mute"] {
+        content: url('/new-muted-menu.svg');
+    }
+    &[class*="custom-side-block"] {
+        content: url('/new-blocked-menu.svg');
+    }
+    &[class*="custom-profile-inactive-with-notification"] {
+      content: url('/profile-inactive-with-notif.svg');
+    }
+    &[class*="custom-email-list"] {
+      content: url('/email-list.svg');
+    }
+    &[class*="custom-geo-list"] {
+      content: url('/geo-black.svg');
+    }
+    &[class*="custom-birthday-list"] {
+      content: url('/birthday-black.svg');
+    }
+    &[class*="custom-step-one"] {
+        content: url('/Progress1.svg');
+      }
+      &[class*="custom-step-two"] {
+        content: url('/Progress2.svg');
+      }
+      &[class*="custom-step-three"] {
+        content: url('/Progress3.svg');
+      }
+      &[class*="custom-stylistapp-name"] {
+        content: url('/stylist-application-name.svg');
+      }
+      &[class*="custom-stylistapp-bday"] {
+        content: url('/stylist-application-bday.svg');
+      }
+      &[class*="custom-stylistapp-sex"] {
+        content: url('/stylist-application-gender.svg');
+      }
+      &[class*="custom-stylistapp-email"] {
+        content: url('/stylist-application-email.svg');
+      }
+      &[class*="custom-stylistapp-geo"] {
+        content: url('/stylist-application-location.svg');
+      }
+      &[class*="custom-stylistapp-phone"] {
+        content: url('/stylist-application-phone.svg');
+      }
+      &[class*="custom-stylistapp-ig"] {
+        content: url('/stylist-application-instagram.svg');
+      }
+      &[class*="custom-star-challenge"] {
+        content: url('/star-challenges.svg');
+      }
+      &[class*="custom-rising-star"] {
+        content: url('/rising-star.svg');
+      }
+      &[class*="custom-rising-star-white"] {
+        content: url('/rising-star-white.svg');
+      }
+      &[class*="custom-icon-star"] {
+        content: url('/icon-star.svg');
+      }
+      &[class*="custom-legend-star"] {
+        content: url('/legend-star.svg');
+      }
+      &[class*="custom-superstar-star"] {
+        content: url('/a-rising-star.svg');
+      }
+      &[class*="custom-inside-mute"] {
+        content: url('/inside-mute-notif.svg');
+      }
+      &[class*="custom-inside-style"] {
+        content: url('/inside-style-mute.svg');
+      }
+      &[class*="custom-message-camera"] {
+        content: url('/messaging-icon.svg');
+      }
+      &[class*="custom-message-black"] {
+        content: url('/message-black.svg');
+      }
+      &[class*="custom-message-blocking"] {
+        content: url('/block-messaging.svg');
+      }
+      &[class*="custom-send-invite"] {
+        content: url('/send-invite.svg');
+      }
+      &[class*="custom-copy-link"] {
+        content: url('/copy-link.svg');
+      }
+      &[class*="custom-inside-email"] {
+        content: url('/inside-email-settings.svg');
+      }
+      &[class*="custom-security-password"] {
+        content: url('/change-password.svg');
+      }
+      &[class*="custom-security-auth"] {
+        content: url('/two-factor-auth.svg');
+      }
+      &[class*="custom-security-history"] {
+        content: url('/history-privacy.svg');
+      }
+      &[class*="custom-close-history"] {
+        content: url('/close-history.svg');
+      }
+      &[class*="custom-message-gold"] {
+        content: url('/message-gold.svg');
+
+      } &[class*="custom-rotate-icon"] {
+        content: url('/new-rotate-icon.svg');
+      }
+
+      &[class*="custom-rewards-icon"] {
+        content: url('/style-points-icon.svg');
+      }
+
+      &[class*="custom-message-icon-gold"] {
+        content: url('/message-tab-gold.svg');
+      }
+      /* Tier Levels  */
+      &[class*="custom-superstar-icon"] {
+        content: url('/super-star-icon.svg');
+      }
+      &[class*="custom-iconic-icon"] {
+        content: url('/iconic-icon.svg');
+      }
+      &[class*="custom-legends-icon"] {
+        content: url('/legend-icon.svg');
+      }
+      /* End of tier levels */
+      &[class*="custom-stylist-applied"] {
+        content: url('/stylist-applied-icon.svg');
+      }
+      &[class*="custom-skip-close"] {
+        content: url('/close2.svg');
+      }
+      &[class*='custom-style-icon-gold'] {
+        content: url('/style-points-gold.svg');
+      }
+      &[class*='custom-style-icon-white'] {
+        content: url('/style-points-white.svg');
+      }
+      &[class*='custom-empty-rewards'] {
+        content: url('/emptyRewards.png');
+      }
+      &[class*='custom-active-discover'] {
+        content: url('/active-discover.svg');
+      }
+}
+/* CARD ICONS */

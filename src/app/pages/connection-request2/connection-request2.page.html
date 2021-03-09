@@ -1,0 +1,189 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar *ngIf="!show">
+    <ion-title>CONNECTION REQUEST</ion-title>
+    <ion-buttons slot="start">
+        <ion-icon slot="icon-only" src="assets/css/icon/back.svg" (click)="back()" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ng-progress #progressBar [color]="'#B3A25D'" [meteor]="false" [spinner]="false" [fixed]="true" [thick]="true"></ng-progress>
+
+<ion-content class="ion-padding-top">
+  <!-- <ion-refresher (ionRefresh)="doRefresh($event)" slot="fixed" >
+    <ion-refresher-content disabled refreshingSpinner="none" ></ion-refresher-content>
+  </ion-refresher> -->
+
+  <ng-container *ngIf="users && users.length == 0">
+    <ion-row class="ion-padding">
+      <ion-col class="ion-text-center">
+        <ion-text class="no-connection-text ion-padding-top" >{{"Express your style to make connections!"}}</ion-text>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+
+  <ng-container *ngIf="users && users.length != 0">
+    <ion-item *ngFor="let user of users" lines="full">
+      <ion-col size="2" class="ion-padding-bottom" (click)="goToProfile(user)">
+        <ion-avatar>
+          <ion-img #image [src]="user.user_profile_pic_url" (ionError)="errorLoad(user)" *ngIf="user && user.user_profile_pic_url &&!user.errorImage"></ion-img>
+          <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="user.errorImage" ></ion-img>
+          <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="user && !user.user_profile_pic_url" ></ion-img>
+          <!-- <img-loader backgroundSize="cover" *ngIf="user && user.user_profile_pic_url" src="{{ user.user_profile_pic_url }}" fallbackUrl="assets/imgs/empty-states/no-user-photo.png" fallbackAsPlaceholder="true"></img-loader>
+          <img-loader backgroundSize="cover" *ngIf="user && !user.user_profile_pic_url" src="assets/imgs/empty-states/no-user-photo.png"></img-loader> -->
+        </ion-avatar>
+      </ion-col>
+      <ion-col size="5" class="ion-padding-bottom ">
+        <ion-text (click)="goToProfile(user)">{{ user.first_name }} {{ user.last_name }}</ion-text>
+      </ion-col>
+      <ion-col size="5" class="ion-no-padding">
+        <ng-container *ngIf="user.accepted == 0">
+              <ion-row>
+                <ion-col size="6" class="ion-no-padding">
+                  <ion-button  mode="ios" strong="true" size="small"  (click)="connectUser(user, 1)"><b>{{ "Approve" | uppercase }}</b></ion-button>
+                </ion-col>
+             
+                <ion-col size="6" class="ion-no-padding">
+                  <ion-button  mode="ios" fill="outline" strong="true" size="small"  (click)="connectUser(user, 2)">{{ "Ignore" | uppercase }}</ion-button>
+                </ion-col>
+              </ion-row>
+        </ng-container>
+        <ng-container *ngIf="user.accepted != 0">
+          <ion-row *ngIf="user.accepted == 1">
+            <ion-col size="12" class="ion-text-end ion-no-padding">
+              <ion-text class="text-action"  mode="ios"  color="primary" ><strong>{{ "Approved" | uppercase }}</strong></ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="user.accepted == 2" >
+            <ion-col size="12" class="ion-text-end ion-no-padding">
+              <ion-text class="text-action" mode="ios"  color="primary" ><strong>{{ "Ignored" | uppercase }}</strong></ion-text>
+            </ion-col>
+          </ion-row>
+          <!-- TEXT ACTIONS -->
+          <!-- <ion-item col-6 no-padding margin-bottom text-wrap  text-right *ngIf="user.accepted == 1">
+            <span class="action-text" ion-text color="primary">{{ "Approved" | uppercase }}</span>
+          </ion-item>
+
+          <ion-item col-6 no-padding margin-bottom text-wrap  text-right *ngIf="user.accepted == 2">
+            <span class="action-text" ion-text color="primary">{{ "Ignored" | uppercase }}</span>
+          </ion-item> -->
+        </ng-container>
+
+      <!-- </ng-container> -->
+      </ion-col>
+    </ion-item>
+  </ng-container>
+
+
+
+ 
+    <div *ngIf="!isLoaded">
+      <ion-row class="ion-no-padding ion-padding-start">
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%; height: 40px;"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%; height: 40px;"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%; height: 40px;"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%; height: 40px;"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%; height: 40px;"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%; height: 40px;"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%; height: 40px;"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%; height: 40px;"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%; height: 40px;"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+        <ion-col size="2">
+          <ion-avatar>
+            <ion-skeleton-text animated style="border-radius: 50%;"></ion-skeleton-text>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
+          <ion-row>
+            <ion-skeleton-text animated style="width: 88%; height: 40px;"></ion-skeleton-text>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+
+
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
+
+</ion-content>

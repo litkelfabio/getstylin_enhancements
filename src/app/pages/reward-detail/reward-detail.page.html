@@ -1,0 +1,245 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title>REWARDS</ion-title>
+    <ion-buttons slot="start" (click)="back()">
+      <ion-icon src="assets/css/icon/back.svg"></ion-icon>
+    </ion-buttons>
+   </ion-toolbar>
+</ion-header>
+
+<ng-progress #progressBar [color]="'#B3A25D'" [meteor]="false" [spinner]="false" [fixed]="true" [thick]="true"></ng-progress>
+<ion-content>
+  <ion-refresher #refresherRef slot="fixed" (ionRefresh)="doRefresh($event)" mode="md" >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <!-- <ion-row *ngIf="!claimed" style="--background:rgba(179,162,93, 0.05)">
+    <ion-col padding col-12 class="d-flex align-items-center justify-content-between">
+        <h2 text-left class="my-0  sub-text">Redeemable Points</h2>
+        <h2 *ngIf="points" text-right class="my-0">{{ points }} PTS</h2>  
+        <h2 *ngIf="!points" text-right class="my-0">0 PTS</h2>  
+    </ion-col>
+  </ion-row> -->
+
+  <div *ngIf="reward">
+    <ion-row *ngIf="!claimed" style='background: rgba(179,162,93, 0.05)'>
+      <ion-col class="ion-text-start ion-padding">
+        <ion-text color="medium" ><b>Redeemable Points</b></ion-text>
+      </ion-col>
+      <ion-col class="ion-text-end ion-padding">
+        <ion-text *ngIf="points"><b>{{points}} PTS</b></ion-text>
+        <ion-text *ngIf="!points"><b>0 PTS</b></ion-text>
+      </ion-col>
+    </ion-row>
+  
+    <ng-container *ngIf="reward">
+      <!-- <ion-row>
+        <ion-col padding col-12>
+          <div class="img-thumbnail-holder rounded h-150 w-100-per"
+          [ngStyle]="{'background-image': 'url('+ reward.photo +')' }">
+        </div>
+    
+        </ion-col>
+        <div *ngIf="!claimed" padding-horizontal class="d-flex align-items-center justify-content-between fs-14" col-12>
+          <h2 class="my-0"><strong>{{ reward.promo }} <span *ngIf="reward.promo"> on </span>{{ reward.name }}</strong></h2>
+          <h2 class="my-0 text-gold" style="min-width: 60px;"><strong>{{ reward.point_value }} PTS</strong></h2>
+        </div>
+      </ion-row> -->
+  
+      <ion-row class="set-padding-0-12-16-12 ion-padding-horizontal" >
+        <ion-col col-12 >
+          <!-- <ngx-progressive-img-loader class="ion-padding-horizontal img-border "
+                      #imagePost
+                      [height]="'200px'"
+                      [width]="'100%'"
+                      (imageLoaded)="onImgLoad($event)"
+                      (thumbnailLoaded)="onThumbLoad($event)"
+                      [img]="reward.photo"
+                      [thumbnail]="reward.photo"
+                      [placeholderBgColor]="'grey'"
+                      [preserveAspectRatio]="true"
+                      [overlayTint]="'rgba(0,0,0,0)'"
+                       >
+          </ngx-progressive-img-loader> -->
+          <div class="img-container">
+            <ion-img #image id='image2' (ionImgDidLoad)="ionImgDidLoadReward(reward)" [src]="reward.photo"  (ionError)="errorLoad(reward)" *ngIf="reward.photo &&!reward.errorImage"></ion-img>
+          <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="reward.errorImage" ></ion-img>
+          <ion-img  src="/assets/css/imgs/empty-states/fallback.svg" *ngIf="reward && !reward.photo" ></ion-img>
+          <div *ngIf="!isLoadedReward" class="spinner">
+            <ion-spinner  name="crescent" class="spinner-circle-style-challenges"></ion-spinner>
+          </div>
+        </div>   
+          <ion-row class="ion-padding-top">
+            <ion-col size="8" class="ion-text-start ion-no-padding">
+              <strong><ion-text class="title-text " *ngIf="reward" [innerHTML]="reward.promo"></ion-text> on 
+                <ion-text class="title-text" *ngIf="reward" [innerHTML]="reward.name"></ion-text>
+              </strong>
+            </ion-col>
+            <ion-col size="4" class="ion-text-end ion-no-padding">
+              <ion-text class="title-text" *ngIf="reward" color="primary" ><strong>{{ reward.point_value }} <strong *ngIf="reward.point_value < 2">PT </strong> <strong *ngIf="reward.point_value > 1">PTS</strong></strong></ion-text>
+            </ion-col>
+            <ion-row>
+              <ion-col class="ion-no-padding ion-text-start" style="padding-top: 3px;">
+                <ion-text class="title-text" color="grey" *ngIf="reward" [innerHTML]="reward.description"></ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+  
+      <!-- <ion-row>
+        <ion-col padding-horizontal col-12>
+          <p text-left ion-text text-wrap class="descriptionChallenges sub-text my-0 fs-14" [innerHTML]="reward.description">
+          </p>
+        </ion-col>
+      </ion-row> -->
+  
+     <ng-container *ngIf="claimed">
+      <!-- <ion-row class="mt-20 ion-padding-top" > -->
+        <!-- <ion-col col-12 class="sub-text d-flex justify-content-center" ><strong>SCAN CODE TO CLAIM:</strong></ion-col>
+        <ion-col class="d-flex justify-content-center"padding-horizontal col-12> -->
+          <!-- <qrcode [qrdata]="reward.promo_code" [colordark]="'#c7ba88'" [size]="180" [level]="'M'"></qrcode> -->
+        <!-- </ion-col> -->
+        <!-- <ion-col class="ion-text-center">
+          <ion-text class="text-promo"><strong>SCAN CODE TO CLAIM:</strong></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-center ion-no-padding"> -->
+          <!-- <qrcode [qrdata]="reward.promo_code" [colorDark]="'#c7ba88'" [width]="240" [level]="'M'"></qrcode> -->
+        <!-- </ion-col>
+      </ion-row> -->
+     <!-- <ion-row>
+       <ion-col size="12">
+        <ion-button expand="block" fill="clear" (click)="openUrl()"><ion-text color="primary">{{aff_link}}</ion-text></ion-button>
+       </ion-col>
+     </ion-row>
+     <ion-row>
+      <ion-col size="12">
+        <ion-button expand="block" fill="clear" (click)="copyUrl()">
+          <ion-label color="primary">
+            <ion-icon src="assets/css/icon/attach-image-icon.svg"></ion-icon>
+            Copy link</ion-label>
+        </ion-button>
+       </ion-col>
+     </ion-row> -->
+     </ng-container>
+      
+      <!-- <ion-row class="mt-30" style="margin-bottom:100px"  *ngIf="claimed">
+        
+        <ion-col class="d-flex justify-content-center"padding-horizontal col-12>
+          <strong class="promo-code">{{ reward.promo_code }}</strong>
+        </ion-col>
+      </ion-row> -->
+      
+      
+      <!-- <ng-container *ngIf="claimed">
+      <ion-row >
+        <ion-col class="ion-text-center">
+          <ion-text class="text-promo"><strong>PROMO CODE:</strong></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-text class="text-promo code-text" color="primary"> <strong class="promo-code">{{ reward.promo_code }}</strong></ion-text>
+        </ion-col>
+      </ion-row>
+      </ng-container>
+       -->
+  
+    </ng-container> 
+    
+  
+    <ion-row>
+      <ion-col class="ion-text-center ion-padding-horizontal ion-padding-top">
+        <ion-text *ngIf="!claimed && !insufficientPoints && remainingPoints >= 0 && current_tier == reward_tier">Remaining points after: {{ remainingPoints }} PTS</ion-text>
+        <ion-text *ngIf="!claimed && insufficientPoints && remainingPoints < 0 && current_tier == reward_tier" >Collect more points to redeem!</ion-text>
+        <ng-container *ngIf="!forAll">
+          <ion-text *ngIf="current_tier != reward_tier" >This reward is only exclusive on {{reward_tier_text}} tier</ion-text>
+        </ng-container>
+      </ion-col>
+    </ion-row>
+      <ion-row *ngIf="!hideJoinButton && !claimed" class="set-padding-0-12-16-12 ion-text-center"  
+      style="
+        position: relative;
+        bottom: 0px;
+        width: 100%;
+        ">
+        <!-- <ion-col *ngIf="!claimed && !insufficientPoints && remainingPoints >= 0" class="ion-text-center sub-text fs-13" col-12>Remaining points after: {{ remainingPoints }} PTS</ion-col>
+        <ion-col *ngIf="!claimed && insufficientPoints && remainingPoints < 0" class="ion-text-center sub-text fs-13" col-12>Collect more points to redeem!</ion-col>
+        <ion-col padding-horizontal col-12 class="fs-14"> -->
+        <!-- </ion-col> -->
+         <ion-col class="ion-text-center ion-padding">
+          <ng-container *ngIf="forAll">
+            <ion-button  *ngIf="!claimed && !insufficientPoints && current_tier == reward_tier"  fill="outline" expand="block" (click)="claimNow()" ><strong>{{'get this reward'| uppercase}}</strong></ion-button>
+            <ion-button  *ngIf="!claimed && insufficientPoints || current_tier != reward_tier" disabled fill="outline" expand="block"  class="disabled"><strong>{{'get this reward'| uppercase}}</strong></ion-button>
+          </ng-container>
+          <ng-container *ngIf="!forAll">
+            <ion-button  *ngIf="!claimed && insufficientPoints || current_tier != reward_tier" disabled fill="outline" expand="block"  class="disabled"><strong>{{'get this reward'| uppercase}}</strong></ion-button>
+            <ion-button  *ngIf="!claimed && !insufficientPoints && current_tier == reward_tier"  fill="outline" expand="block" (click)="claimNow()" ><strong>{{'get this reward'| uppercase}}</strong></ion-button>
+          </ng-container>
+         </ion-col>
+      </ion-row>
+      <!-- <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-button *ngIf="claimed" disabled expand="block" fill="outline"  class="disabled" >{{'already claimed'| uppercase}}</ion-button>
+        </ion-col>
+      </ion-row> -->
+      
+  </div>
+
+    <div *ngIf="!reward">
+      <div class="ion-padding custom-skeleton">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 50%;height: 50px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%;height: 20px;"></ion-skeleton-text>
+      </div>
+    </div>
+    <ion-footer *ngIf="reward && claimed" style="border-top: 1px solid; border-color: #B3A25b;">
+      <ion-row class="ion-padding-top" *ngIf="!expired">
+        <ion-col class="ion-text-center">
+          <ion-text><strong>{{'claim your reward' | uppercase}}</strong></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="!expired">
+        <ion-col class="ion-text-center">
+          <ion-text>PROMO CODE: </ion-text><strong><ion-text [innerHTML]="reward.promo_code"></ion-text></strong>
+        </ion-col>
+      </ion-row>
+      <ion-row  *ngIf="expired" class="ion-padding-top">
+        <ion-col class="ion-text-center">
+          <ion-text><strong>This reward is expired.</strong></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        
+          <!-- <ion-col class="ion-text-center ion-no-padding" size="12">
+          <ion-button class="footer-button" style='background: rgb(240,236,223);'  strong="true" expand="block" fill="clear" (click)="openUrl()">{{aff_link}}
+            <ion-icon class="ion-padding-start" slot="end" name="copy-outline" color="primary" (click)="copyUrl()"></ion-icon>
+          </ion-button>
+        </ion-col> -->
+        <ion-col class="ion-text-center" *ngIf="!expired">
+          <ion-card style="margin: 0px;">
+           <ion-row >
+            <ion-col size="10" >
+              <ion-button fill="clear" (click)="openUrl()" strong="true" style="width: 105% !important;">
+                <ion-text class="url-text" color="primary" (click)="openUrl()">{{aff_link}}</ion-text>
+              </ion-button>
+            </ion-col>
+            <ion-col size="2" class="ion-padding-top">
+              <ion-button fill="clear" size="small"  (click)="copyUrl()">
+                <img src="assets/icon/copy.png" class="icon-img">
+              </ion-button>
+            </ion-col>
+           </ion-row>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-footer>
+    
+    
+</ion-content>
+

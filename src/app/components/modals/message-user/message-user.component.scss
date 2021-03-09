@@ -1,0 +1,33 @@
+.user-item{
+    padding-right: 18px !important;
+}
+.avatar{
+    padding-left: 0px !important;
+}
+.icon-message{
+    padding-right: 10px !important;
+}
+// .spinner2{
+//     position: absolute;
+//     align-items: center;
+//     justify-content: center;
+//     z-index: 999;
+//     top: 8px;
+//     left: 12px;
+// }
+.spinner2{
+    background-color: gray !important;
+    border-radius: 50%;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    height: 47px;
+    width: 48px;
+    top: 0px;
+    left: 0px;
+} 
+.spinner-circle{
+    top: 8px;
+    left: 10px;
+}

@@ -1,0 +1,37 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title>E-MAIL</ion-title>
+    <ion-buttons slot="start">
+      <ion-icon src="assets/css/icon/back.svg" (click)="back()" style="zoom: 0.7;"></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-icon  src="assets/css/icon/send.svg" (click)="updateEmail()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content class="ion-padding">
+  <form [formGroup]="changeEmailForm">
+    <ion-row>
+
+      <ion-item lines="full">
+        <ion-icon src="assets/css/icon/inside-email-settings.svg"></ion-icon>
+        <ion-input type="text" class="emailAdd ion-padding-bottom" placeholder="Email Address" formControlName="email" (keyup)="validateInfos($event.target.value)"></ion-input>
+      </ion-item>
+
+      <ng-container *ngIf="changeEmailForm.controls.email.touched && changeEmailForm.valid || !changeEmailForm.valid">
+        <!-- on-going UI adjustments on this one -->
+        <ion-text class="adjustments" color="danger"  *ngIf="!changeEmailForm.valid">{{ emailError }}</ion-text>
+        <ion-text class="adjustments" color="medium"  *ngIf="changeEmailForm.valid && emailExistence === false">Email Address is available.</ion-text>
+        <ion-text class="adjustments" color="danger"  *ngIf="changeEmailForm.valid && emailExistence === true">Email Address already exists.</ion-text>
+      </ng-container>
+
+      <ion-text style="font-size: 13px; font-family: 'Raleway' !important;" color="medium" class="ion-text-wrap ion-padding-top">Your unique username is your main identification (along with your unique email address) in this this app.
+        All account-related updates and notices are sent to this e-mail address.
+        </ion-text>
+    </ion-row>
+  </form>
+</ion-content>
+

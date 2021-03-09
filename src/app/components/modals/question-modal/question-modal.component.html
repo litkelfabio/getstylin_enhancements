@@ -1,0 +1,59 @@
+<div class="inner-content ion-no-padding">
+  <div class="center">
+    <ion-row class="ion-padding-top"> 
+      <ion-col class="ion-text-center ion-no-padding">
+        <form [formGroup]="postForm">
+          <ion-list>
+            <ion-item lines="full">
+              <ion-icon src="assets/css/icon/caption.svg" slot="start" style="zoom: 0.6;" class="ion-padding-top"></ion-icon>
+              <ion-textarea rows="5" placeholder="Share your question to the community!" formControlName="question"></ion-textarea>
+            </ion-item>
+
+            <!-- <ion-item lines="full">
+              <ion-icon src="assets/css/icon/hashtag.svg"></ion-icon>
+              <ion-input placeholder=" Boost your question with tags" formControlName="tags" ></ion-input>
+            </ion-item> -->
+          </ion-list> 
+        </form>
+          <ion-list>
+            <ion-item  lines="full">
+              <ng-container *ngIf="isAndroid">
+                <ion-icon src="assets/css/icon/hashtag.svg" slot="start" style="zoom: 0.6 !important;"></ion-icon>
+                <tag-input  [(ngModel)]="tags"  [editable]='true' placeholder="Add tags to this post" #tagInput (onBlur)="onBlur($event)"
+                secondaryPlaceholder="Add tags to this post"  mode="ios" (onTextChange)="seperatorKeys($event)"  style="width: 100%;"
+                ></tag-input>
+              </ng-container>
+              <ng-container *ngIf="!isAndroid">
+                <ion-icon src="assets/css/icon/hashtag.svg" slot="start" style="zoom: 0.6 !important;"></ion-icon>
+                <tag-input [(ngModel)]='tags' [editable]='true' placeholder="Boost your question with tags" #tagInput (onBlur)="onBlur($event)" style="width: 100%;"
+                secondaryPlaceholder="Boost your question with tags"  mode="ios" (onTextChange)="seperatorKeysIos($event)"  [separatorKeyCodes]="[32,188,186,13,9]"
+                ></tag-input>
+              </ng-container>
+            </ion-item>
+            <ion-text class="ion-padding" *ngIf="activeTags" style="font-weight: 100 !important; font-size: 12px !important; font-family: 'Raleway' !important;">Use space, comma or enter button to enter tags</ion-text>
+          </ion-list> 
+        <form>
+          <ion-list>
+            <ion-item lines="full">
+              <ion-icon src="assets/css/icon/attach-image-icon.svg" style="zoom: 0.6;" slot="start" (click)="presentActionSheet()"></ion-icon>
+              <ion-label color="medium" *ngIf="!questionAttachment" style="font-size: 16px;">Upload image
+              </ion-label>
+              <div style="padding: 5px !important; position: relative;">
+                <ion-icon color="light" name="close" class="remove-icon" (click)="removeAttachment()" *ngIf="questionAttachment"></ion-icon>
+                <img id="attachment-preview" *ngIf="questionAttachment" [src]="questionAttachment" 
+                style="height: 10%;
+                width: 28%;
+                border-radius: 10px;
+                text-align: left;"/>
+              </div>
+              <input #imgupload class="d-none" type="file" (change)="imgChange($event)" accept="image/jpeg,image/png"/>
+              <ion-button slot="end" [disabled]="!postForm.valid || !questionAttachment" fill="clear" (click)="postStyleQuestionNew()">
+                <ion-icon src="assets/css/icon/send.svg" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </ion-list>
+        </form>
+      </ion-col>
+    </ion-row>
+  </div>
+</div>

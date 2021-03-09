@@ -1,0 +1,409 @@
+<ion-header class="ion-no-border ion-no-padding ion-padding-bottom" >
+  <ion-toolbar class="ion-no-padding" style="padding-bottom: 10px;">
+    <ion-buttons slot="start" class="ion-padding-start ion-padding-top" *ngIf="otherUser" [collapse]='true'>
+      <ion-icon  src="assets/css/icon/back.svg" (click)="back()" style="zoom: 1 !important;"></ion-icon>
+    </ion-buttons>
+    <ion-col size="11">
+      <ion-row style="float: right;" class="ion-padding-horizontal ion-padding-top">
+        <ion-col size="12" class="ion-no-padding" style="padding-bottom: 0px !important;">
+          <!-- *ngIf="profileInfo && !blockedMe && !profileInfo.blockedBy  " -->
+          <ion-buttons  *ngIf="profileInfo && !blockedMe && !profileInfo.blockedBy">
+            <ng-container  *ngIf="!otherUser ">
+              <ion-button fill="clear" [disabled]="!isLoaded" color="dark" class="ion-no-padding" (click)="contextSwitcher('posts')" *ngIf="!otherUser && activeContext == 'posts'">
+                <ion-icon src="assets/css/icon/posts-active.svg"></ion-icon>
+                <ion-label class="text-icon text-end">MY STYLE</ion-label>
+              </ion-button>
+              <ion-button fill="clear" [disabled]="!isLoaded" color="dark" class="ion-no-padding" (click)="contextSwitcher('posts')" *ngIf="!otherUser && activeContext != 'posts'">
+                <ion-icon src="assets/css/icon/posts.svg"></ion-icon>
+                <ion-label class="text-icon text-end">MY STYLE</ion-label>
+              </ion-button>
+            </ng-container>
+            <ng-container *ngIf="otherUser">
+              <ng-container *ngIf="(!userState.isBlocked && !userState.blockedBy )|| (otherUser.isBlocked === false && otherUser.blockedBy === false)">
+                <ion-button fill="clear" [disabled]="!isLoaded" color="dark" class="ion-no-padding" (click)="contextSwitcher('posts')" *ngIf="otherUser && activeContext == 'posts'">
+                  <ion-icon src="assets/css/icon/posts-active.svg"></ion-icon>
+                  <ion-label class="text-icon text-end">STYLE</ion-label>
+                </ion-button>
+                <ion-button fill="clear" [disabled]="!isLoaded" color="dark" class="ion-no-padding" (click)="contextSwitcher('posts')" *ngIf="otherUser && activeContext != 'posts'">
+                  <ion-icon src="assets/css/icon/posts.svg"></ion-icon>
+                  <ion-label class="text-icon text-end">STYLE</ion-label>
+                </ion-button>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="!otherUser ">
+              <ion-button fill="clear" [disabled]="!isLoaded"  (click)="contextSwitcher('faves')" *ngIf="activeContext == 'faves'" color="dark" class="ion-no-padding">
+                <ion-icon src="assets/css/icon/favorites-active.svg"></ion-icon>
+                <ion-label class="text-icon" color="dark">FAVORITES</ion-label>
+              </ion-button>
+              <ion-button fill="clear" [disabled]="!isLoaded"  (click)="contextSwitcher('faves')" *ngIf="activeContext != 'faves'" class="ion-no-padding">
+                <ion-icon src="assets/css/icon/favorites-gold.svg"></ion-icon>
+                <ion-label class="text-icon" color="dark">FAVORITES</ion-label>
+              </ion-button>
+            </ng-container>
+          </ion-buttons>
+          
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-toolbar>
+</ion-header>
+<ng-progress #progressBar [color]="'#B3A25D'" [spinner]="false" [fixed]="true" [meteor]="false" [thick]="true"></ng-progress>
+<ion-content class="ion-padding-horizontal ion-padding-bottom" [class.rank-rising_star]="rank === 'rank-rising_star'"
+[class.rank-super_star]="rank === 'rank-super_star'"
+[class.rank-icon]="rank === 'rank-icon'"
+[class.rank-legend]="rank === 'rank-legend'">
+  <ion-refresher #refresherRef slot="fixed" (ionRefresh)="doRefresh($event)" mode="md" >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+ <ion-row class="ion-no-padding">
+   <ion-col size="12" class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ng-container *ngIf="isLoaded">
+        <ion-col size="4" class="ion-no-padding">
+          <div class="img-container">
+            <ion-img *ngIf="profileInfo.profile_profile_pic &&  !profileInfo.errorProfile" (ionError)="errorLoad(profileInfo)" (ionImgDidLoad)="isLoadedImg2(profileInfo)" #image class="img-dashboard" [src]="profileInfo.profile_profile_pic"  style="border-radius: 10px!important;"></ion-img>
+            <ion-img *ngIf="!profileInfo.profile_profile_pic  || profileInfo.errorProfile"  style="border-radius: 10px!important;" src="/assets/css/imgs/empty-states/no-user-photo.png" style="border-radius: 10px!important;overflow: hidden;"></ion-img>
+            <!-- <div class="spinner" *ngIf="!profileInfo.isLoadedProfile"> -->
+              <ion-spinner name="crescent" class="spinner-circle" *ngIf="!profileInfo.isLoadedProfile"></ion-spinner>
+              <!-- </div> -->
+          <!-- <img [src]="item.photo" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }" tappable (click)="gotoDetails(item)"/> -->
+          <!-- <ng-container *ngIf="!item.isLoaded">
+            <ion-spinner name="crescent"></ion-spinner>
+            <ion-skeleton-text animated style="width: 100%; height: 300px; border-radius: 10px;"></ion-skeleton-text>
+            <img src= "/assets/css/imgs/empty-states/fallback.svg">
+          </ng-container> -->
+          <!-- <ng-container *ngIf="profileInfo.profile_profile_pic">
+           <ngx-progressive-img-loader
+           [height]="'150px'"
+           [width]="'100%'"
+           [img]="profileInfo.profile_profile_pic"
+           [thumbnail]="profileInfo.profile_profile_pic"
+           [placeholderBgColor]="'grey'"
+           [preserveAspectRatio]="true"
+           class="borderImg">
+           </ngx-progressive-img-loader>
+          </ng-container> -->
+              <!-- <ng-container *ngIf="!profileInfo.profile_profile_pic">
+              <img src="assets/css/imgs/placeholder.png">
+              </ng-container> -->
+            <!-- </div> -->
+          </div>
+           <!-- [fallbackImg]="'assets/css/imgs/empty-states/no-user-photo.png'" -->
+         </ion-col>
+      </ng-container>
+      <ng-container *ngIf="!isLoaded">
+        <ion-col size="4" class="ion-no-padding">
+          <ion-skeleton-text animated style="height: 150px; width: 120px; border-radius: 10px;"></ion-skeleton-text>
+        </ion-col>
+      </ng-container>
+      <ion-col size="8" class="about-row" class="ion-padding-start" >
+        <ng-container *ngIf="profileInfo.profile_first_name && profileInfo.profile_last_name && isLoaded">
+          <ion-row>
+            <ion-text class="name-text"><strong>{{ profileInfo.profile_first_name }} {{ profileInfo.profile_last_name }}</strong></ion-text>
+          </ion-row>
+        </ng-container>
+        <ng-container *ngIf="!isLoaded">
+          <ion-row>
+            <ion-skeleton-text  animated style="height: 30px; width: 150px;"></ion-skeleton-text>
+          </ion-row>
+        </ng-container>
+        <ng-container *ngIf="!profileInfo.profile_first_name && !profileInfo.profile_last_name">
+          <ion-row>
+            <ion-text class="name-text ion-no-padding"><strong>{{ profileInfo.first_name }} {{ profileInfo.last_name }}</strong></ion-text>
+          </ion-row>
+        </ng-container>
+        <!-- <ion-row (click)="gotoEditProfile()" *ngIf="!otherUser"> -->
+            <!-- <ion-button fill="none" (click)="gotoEditProfile()" [disabled]="!isLoaded" *ngIf="!otherUser"></ion-button> -->
+            <!-- <ion-icon src="assets/css/icon/edit.svg" slot="start" ></ion-icon>
+          <ion-text>Edit</ion-text> -->
+          <ion-button class="ion-no-padding ion-no-margin info" fill="clear" size="small" [disabled]="!isLoaded" *ngIf="!otherUser">
+            <ion-icon src="assets/css/icon/edit.svg" (click)="gotoEditProfile()"></ion-icon>
+            <ion-text color="primary" class="edit-text ion-no-padding" (click)="gotoEditProfile()"> <strong>&nbsp;&nbsp;EDIT</strong></ion-text>
+          </ion-button>
+        <!-- </ion-row> -->
+        <!-- <ion-row *ngIf="otherUserPoints && isLoaded" style="padding: 10px 0px 10px 0px !important;">
+          <ng-container *ngIf="otherUserPoints < 5000">
+            <ion-icon src="assets/css/icon/rising-star.svg" style="padding-right: 10px !important;zoom: 0.6;padding-top: 5px;"></ion-icon>
+          <ion-text class="points-text" color="primary"><strong>RISING STAR</strong></ion-text>
+          </ng-container>
+          <ng-container *ngIf="otherUserPoints > 4999 && otherUserPoints < 15000">
+            <ion-icon src="assets/css/icon/a-rising-star.svg" style="padding-right: 10px !important;zoom: 0.6;padding-top: 5px;"></ion-icon>
+          <ion-text class="points-text" color="primary" ><strong>SUPERSTAR</strong></ion-text>
+          </ng-container>
+          <ng-container *ngIf="otherUserPoints > 14999 && otherUserPoints < 20000">
+            <ion-icon src="assets/css/icon/icon-star.svg" style="padding-right: 10px !important;zoom: 0.6;padding-top: 5px;"></ion-icon>
+            <ion-text class="points-text" color="primary" ><strong>ICON</strong></ion-text>
+          </ng-container>
+          <ng-container *ngIf="otherUserPoints > 19999">
+            <ion-icon src="assets/css/icon/legend-star.svg" style="padding-right: 10px !important;zoom: 0.6;padding-top: 5px;"></ion-icon>
+            <ion-text class="points-text" color="primary"><strong>LEGEND</strong></ion-text>
+          </ng-container>
+        </ion-row> -->
+        <ion-row *ngIf="profileInfo.profile_about  && !profileInfo.isBlocked && !profileInfo.blockedBy && isLoaded">
+          <ion-col class="ion-text-start ion-no-padding info" *ngIf="profileInfo.profile_about && profileInfo.profile_about != 'null'">
+            <ion-text class="info-text">{{ profileInfo.profile_about }}</ion-text>
+          </ion-col>
+        </ion-row>
+        <!-- <ion-row style="padding-top: 10px !important;" *ngIf="otherUserPoints && isLoaded">
+          <ion-icon src="assets/css/icon/style-points-gold.svg" style="padding-top: 3px !important;"></ion-icon><ion-text class="points-text" color="primary" style="padding-left: 10px !important"><strong>{{ otherUserPoints }} PT<ng-container *ngIf="otherUserPoints > 1">S</ng-container></strong></ion-text>
+        </ion-row> -->
+        <ion-row *ngIf="!isLoaded">
+          <ion-skeleton-text animated style="height: 15px; width: 150px;"></ion-skeleton-text>
+        </ion-row>
+        <ion-row *ngIf='profileInfo && !profileInfo.isBlocked && !profileInfo.blockedBy && isLoaded' > 
+          <ion-col class="ion-text-start ion-no-padding info" *ngIf="profileInfo.profile_gender == '1' || profileInfo.profile_gender == 'male'">
+            <ion-text class="dAdjust ion-no-padding info-text" no-margin>Male</ion-text>
+          </ion-col>
+          <ion-col class="ion-text-start ion-no-padding info" *ngIf="profileInfo.profile_gender == '2' || profileInfo.profile_gender == 'female'">
+            <ion-text class="dAdjust ion-no-padding info-text" no-margin >Female</ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="!isLoaded">
+          <ion-skeleton-text animated style="height: 15px; width: 150px;"></ion-skeleton-text>
+        </ion-row>
+        <ion-row *ngIf='profileInfo && !profileInfo.isBlocked && !profileInfo.blockedBy && isLoaded'>
+          <ion-col class="ion-text-start ion-no-padding info" *ngIf="profileInfo.profile_location && profileInfo.profile_location !='null'">
+            <ion-row>
+              <ion-col size="1" class="ion-no-padding" style="padding-top: 2px !important;">
+                <ion-icon src="assets/css/icon/location.svg"></ion-icon>
+              </ion-col>
+              <ion-col size="11" class="ion-no-padding" style="padding-left: 0px !important;">
+                <ion-text class="dAdjust info-text" color="medium"> {{ profileInfo.profile_location }}</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="!isLoaded">
+          <ion-skeleton-text animated style="height: 15px; width: 150px;"></ion-skeleton-text>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!otherUser" class="ion-padding-top">
+      <ion-col size="5" style="padding-left: 0px;">
+        <ion-button  expand="block" style="--border-radius: 5px !important;" (click)="gotoConnections()"
+         strong="true" [disabled]="!isLoaded">
+          <ng-container *ngIf="isLoaded">
+            CONNECTIONS 
+          </ng-container>
+          <ion-spinner name="dots" *ngIf="!isLoaded"></ion-spinner>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button [disabled]="!isLoaded" style="--border-radius: 5px !important;" expand="block" (click)="goToMemberPrivileges()" strong="true">
+          <ion-row>
+            <ion-col size="2" class="ion-no-padding" *ngIf="isLoaded">
+              <ion-icon src="assets/css/icon/style-points-white.svg" class="style-points"></ion-icon>
+            </ion-col>
+            <ion-col size="10" class="ion-no-padding"> 
+              <ng-container *ngIf="isLoaded">
+                <ion-label>{{ pointsPassed | number }} PTS</ion-label>
+              </ng-container>
+              <ion-spinner name="dots" *ngIf="!isLoaded"></ion-spinner>
+            </ion-col>
+          </ion-row>
+        </ion-button>
+      </ion-col>
+      <ion-col size="3">
+        <!-- <ion-badge color="primary" *ngIf="requestCount > 0"> </ion-badge> -->
+        
+        <ion-button style="--border-radius: 5px !important;" [disabled]="!isLoaded" expand="block" fill="outline" (click)="showMenu()" strong="true"><b>MORE</b><div class="badge-primary" *ngIf="requestCount > 0"></div>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="(otherUser || userState) && ((otherUser && !otherUser.isBlocked ))" class="ion-padding-top">
+        <ion-col size="5" style="padding-left: 0px;" *ngIf="(otherUser && userState.isFriend === 'unconnected'|| userState.isFriend === 'pending')||(userState && userState.isFriend === 'unconnected'|| userState.isFriend === 'pending' || profileInfo.isFriend === 'unconnected') && ((userState.isBlocked === false || userState.blockedBy === false)||(otherUser.isBlocked === false || otherUser.blockedBy === false))">
+          <ion-button [disabled]="!isLoaded"  expand="block" style="--border-radius: 5px !important;"
+           strong="true" *ngIf="(profileInfo.isFriend === 'unconnected' && isPending == false)|| (userState.isFriend === 'unconnected' && userState == false)"
+            (click)="save()">
+           <ng-container *ngIf="isLoaded"> 
+            CONNECT
+           </ng-container>
+           <ion-spinner name="dots" *ngIf="!isLoaded"></ion-spinner>
+          </ion-button>
+          <ion-button [disabled]="!isLoaded"  expand="block" style="--border-radius: 5px !important;"
+           strong="true" *ngIf="(userState.isFriend === 'unconnected' && isPending == true)" 
+            (click)="save(true)">
+           <ng-container *ngIf="isLoaded">
+            ACCEPT
+           </ng-container>
+           <ion-spinner name="dots" *ngIf="!isLoaded"></ion-spinner>
+          </ion-button>
+          <ion-button [disabled]="!isLoaded"  expand="block" fill="outline" style="--border-radius: 5px !important;" 
+          (click)="save()" strong="true" *ngIf="profileInfo.isFriend === 'pending' || userState.isFriend === 'pending' && otherUser.isBlocked === false && otherUser.blockedBy === false">
+          <ng-container *ngIf="isLoaded">
+            CANCEL
+          </ng-container>
+          <ion-spinner name="dots" *ngIf="!isLoaded"></ion-spinner>
+        </ion-button>
+        </ion-col>
+        <ion-col size="5" style="padding-left: 0px;"*ngIf="otherUser.isFriend === 'connected' ||  userState.isFriend === 'connected'">
+          <ion-button [disabled]="!isLoaded" fill="outline"  expand="block" style="--border-radius: 5px !important;" 
+          (click)="save()" strong="true">
+          <ion-spinner name="dots" *ngIf="!isLoaded"></ion-spinner>
+            <ng-container *ngIf="isLoaded">
+              DISCONNECT
+            </ng-container>
+          </ion-button>
+        </ion-col>
+      <ion-col size="4">
+        <ion-button fill="outline"  style="--border-radius: 5px !important;" expand="block"
+         strong="true" [disabled]="!isLoaded" (click)="openMessageModal(otherUser)">
+         MESSAGE
+        </ion-button>
+      </ion-col>
+      <ion-col size="3" *ngIf="(otherUser.isBlocked === false || otherUser.blockedBy === false) || (userState.isBlocked === false || userState.blockedBy === false)">
+        <ion-button [disabled]="!isLoaded" style="--border-radius: 5px !important;" expand="block" fill="outline" (click)="showMenu(otherUser)" strong="true"><b>MORE</b></ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="otherUser && otherUser.isBlocked">
+      <ion-col size="12" class="ion-text-center">
+        <ion-button expand="block" fill="outline" color="primary" strong="true" (click)="blockUser(otherUser)">UNBLOCK</ion-button>
+      </ion-col>
+    </ion-row>
+    <br>
+    <ng-container *ngIf="items && items.length < 1 && isLoaded">
+      <ion-row >
+        <ion-col size="12" class="ion-text-center ion-no-padding">
+          <ion-text *ngIf="!otherUser && activeContext != 'faves'">We know you've got great style. Start sharing your best looks today!</ion-text>
+          <ion-text *ngIf="otherUser && userState['isFriend'] == 'connected'">{{ profileInfo.profile_first_name }} has no posts yet. Encourage {{ profileInfo.profile_first_name }} to post their favorite styles!</ion-text>
+          <ion-text *ngIf="otherUser && (userState['isFriend'] == 'unconnected' || userState['isFriend'] == 'pending') && userState['account_private'] != 1">No Posts Yet. Connect with {{ profileInfo.profile_first_name }} to see their first post! </ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+   </ion-col>
+ </ion-row>
+ 
+ <ng-container *ngIf="activeContext == 'posts' && (profileInfo && !profileInfo.blockedBy && !profileInfo.isBlocked)">
+   <ion-row>
+     <ion-col class="ion-text-center">
+       <ion-icon style="zoom: 2;" src="assets/css/icon/account-security.svg" *ngIf="activeContext == 'posts' && otherUser && ((userState['isFriend'] == 'unconnected' || userState['isFriend'] == 'pending') && userState['account_private'] == 1)"></ion-icon>
+      <h3 ion-text text-center *ngIf="activeContext == 'posts' && otherUser && ((userState['isFriend'] == 'unconnected' || userState['isFriend'] == 'pending') && userState['account_private'] == 1)">This account is private.</h3>
+     </ion-col>
+   </ion-row>
+   <div *ngIf="isLoaded">
+    <ion-grid *ngIf="activeContext =='posts' && !otherUser || otherUser && ((userState['isFriend'] == 'connected' || userState['isFriend'] == 'unconnected' || userState['isFriend'] == 'pending') && userState['account_private'] == 0)"  class="ion-no-padding">
+      <ion-row class="ion-no-padding">
+        <ion-col *ngIf="items && items.length > 0" size="12" class="ion-no-padding">
+         <ngx-masonry [options]="{ gutter: 10, fitWidth: false }" (itemsLoaded)='completeMasonry()' [ordered]="true">
+           <div class="ion-no-padding" ngxMasonryItem class="grid-sizer grid-item" *ngFor="let item of items; let i = index">
+             <img class="ion-no-padding" (click)="gotoDetails(item)" [src]="item.photo" style="border-radius: 10px !important;" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
+           </div>
+         </ngx-masonry>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-grid *ngIf="activeContext =='posts' && otherUser  && (userState['isFriend'] == 'connected' && userState['account_private'] == 1)"  class="ion-no-padding">
+      <ion-row class="ion-no-padding">
+        <ion-col *ngIf="items && items.length > 0" size="12" class="ion-no-padding">
+         <ngx-masonry [options]="{ gutter: 10, fitWidth: false }" (itemsLoaded)='completeMasonry()' [ordered]="true">
+           <div class="ion-no-padding" ngxMasonryItem class="grid-sizer grid-item" *ngFor="let item of items; let i = index">
+             <img class="ion-no-padding" (click)="gotoDetails(item)" [src]="item.photo" style="border-radius: 10px !important;" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
+           </div>
+         </ngx-masonry>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+   </div> 
+ </ng-container>
+
+ <div *ngIf="!isLoaded || !isMasornyisLoaded ">
+  <div class="ion-no-padding custom-skeleton">
+    <ion-row class="ion-no-padding">
+      <ion-col size="6" class="ion-no-padding">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+  </div>
+ </div>
+ 
+<ng-container *ngIf="activeContext == 'faves' && (profileInfo && !profileInfo.blockedBy && !profileInfo.isBlocked)">
+  <ion-icon style="zoom: 2;" src="assets/css/icon/account-security.svg" *ngIf="activeContext == 'faves' && otherUser && ((userState['isFriend'] == 'unconnected' || userState['isFriend'] == 'pending') && userState['account_private'] == 1)"></ion-icon>
+  <!-- <h3 ion-text text-center *ngIf="activeContext == 'faves' && otherUser && ((userState['isFriend'] == 'unconnected' || userState['isFriend'] == 'pending') && userState['account_private'] == 1)">This account is private.</h3> -->
+ <div *ngIf="!isLoaded || !isMasornyisLoaded">
+  <div class="ion-no-padding custom-skeleton">
+    <ion-row class="ion-no-padding">
+      <ion-col size="6" class="ion-no-padding">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+  </div>
+ </div>
+ <div *ngIf="isLoaded">
+  <ion-grid *ngIf="activeContext == 'faves' && !otherUser || otherUser && ((userState['isFriend'] == 'connected' || userState['isFriend'] == 'unconnected' || userState['isFriend'] == 'pending') && userState['account_private'] == 0)" class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col  *ngIf="isLoaded && faveItems && faveItems.length > 0" size="12" class="ion-no-padding">
+       <ngx-masonry [options]="{ gutter: 10 }" (itemsLoaded)='completeMasonry()' [ordered]="true">
+         <div class="ion-no-padding" ngxMasonryItem class="grid-sizer grid-item"  *ngFor="let item of faveItems; let i = index" >
+           <!-- <img class="ion-no-padding" (click)="gotoDetails(item)" [src]="item.photo" style="border-radius: 10px !important;" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }"> -->
+           <img class="ion-no-padding" (click)="getPostById(item.id)"  [src]="item.user_post_pic_url" style="border-radius: 10px !important;" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
+           <!-- <ng-container *ngIf="i % 3 == 0">
+            <img-loader [src]="item.user_post_pic_url" useImg [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }" fallbackUrl="{{ item.user_post_pic_url ? item.user_post_pic_url : 'assets/imgs/empty-states/fallback.svg' }}" fallbackAsPlaceholder="true"></img-loader>
+          </ng-container>
+          <ng-container *ngIf="i % 3 == 1">
+            <img-loader [src]="item.user_post_pic_url" useImg [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }" fallbackUrl="{{ item.user_post_pic_url ? item.user_post_pic_url : 'assets/imgs/empty-states/fallback.svg' }}" fallbackAsPlaceholder="true"></img-loader>
+          </ng-container>
+          <ng-container *ngIf="i % 3 == 2">
+            <img-loader [src]="item.user_post_pic_url" useImg [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }" fallbackUrl="{{ item.user_post_pic_url ? item.user_post_pic_url : 'assets/imgs/empty-states/fallback.svg' }}" fallbackAsPlaceholder="true"></img-loader>
+          </ng-container> -->
+         </div>
+       </ngx-masonry>
+      </ion-col>
+      <ion-row>
+        <ion-col size="12" class="ion-text-center" *ngIf="isLoaded && faveItems.length == 0">
+          <ion-text *ngIf="!otherUser">Nothing saved yet. Save your favorite looks and find them here!</ion-text>
+          <ion-text *ngIf="otherUser && userState['isFriend'] == 'connected'">{{ profileInfo.profile_first_name }} has nothing saved yet.</ion-text>
+          <ion-text *ngIf="otherUser && (userState['isFriend'] == 'unconnected' || userState['isFriend'] == 'pending')">Nothing saved yet. Connect with {{ profileInfo.profile_first_name }} to discover their favorite styles!</ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-row>
+  </ion-grid>
+ </div>
+</ng-container>
+
+<ion-infinite-scroll  (ionInfinite)="doInfinite($event)" *ngIf="isLoaded && totalPages > page">
+  <ion-infinite-scroll-content  loadingSpinner="none">
+    <ion-col class="ion-text-center" *ngIf="(otherUser || userState) && ((otherUser && !otherUser.isBlocked )|| (userState &&!userState.isBlocked ))">
+      <ion-spinner name="crescent"></ion-spinner>
+    </ion-col>
+    <!-- <ion-row class="ion-no-padding">
+      <ion-col size="6" class="ion-no-padding">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-no-padding">
+      <ion-col size="6" class="ion-no-padding">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="6">
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 10px;"></ion-skeleton-text>
+      </ion-col>
+    </ion-row> -->
+  </ion-infinite-scroll-content>
+</ion-infinite-scroll>
+</ion-content>

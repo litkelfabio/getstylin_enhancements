@@ -1,0 +1,217 @@
+<ion-header class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">COMMENTS</ion-title>
+    <ion-icon src="assets/css/icon/back.svg" slot="start"(click)="goToPostDetails()"></ion-icon>
+    </ion-toolbar>
+</ion-header>
+<ng-progress #progressBar [color]="'#B3A25D'" [spinner]="false" [fixed]="true" [meteor]="false" [thick]="true"></ng-progress>
+<ion-content class="ion-padding" *ngIf="!loading">
+  <ion-refresher #refresherRef slot="fixed" (ionRefresh)="doRefresh($event)" mode="md" >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-row id="comment-tree">
+    <ng-container *ngIf="context == 'post'">
+      <ion-col size="12">
+        <ion-row (click)="viewUserProfile(commentTree.comment)">
+          <ion-col size="2" class="thumbnail-container">
+            <!-- <ion-avatar>
+              <img src="assets/css/imgs/placeholder.png">
+            </ion-avatar> -->
+            <div class="owner-thumbnail" *ngIf="commentTree.comment.user_profile_pic_url" [ngStyle]="{ 'background-image': 'url(' + commentTree.comment.user_profile_pic_url + ')'}"></div>
+            <div class="owner-thumbnail" *ngIf="!commentTree.comment.user_profile_pic_url" [ngStyle]="{ 'background-color': '#999999'}"></div>
+          </ion-col>
+          <ion-col size="10">
+            <ion-row>
+              <strong><ion-text>{{ commentTree.comment.user_first_name }} {{ commentTree.comment.user_last_name }}</ion-text></strong>
+            </ion-row>
+            <ion-row style="padding: 3px 0px 3px 0px !important;">
+              <ion-text style="overflow: auto;">{{ commentTree.comment.comment }}</ion-text>
+            </ion-row>
+            <ion-row>
+              <ion-text color="medium">{{ getMoment(commentTree.comment.created_at) | timeAgoV2 }}</ion-text>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+        <div class="loading" text-center *ngIf="repliesAreUpdating">
+          <ion-spinner color="t-gold"></ion-spinner>
+          <ion-label>Updating replies.</ion-label>
+        </div>
+        <ng-container  *ngIf="commentTree.replies.length > 0">
+          <ion-row class="ion-padding-top">
+            <strong><ion-text>REPLIES</ion-text></strong>
+          </ion-row>
+          <div *ngFor="let reply of commentTree.replies">
+            <ion-row class="replies">
+              <ion-col size="2" class="thumbnail-container" tappable (click)="viewUserProfile(reply)">
+                <!-- <ion-avatar>
+                  <img src="assets/css/imgs/placeholder.png">
+                </ion-avatar> -->
+                <div class="owner-thumbnail" *ngIf="reply.user_profile_pic_url" [ngStyle]="{ 'background-image': 'url(' + reply.user_profile_pic_url + ')'}"></div>
+                  <div class="owner-thumbnail" *ngIf="!reply.user_profile_pic_url" [ngStyle]="{ 'background-color': '#999999'}"></div>
+              </ion-col>
+              <ion-col size="10">
+                <ion-row (click)="viewUserProfile(reply)"> 
+                  <strong><ion-text>{{ reply.user_first_name }} {{ reply.user_last_name }}</ion-text></strong>
+                </ion-row>
+                <ion-row style="padding: 3px 0px 3px 0px !important;">
+                  <ion-text style="overflow: auto;"> {{ reply.commentReply }}</ion-text>
+                </ion-row>
+                <ion-row>
+                  <div class="comment-parent-controls">
+                    <ion-text color="medium">{{ getMoment(reply.created_at) | timeAgoV2 }}&nbsp;&nbsp;</ion-text>
+                    <ion-text color="primary" *ngIf='reply.total_comments > 0' class="control-item timestamp">&nbsp;&nbsp;&nbsp;{{ reply.total_comments+ ' Like/s' }}</ion-text>
+                    <span *ngIf='!reply.is_liked' ion-text class="control-item" tappable (click)='likeComment(reply)'>Like</span>
+                    <span *ngIf='reply.is_liked' ion-text class="control-item active" tappable (click)='likeComment(reply)'>Like</span>
+                    <span ion-text class="control-item" tappable (click)="toggleEdit(reply)" *ngIf="profileInfo['id']== reply.userId">Edit</span>
+                    <span ion-text class="control-item" tappable (click)="presentDeletePrompt(reply, true)" *ngIf="profileInfo['id'] == reply.userId">Delete</span>
+                  </div>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ng-container>
+      </ion-col>
+    </ng-container>
+    <ng-container *ngIf="context == 'stylecolumn'">
+      <ion-col size="12">
+        <ion-row (click)="viewUserProfile(commentTree.response)">
+          <ion-col size="2" class="thumbnail-container">
+            <!-- <ion-avatar>
+              <img src="assets/css/imgs/placeholder.png">
+            </ion-avatar> -->
+            <div class="owner-thumbnail" *ngIf="commentTree.response.user_profile_pic_url" [ngStyle]="{ 'background-image': 'url(' + commentTree.response.user_profile_pic_url + ')'}"></div>
+            <div class="owner-thumbnail" *ngIf="!commentTree.response.user_profile_pic_url" [ngStyle]="{ 'background-color': '#999999'}"></div>
+          </ion-col>
+          <ion-col size="10">
+            <ion-row>
+              <ion-text style="font-size: 15px !important;"><b>{{ commentTree.response.user_first_name }} {{ commentTree.response.user_last_name }}</b></ion-text>
+            </ion-row>
+            <ion-row>
+              <ion-text style="overflow: auto;">{{ commentTree.response.comment }}</ion-text>
+            </ion-row>
+            <ion-row>
+              <ion-text color="medium">{{ getMoment(commentTree.response.created_at) | timeAgoV2 }}</ion-text>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+        <div class="loading" text-center *ngIf="repliesAreUpdating">
+          <ion-spinner color="t-gold"></ion-spinner>
+          <ion-label>Updating replies.</ion-label>
+        </div>
+        <ng-container  *ngIf="commentTree['replies'].length > 0">
+          <ion-row class="ion-padding-top">
+            <ion-text><b>REPLIES</b></ion-text>
+          </ion-row>
+          <div *ngFor="let reply of commentTree['replies']">
+            <ion-row class="replies">
+              <ion-col size="2" class="thumbnail-container" tappable (click)="viewUserProfile(reply)">
+                <!-- <ion-avatar>
+                  <img src="assets/css/imgs/placeholder.png">
+                </ion-avatar> -->
+                <div class="owner-thumbnail" *ngIf="reply.user_profile_pic_url" [ngStyle]="{ 'background-image': 'url(' + reply.user_profile_pic_url + ')'}"></div>
+                  <div class="owner-thumbnail" *ngIf="!reply.user_profile_pic_url" [ngStyle]="{ 'background-color': '#999999'}"></div>
+              </ion-col>
+              <ion-col size="10">
+                <ion-row (click)="viewUserProfile(reply)"> 
+                  <ion-text style="font-size: 15px !important;"><b>{{ reply.user_first_name }} {{ reply.user_last_name }}</b></ion-text>
+                </ion-row>
+                <ion-row>
+                  <ion-text style="overflow: auto;"> {{ reply.reply }}</ion-text>
+                </ion-row>
+                <ion-row>
+                  <div class="comment-parent-controls">
+                    <ion-text color="medium">{{ getMoment(reply.created_at) | timeAgoV2 }}</ion-text>
+                    <ion-text color="primary" *ngIf='reply.total_comments > 0' class="control-item timestamp">&nbsp;&nbsp;&nbsp;{{ reply.total_comments+ ' Like/s' }}</ion-text>
+                    <span *ngIf='!reply.is_liked' ion-text class="control-item" tappable (click)='likeComment(reply)'>&nbsp;&nbsp;Like</span>
+                    <span *ngIf='reply.is_liked' ion-text class="control-item active" tappable (click)='likeComment(reply)'>&nbsp;&nbsp;Like</span>
+                    <span ion-text class="control-item" tappable (click)="toggleEdit(reply)" *ngIf="profileInfo['id']== reply.userId">&nbsp;&nbsp;Edit</span>
+                    <span ion-text class="control-item" tappable (click)="presentDeletePrompt(reply, true)" *ngIf="profileInfo['id'] == reply.userId">&nbsp;&nbsp;Delete</span>
+                  </div>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ng-container>
+      </ion-col>
+    </ng-container>
+  </ion-row>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="maxPages > currentPage">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+<ion-content *ngIf="loading" class="ion-padding">
+  <ion-skeleton-text style="width: 100%; height: 30%;"></ion-skeleton-text>
+  <ion-skeleton-text style="width: 100%; height: 10%;"></ion-skeleton-text>
+  <ion-skeleton-text style="width: 100%; height: 30%;"></ion-skeleton-text>
+  <ion-skeleton-text style="width: 100%; height: 30%;"></ion-skeleton-text>
+</ion-content>
+<ion-footer *ngIf="!loading">
+  <ng-container *ngIf="isReply == true || isEditing == true">
+    <div id="replying-to" >
+      <ion-item lines="none">
+        <div item-start id="snippet">
+          <ng-container *ngIf="isReply == true">
+            <!-- <span *ngIf="replyingTo['name'] != profileInfo['profile_first_name']">Replying to <b>{{ replyingTo['name'] }}</b></span>
+            <span *ngIf="replyingTo['name'] == profileInfo['profile_first_name']">Replying to <b>yourself</b></span> -->
+            <div><ion-label>{{ replyingTo['comment'] }}</ion-label></div>
+          </ng-container>
+  
+          <ng-container *ngIf="isEditing == true">
+            <span>Editing comment</span>
+            <div><ion-label>{{ editingWhich['comment'] }}</ion-label></div>
+          </ng-container>
+        </div>
+  
+        <div item-end id="control">
+          <!-- <ion-button   fill="clear" size="small" *ngIf="isReply == true" (click)="toggleReply(null, true)"><ion-icon name="close-outline" color="pitchblack"></ion-icon></ion-button> -->
+          <ion-button   fill="clear" size="small" *ngIf="isEditing == true" (click)="toggleEdit(null, true)"><ion-icon name="close-outline" color="pitchblack"></ion-icon></ion-button>
+        </div>
+      </ion-item>
+    </div>
+  </ng-container>
+ 
+  <!-- End Replying to n Container -->
+
+  <div class="comment-entry-post">
+    <ion-grid class="ion-no-margin ion-no-padding">
+      <ion-row class="ion-no-margin ion-no-padding text-center">
+        <ion-col size="2">
+          <div class="comment-entry-item text-center" >
+            <div class="comment-entry-user-photo" *ngIf="profileInfo['profile_profile_pic']" [ngStyle]="{ 'background-image': 'url('+ profileInfo['profile_profile_pic'] +')'}"></div>
+            <div class="comment-entry-user-photo" *ngIf="!profileInfo['profile_profile_pic']" [ngStyle]="{ 'background-color': '#999999'}"></div>
+          </div>
+        </ion-col>
+
+        <ion-col size="8">
+          <div class="comment-entry-item">
+            <!-- <div id="comment-input" placeholder="Add comment..." contenteditable="true" (input)="messageToSend = $event.target.innerText"></div> -->
+            <div class="comment-entry-inputField text-left" autosize text-left>
+              <textarea #commentField [(ngModel)]="commentText" class="comment-entry-inputField" rows="1" maxLength="500" placeholder="Add comment..."></textarea>
+              <!-- <textarea #commentField name="comment" class="comment-entry-inputField" rows="1" maxLength="500" placeholder="Add comment..."></textarea> -->
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="2">
+          <div class="comment-entry-item">
+            <div class="comment-entry-sendBtn">
+              <ion-button  fill="clear" icon-only *ngIf="context == 'post' && isEditing == false" (click)="postComment(true)" [disabled]="isPosting || !commentText" slot="end"><ion-icon src="assets/css/icon/send.svg" slot="end"></ion-icon></ion-button>
+              <ion-button  fill="clear" icon-only *ngIf="context == 'stylecolumn' && isEditing == false" (click)="postResponse(true)" [disabled]="isPosting || !commentText"><ion-icon src="assets/css/icon/send.svg" slot="end"></ion-icon></ion-button>
+              <ion-button  fill="clear" icon-only *ngIf="context == 'post' && isEditing == true" (click)="postComment(null, true)" [disabled]="isPosting || !commentText" slot="end"><ion-icon src="assets/css/icon/send.svg" slot="end"></ion-icon></ion-button>
+              <ion-button  fill="clear" icon-only *ngIf="context == 'stylecolumn' && isEditing == true" (click)="postResponse(null, true)" [disabled]="isPosting || !commentText" slot="end"><ion-icon src="assets/css/icon/send.svg" slot="end"></ion-icon></ion-button>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <!-- <ion-toolbar class="ion-no-padding footer">
+    <ion-col size="12">
+      <ion-item lines="none">
+        <ion-avatar style="background-color: grey;" slot="start"></ion-avatar>
+        <ion-input placeholder="Add comment..."></ion-input>
+        <ion-icon src="assets/css/icon/send-icon.svg" slot="end"></ion-icon>
+      </ion-item>
+    </ion-col>
+  </ion-toolbar> -->
+</ion-footer>

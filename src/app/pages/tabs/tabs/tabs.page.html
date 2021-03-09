@@ -1,0 +1,89 @@
+<ion-content>
+
+<ion-tabs #tabs (ionTabsDidChange)="setCurrentTab()">
+
+  <ion-tab-bar slot="bottom">
+
+    <!-- <ng-container>
+      <ion-tab-button tab="dashboard" (click)="dashboardTab()">
+        <ion-icon [src]=" dashboardIcon"></ion-icon>
+        <ion-text style="font-size: 8px;" color="{{dashboardColor}}">DASHBOARD</ion-text>
+      </ion-tab-button>
+    </ng-container> -->
+    <ion-tab-button tab="dashboard">
+      <ng-container *ngIf="selectedTab == 'dashboard'" >
+        <ion-icon src="assets/css/icon/dashboard-active.svg" (click)="refreshDashboard()"></ion-icon>
+        <ion-text style="font-size: 8px;" color="dark">DASHBOARD</ion-text>
+      </ng-container>
+      <ng-container *ngIf="selectedTab != 'dashboard'">
+        <ion-icon src="assets/css/icon/dashboard.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="medium">DASHBOARD</ion-text>
+      </ng-container>
+    </ion-tab-button>
+    <!-- <ng-container >
+      <ion-tab-button tab="dashboard">
+        <ion-icon src="assets/css/icon/dashboard.svg"></ion-icon>
+        <ion-text style="font-size: 8px;">DASHBOARD</ion-text>
+      </ion-tab-button>
+    </ng-container> -->
+
+    <ion-tab-button tab="my-stylin" (click)="goToStylin()">
+      <ng-container *ngIf="selectedTab == 'my-stylin' && withNotif != 'mystylin'">
+        <ion-icon src="assets/css/icon/profile-active.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="dark">MY-STYLIN'</ion-text>
+      </ng-container>
+      <ng-container *ngIf="selectedTab != 'my-stylin'&& withNotif != 'mystylin'">
+        <ion-icon src="assets/css/icon/profile.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="medium">MY-STYLIN'</ion-text>
+      </ng-container>
+      <ng-container *ngIf="selectedTab =='my-stylin' && withNotif == 'mystylin'">
+        <ion-badge color="primary">{{requestCount}}</ion-badge>
+        <ion-icon src="assets/css/icon/profile-inactive-with-notif.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="primary">MY-STYLIN'</ion-text>
+      </ng-container>
+      <ng-container *ngIf="selectedTab !='my-stylin' && withNotif == 'mystylin'">
+        <ion-badge color="primary">{{requestCount}}</ion-badge>
+        <ion-icon src="assets/css/icon/profile-inactive-with-notif.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="primary">MY-STYLIN'</ion-text>
+      </ng-container>
+    </ion-tab-button>
+
+    <ion-tab-button (click)='presentActionSheet()'>
+      <ng-container *ngIf="selectedTab == 'upload'">
+        <ion-icon src="assets/css/icon/upload-active.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="dark">UPLOAD</ion-text>
+      </ng-container>
+      <ng-container *ngIf="selectedTab != 'upload'">
+        <ion-icon src="assets/css/icon/upload.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="medium">UPLOAD</ion-text>
+      </ng-container>
+    </ion-tab-button>
+
+    <ion-tab-button tab="rewards">
+      <ng-container *ngIf="selectedTab == 'rewards'">
+        <ion-icon src="assets/css/icon/rewards2-active.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="dark">REWARDS</ion-text>
+      </ng-container>
+      <ng-container *ngIf="selectedTab != 'rewards'">
+        <ion-icon src="assets/css/icon/rewards2.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="medium">REWARDS</ion-text>
+      </ng-container>
+    </ion-tab-button>
+
+    <ion-tab-button tab="discover">
+      <ng-container *ngIf="selectedTab == 'discover'">
+        <ion-icon src="assets/css/icon/discover-active.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="dark">DISCOVER</ion-text>
+      </ng-container>
+      <ng-container *ngIf="selectedTab != 'discover'">
+        <ion-icon src="assets/css/icon/discover.svg"></ion-icon>
+        <ion-text style="font-size: 8px;" color="medium">DISCOVER</ion-text>
+      </ng-container>
+    </ion-tab-button>
+
+
+  </ion-tab-bar>
+
+</ion-tabs>
+<input #imgupload class="d-none" type="file" (change)="imgChange($event)" accept="image/jpeg,image/png" multiple/>
+</ion-content>

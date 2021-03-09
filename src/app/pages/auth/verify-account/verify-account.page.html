@@ -1,0 +1,167 @@
+<ion-content class="ion-padding">
+  <ng-progress #progressBar></ng-progress>
+  <div class="center">
+    <ion-row class="ion-padding">
+      <ion-col size="12" class="ion-text-center" >
+        <img id="logo" src='assets/imgs/GS.svg' >
+      </ion-col>
+      <ion-col class="ion-text-center">
+        <ion-text><b>VERIFY ACCOUNT</b></ion-text>
+        <h4>A verification code will be sent your email.</h4>
+      </ion-col>
+      <ion-col size="12">
+        <form [formGroup]="activateForm">
+          <ion-col size="12">
+            <ion-item lines="none">
+              <ion-input
+              type="text"
+              formControlName="activation_code"
+              placeholder="Activation Code"
+              ></ion-input>
+            </ion-item>
+            <ng-container *ngIf="activateForm.controls.activation_code.touched">
+              <ion-row>
+                <ion-col class="ion-text-end">
+                  <ion-text *ngIf="
+                  activateForm.controls.activation_code.hasError('required')
+                  " class="adjustment" color="danger">This field is required.</ion-text>
+                  <ion-text class="adjustment" color="danger" *ngIf="
+                    activateForm.controls.activation_code.hasError('minlength') ||
+                    activateForm.controls.activation_code.hasError('maxlength')
+                    ">
+                      Activation code must be exactly 6 digits only
+                  </ion-text>
+                  <ion-text class="adjustment" color="danger"
+                  *ngIf="
+                  !activateForm.controls.activation_code.hasError(
+                    'minlength'
+                  ) &&
+                  !activateForm.controls.activation_code.hasError(
+                    'maxlength'
+                  ) &&
+                  invalidCode
+                  ">
+                  Invalid activation code. Please try again.
+                  </ion-text>
+                </ion-col>
+              </ion-row>
+              
+            </ng-container>
+            <!-- <ion-item text-right no-padding>
+              <ion-button
+              *ngIf="!enableResend"
+               fill="clear"
+               color="primary"
+              >
+              Resend Code in  {{ timer }}
+              </ion-button>
+              <ng-container *ngIf="enableResend">
+                <ion-button
+                  type="button"
+                  *ngIf="!type"
+                  ion-button
+                  clear
+                  color="t-gold"
+                  tappable
+                  (click)="activate('resend')"
+                  [disabled]="!isLoaded && !enableResend"
+                >
+                  Resend Code
+                </ion-button>
+                <ion-button
+                  type="button"
+                  *ngIf="type && type == 'verification_code'"
+                  ion-button
+                  clear
+                  color="t-gold"
+                  tappable
+                  (click)="resend()"
+                  [disabled]="!isLoaded && !enableResend"
+                >
+                  Resend Code
+                </ion-button>
+              </ng-container>
+
+            </ion-item> -->
+
+            <ion-row>
+              <ion-col class="ion-text-end ion-no-padding">
+                <ion-button *ngIf="!enableResend"   fill="clear" color="primary">
+                  Resend Code {{timer}}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+            <ng-container *ngIf="enableResend">
+              <ion-row class="ion-no-padding">
+                <ion-col class="ion-text-end ion-no-padding">
+                  <ion-button *ngIf="!type" fill="clear" color="primary"
+                  [disabled]="!isLoaded && !enableResend" class="ion-no-margin"
+                  (click)="activate('resend')">
+                    Resend Code
+                  </ion-button>
+                  <ion-button *ngIf="type && type == 'verification_code'" (click)="resend()" fill="clear" color="primary"  
+                  [disabled]="!isLoaded && !enableResend">
+                    Resend Code
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ng-container>
+
+            <!-- <ion-item no-padding>
+              <ion-button
+                type="submit"
+                *ngIf="type && type == 'verification_code'"
+                mode="ios"
+                block
+                strong="true"
+                (click)="sendCode()"
+                [disabled]="!activateForm.valid"
+              >
+                {{ "Verify" | uppercase }}
+              </ion-button>
+              <ion-button
+                type="submit"
+                *ngIf="!type"
+                mode="ios"
+                ion-button
+                block
+                strong
+                small
+                stappable
+                (click)="activate('activate')"
+                [disabled]="!activateForm.valid"
+              >
+                {{ "Activate" | uppercase }}
+              </ion-button>
+            </ion-item> -->
+
+            <ion-row>
+              <ion-col class="ion-text-center">
+                <ion-button strong="true" expand="block" style="--border-radius: 5px !important;" 
+                class="ion-padding-start"
+                *ngIf="type && type == 'verification_code'"
+                [disabled]="!activateForm.valid"
+                (click)="sendCode()"
+                color="primary">
+                  {{"verify" | uppercase}}
+                </ion-button>
+                <ion-button  (click)="activate('activate')" style="--border-radius: 5px !important;"
+                *ngIf="!type" strong="true" expand="block"
+                class="ion-padding-start"
+                [disabled]="!activateForm.valid">
+                  {{"activate" | uppercase}}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+
+          </ion-col>
+        </form>
+      </ion-col>
+    </ion-row> 
+  </div>
+   
+          
+          
+ 
+ 
+</ion-content>

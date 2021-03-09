@@ -1,0 +1,128 @@
+<ion-content padding-horizontal>
+  <ion-col size="12">
+    <ion-row>
+			<ion-col size="12" class="ion-text-center" >
+				<img id="logo" src='assets/imgs/GS.svg' height="120px" >
+      </ion-col>
+      <ion-col col-12 class="ion-text-center" >
+        <img src='assets/imgs/Progress3.svg' >
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12 class="ion-text-center">
+        <h5>{{ "Complete Your Profile" | uppercase }}</h5> 
+        <p>Just a few details, and you're all set!</p>
+      </ion-col>
+    </ion-row>
+    <form [formGroup]="registrationForm" size="12" class="ion-padding">
+
+
+      <ion-item lines="full" *ngFor="let clothing of clothings; let i = index">
+        <ion-button fill="clear" class="alert-btn" (click)="chooseSize(clothing, i)"></ion-button>
+        <ng-container *ngIf="clothing.clothing_type != 'Bottoms'">
+          <ion-icon src="assets/css/icon/{{clothing.clothing_type | lowercase}}.svg" class="brand-icon" slot="start"></ion-icon>
+        </ng-container> 
+        <ng-container *ngIf="clothing.clothing_type == 'Bottoms'">
+          <ion-icon class="brand-icon" slot="start" src="assets/css/icon/updated-bottoms.svg"></ion-icon>
+        </ng-container>
+        <ng-container *ngIf="clothing.clothing_type == 'Dresses'">
+          <ion-icon class="brand-icon" slot="start" src="assets/css/icon/dress.svg"></ion-icon>
+        </ng-container>
+        <ion-label class="ion-padding-horizontal" color="primary" position="floating">{{ clothing.clothing_type }}</ion-label>
+        <ion-input class="relative-input" readonly="true" type="text" formControlName="clothingField_{{i}}" ></ion-input>
+      </ion-item>
+      <ion-item lines="none" class="submit-btn">
+        <ion-button class="ion-no-margin" slot="end" mode="ios" (click)="saveInfo()">{{ "Submit" | uppercase }}</ion-button>
+      </ion-item>
+      <ion-row class="ion-no-padding"> 
+        <ion-col class="ion-text-center ion-no-padding">
+          <ion-text color="primary" (click)="skipStep()" style="font-family: 'Raleway';">Skip this step</ion-text>
+        </ion-col>
+      </ion-row>
+
+      <!-- <ion-col>
+        <ion-list> 
+          <ion-item *ngFor="let clothing of clothings; let i = index" class="form-item">
+            <ion-label color="primary">{{ clothing.clothing_type }}</ion-label>
+            <ion-input readonly type="text" (click)="chooseSize(clothing, i)" formControlName="clothingField_{{i}}"></ion-input>
+          </ion-item>
+          <ion-item lines="none" class="submit-btn">
+            <ion-button class="ion-no-margin" slot="end" mode="ios" (click)="saveInfo()">{{ "Submit" | uppercase }}</ion-button>
+          </ion-item>
+          
+        </ion-list>   -->
+        
+        <!-- <ion-item size="12">
+          
+          <ion-label>Tops</ion-label>
+          <ion-select>
+            <ion-select-option value="xxs">XXS</ion-select-option>
+            <ion-select-option value="xs">XS</ion-select-option>
+            <ion-select-option value="s">S</ion-select-option>
+            <ion-select-option value="m">M</ion-select-option>
+            <ion-select-option value="l">L</ion-select-option>
+            <ion-select-option value="xl">XL</ion-select-option>
+            <ion-select-option value="xxl">XXL</ion-select-option>
+            <ion-select-option value="xxxl">XXL</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item size="12">
+          <ion-label>Blazers/Jackets</ion-label>
+          <ion-select>
+            <ion-select-option value="32">32</ion-select-option>
+            <ion-select-option value="34">34</ion-select-option>
+            <ion-select-option value="36">36</ion-select-option>
+            <ion-select-option value="38">38</ion-select-option>
+            <ion-select-option value="40">40</ion-select-option>
+            <ion-select-option value="42">42</ion-select-option>
+            <ion-select-option value="44">44</ion-select-option>
+            <ion-select-option value="48">48</ion-select-option>
+            <ion-select-option value="50">50</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item size="12">
+          <ion-label>Bottoms</ion-label>
+          <ion-select>
+            <ion-select-option value="28">28</ion-select-option>
+            <ion-select-option value="30">30</ion-select-option>
+            <ion-select-option value="32">32</ion-select-option>
+            <ion-select-option value="34">34</ion-select-option>
+            <ion-select-option value="36">36</ion-select-option>
+            <ion-select-option value="38">38</ion-select-option>
+            <ion-select-option value="40">40</ion-select-option>
+            <ion-select-option value="42">42</ion-select-option>
+            <ion-select-option value="44">44</ion-select-option>
+            <ion-select-option value="48">48</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item size="12">
+          <ion-label>Shoes</ion-label>
+          <ion-select>
+            <ion-select-option value="28">US 6</ion-select-option>
+            <ion-select-option value="30">US 6.5</ion-select-option>
+            <ion-select-option value="32">US 7</ion-select-option>
+            <ion-select-option value="34">US 7.5</ion-select-option>
+            <ion-select-option value="36">US 8</ion-select-option>
+            <ion-select-option value="38">US 8.5</ion-select-option>
+            <ion-select-option value="40">US 9</ion-select-option>
+            <ion-select-option value="42">US 9.5</ion-select-option>
+            <ion-select-option value="44">US 10</ion-select-option>
+            <ion-select-option value="48">US 10.5</ion-select-option>
+            <ion-select-option value="44">US 11</ion-select-option>
+            <ion-select-option value="44">US 11.5</ion-select-option>
+            <ion-select-option value="44">US 12</ion-select-option>
+            <ion-select-option value="44">US 12.5</ion-select-option>
+            <ion-select-option value="44">US 13</ion-select-option>
+            <ion-select-option value="44">US 14</ion-select-option>
+            <ion-select-option value="44">US 15</ion-select-option>
+          </ion-select>
+        </ion-item> -->
+      <!-- </ion-col> -->
+      <!-- <ion-col size="12">
+        <ion-row style="float: right;" class="ion-padding">
+          <ion-button (click)="goToDashboard()">SUBMIT</ion-button>
+        </ion-row>
+      </ion-col> -->
+    </form>
+  </ion-col>
+</ion-content>

@@ -1,0 +1,119 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">POST</ion-title>
+    <ion-buttons slot="start" class="ion-padding" (click)="backToDashboard()">
+      <ion-icon slot="icon-only" src="assets/css/icon/back.svg" style="zoom: 0.5;"></ion-icon>
+  </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" mode="md" >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col size="10" class="ion-no-padding-top">
+        <ion-item lines="none" class="ion-no-padding" (click)="goToProfile()">
+          <ion-avatar>
+            <img src="{{img}}">
+          </ion-avatar>
+          <ion-text class="ion-padding">Juan Dela Cruz</ion-text>
+        </ion-item>
+      </ion-col>
+      <ion-col size="2" class="ion-text-center ion-no-padding" (click)="editPostModal()">
+        <ion-icon src="assets/css/icon/more.svg" class="ion-no-padding" style="zoom: 2.5;"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-no-padding" >
+      <!-- <img-loader useImg (click)="viewImage()">
+        <img src="{{img}}" placeholder="assets/css/imgs/empty-states/fallback.svg"  style="border-radius: 10px !important;">
+      </img-loader> -->
+      
+    </ion-row>
+    <ion-row class="ion-no-padding">
+      <ion-col>
+        <ion-col size = "1.5" style="zoom: 2.5;" class="ion-no-padding">
+          <ion-icon src="assets/css/icon/likes.svg"></ion-icon>
+        </ion-col>
+        <ion-col size = "1.5" style="zoom: 2.5;" class="ion-no-padding">
+          <ion-icon src="assets/css/icon/dislike.svg"></ion-icon>
+        </ion-col>
+        <ion-col size = "1" style="zoom: 2.5;" class="ion-no-padding">
+          <ion-icon src="assets/css/icon/comments.svg"></ion-icon>
+        </ion-col>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <ion-col size = "1.5" style="zoom: 1.5;" class="ion-no-padding">
+          <ion-icon src="assets/css/icon/likes.svg"></ion-icon>
+          <ion-text style="font-size: 10px; font-weight: 0.02;">1</ion-text>
+        </ion-col>
+        <ion-col size = "1.5" style="zoom: 1.5;" class="ion-no-padding">
+          <ion-icon src="assets/css/icon/dislike.svg"></ion-icon>
+          <ion-text style="font-size: 10px;">4</ion-text>
+        </ion-col>
+        <ion-col size = "1" style="zoom: 1.5;" class="ion-no-padding">
+          <ion-icon src="assets/css/icon/comments.svg"></ion-icon>
+          <ion-text style="font-size: 10px;">2</ion-text>
+        </ion-col>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div>
+    <ion-row class="ion-no-padding">
+      <ion-col class="ion-no-padding">
+        <ion-text>This is Post Description</ion-text>
+        <ion-text color="medium"> &nbsp;&nbsp;15d</ion-text>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div>
+    <ion-row>
+      <ion-col class="ion-no-padding">
+        <ion-text color="secondary">#HASHTAGS</ion-text>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div class="ion-padding-top">
+    <ion-item lines="none" class="ion-no-padding">
+      <ion-avatar style="background-color: grey;" slot="start"></ion-avatar>
+      <ion-col size="10">
+        <ion-row>
+          <ion-text><b>Juana Dela Cruz</b></ion-text>
+        </ion-row>
+        <ion-row>
+          <ion-text>This is comment</ion-text>
+        </ion-row>
+        <ion-row>
+          <ion-text color="medium">3d</ion-text>
+          <ion-text color="primary">&nbsp;&nbsp;Like</ion-text>
+          <ion-text color="primary">&nbsp;&nbsp;Reply</ion-text>
+        </ion-row>
+        <ion-row>
+          <ion-text (click)="goToReplies()">View 1 reply</ion-text>
+        </ion-row>
+      </ion-col>
+    </ion-item>
+  </div>
+  <div *ngIf="!data">
+    <div class="ion-padding custom-skeleton">
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    </div>
+    </div>
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar class="ion-no-padding footer">
+    <ion-col size="12">
+      <ion-item lines="none">
+        <ion-avatar style="background-color: grey;" slot="start"></ion-avatar>
+        <ion-input placeholder="Add comment..."></ion-input>
+        <ion-icon src="assets/css/icon/send-icon.svg" slot="end"></ion-icon>
+      </ion-item>
+    </ion-col>
+  </ion-toolbar>
+</ion-footer>

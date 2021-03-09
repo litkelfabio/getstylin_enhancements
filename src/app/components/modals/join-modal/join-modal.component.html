@@ -1,0 +1,31 @@
+<ion-content>
+  <ion-row style="float: right;">
+    <ion-col size="2" class="ion-text-right">
+      <ion-button fill="clear" (click)="dismissModal()">
+          <ion-icon slot="icon-only" src="assets/css/icon/close.svg" style="zoom: 0.5;"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+  <!-- <ion-img src="assets/css/icon/check-white.png" ></ion-img> -->
+  <ion-row class="ion-padding-horizontal">
+      <ion-col size="12">
+              <ion-col size="12">
+                  <ion-row>
+                      <ion-col size="4">
+                         <ion-img src="assets/css/icon/check-white2.png"></ion-img>
+                      </ion-col>
+                      <ion-col size="8">
+                          <ion-row>
+                            <ion-text class="modal-text">{{params.title}}</ion-text>
+                            <ion-text class="modal-subtext">{{params.sub_text}}</ion-text>
+                          </ion-row>
+                          <ion-row>
+                           
+                          </ion-row>
+                      </ion-col>
+                  </ion-row>
+              </ion-col>
+          
+      </ion-col>
+  </ion-row>
+</ion-content>

@@ -1,0 +1,75 @@
+<ion-header class="ion-no-border ion-padding-top">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">BECOME A STYLISTS</ion-title>
+    <ion-buttons slot="start">
+        <ion-icon slot="icon-only" class="paded-l" src="assets/css/icon/back.svg" routerLink="/stylist-application" routerDirection="back" style="zoom: 0.5;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-col size="12">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <img src='assets/imgs/Progress2.svg'>
+      </ion-col>
+    </ion-row>
+    <form [formGroup]="stylistApplicationFormStep2">
+      <ion-row class="ion-padding">
+        <ion-col size="12" class="ion-text-center">
+          <ion-text><b>PERSONAL STYLE</b></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-no-padding">
+        <ion-col size="12" class="ion-text-center ion-no-padding">
+          <ion-text>Describe your style!</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-no-padding ion-padding-top">
+        <ion-col size="4">
+          <ion-text class="ion-padding-top" style="padding-left: 3px !important;">Preference</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-no-padding">
+          <ion-item lines="none" class="ion-no-padding paded-l">
+            <ion-label class="ion-text-wrap ion-no-margin">Men's Fashion</ion-label>
+            <ion-checkbox mode="md" (click)="updatePreferences('m')" slot="start"></ion-checkbox>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-no-padding">
+          <ion-item lines="none" class="ion-no-padding paded-l">
+            <ion-label class="ion-text-wrap ion-no-margin">Women's Fashion</ion-label>
+            <ion-checkbox mode="md" (click)="updatePreferences('f')" slot="start"></ion-checkbox>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-no-padding ion-padding-top">
+        <ion-col>
+          <ion-text style="padding-left: 3px !important;">Describe your personal style</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="paded-lr">
+          <ion-textarea rows="5"maxLength="150" formControlName="styleDescription" placeholder="Describe your style"></ion-textarea>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-text style="padding-left: 3px !important;">Why do you want to become a stylist?</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="paded-lr">
+          <ion-textarea rows="5" padding-end maxLength="150" formControlName="stylistRationale" placeholder="Tell your reason why"></ion-textarea>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding">
+        <ion-col size="12">
+          <ion-button color="primary" mode="md" expand="block" [disabled]="!stylistApplicationFormStep2.valid" (click)="goToStep3()">{{ 'Next' | uppercase }}</ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-col>
+</ion-content>

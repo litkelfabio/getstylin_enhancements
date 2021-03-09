@@ -1,0 +1,66 @@
+<ion-content class="ion-no-padding">
+  <ion-row class="ion-padding">
+    <ion-col class="ion-text-center">
+      <img class='img-logo' [src]='img' />
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col class="ion-text-center">
+      <ion-text class="ion-text-center title-text"><b>{{ title }}</b></ion-text>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-padding-horizontal">
+    <ion-col class="ion-text-center">
+      <ion-text class="ion-text-center ion-padding-horizontal">{{ body }}</ion-text>
+    </ion-col>
+  </ion-row>
+  <div class='actions-home'>
+    <ion-row class="ion-padding-vertical" *ngIf='index != 3'>
+      <ng-container >
+        <ion-col class="ion-text-center">
+         
+            <!-- <ion-col class="ion-text-end"> -->
+              <!-- <ion-text class='action-skip ion-no-padding' (click)='skip()'>Skip</ion-text >  -->
+                <ion-button  class='action ion-no-padding' (click)='skip()' fill="clear">Skip</ion-button>
+            <!-- </ion-col> -->
+            
+            <img class='circle' src="{{ index == 0 ? 'assets/imgs/tutorials/ellipse-active.png' : 'assets/imgs/tutorials/ellipse.png' }}">
+            <img class='circle' src="{{ index == 1 ? 'assets/imgs/tutorials/ellipse-active.png' : 'assets/imgs/tutorials/ellipse.png' }}">
+            <img class='circle' src="{{ index == 2 ? 'assets/imgs/tutorials/ellipse-active.png' : 'assets/imgs/tutorials/ellipse.png' }}">
+            <img class='circle-end' src="{{ index == 3 ? 'assets/imgs/tutorials/ellipse-active.png' : 'assets/imgs/tutorials/ellipse.png' }}">
+            
+            <!-- <ion-col class="ion-text-start"> -->
+              <!-- <ion-text class='action-next' color="primary" (click)='next()'>Next</ion-text > -->
+                <ion-button class='action ion-no-padding' fill="clear" (click)='next()' >Next</ion-button>
+            <!-- </ion-col> -->
+          </ion-col>
+      </ng-container>
+    </ion-row>
+    <ng-container *ngIf='index == 3'>
+     <ion-row class="ion-padding-bottom">
+      <ion-col class="ion-text-center">
+        <ion-button (click)='skip()'>GET STARTED</ion-button>
+       </ion-col>
+     </ion-row>
+    </ng-container>
+  </div>
+  </ion-content>
+
+<!-- <ion-content class="ion-padding">
+  <img class='img-logo' [src]='img' />
+  <h1 class="ion-text-center">{{ title }}</h1>
+  <h4 class="ion-text-center" >{{ body }}</h4>
+  <div class='actions-home'>
+    <ng-container *ngIf='index != 3'>
+      <h3 class='action-skip' (tap)='skip()'>Skip</h3> 
+      <img class='circle' src="{{ index == 0 ? 'assets/imgs/tutorials/ellipse-active.png' : 'assets/imgs/tutorials/ellipse.png' }}">
+      <img class='circle' src="{{ index == 1 ? 'assets/imgs/tutorials/ellipse-active.png' : 'assets/imgs/tutorials/ellipse.png' }}">
+      <img class='circle' src="{{ index == 2 ? 'assets/imgs/tutorials/ellipse-active.png' : 'assets/imgs/tutorials/ellipse.png' }}">
+      <img class='circle-end' src="{{ index == 3 ? 'assets/imgs/tutorials/ellipse-active.png' : 'assets/imgs/tutorials/ellipse.png' }}">
+      <h3 class='action-next' (tap)='next()'>Next</h3>
+    </ng-container>
+    <ng-container *ngIf='index == 3'>
+      <ion-button (tap)='skip()'>GET STARTED</ion-button>
+    </ng-container>
+  </div>
+</ion-content> -->

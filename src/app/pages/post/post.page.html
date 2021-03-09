@@ -1,0 +1,391 @@
+<ion-header class="ion-no-border ion-padding ">
+  <ion-toolbar>
+    <ion-title class="ion-no-padding">{{ (isEditPost == 1 ? 'post' : 'edit post') | uppercase}}</ion-title>
+    <ion-icon slot="start" src="assets/css/icon/back.svg" (click)="cancelEdit()"></ion-icon>
+    <ion-button class="ion-no-padding" fill='clear' (click)="pushPost()" size="small" [disabled]='!postForm.valid'
+      style="float: right !important;">
+      <ion-icon slot="icon-only" src="assets/css/icon/send.svg" style="font-size: 18px;"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-no-padding">
+  <form [formGroup]="postForm" *ngIf="postForm">
+    <ng-container *ngIf="!video">
+      <ion-row>
+        <ion-col size="12" style="display: flex; justify-content: space-between;">
+          <ng-container>
+            <ion-col size="3" class="ion-no-padding">
+              <ion-button size="large" fill="clear" (click)="select('crop')" class="ion-no-padding">
+                <ion-row class="ion-no-padding">
+                  <ng-container *ngIf="selected == 'crop'">
+                    <ion-col size="12" class="ion-no-padding">
+                      <ion-icon src="assets/css/icon/active-adjust.svg"></ion-icon>
+                    </ion-col>
+                    <ion-col size="12" class="text-button">
+                      <ion-text color='primary'>Adjust</ion-text>
+                    </ion-col>
+                  </ng-container>
+                  <ng-container *ngIf="selected != 'crop'">
+                    <ion-col size="12" class="ion-no-padding">
+                      <ion-icon src="assets/css/icon/adjust-icon.svg"></ion-icon>
+                    </ion-col>
+                    <ion-col size="12" class="text-button">
+                      <ion-text color='dark'>Adjust</ion-text>
+                    </ion-col>
+                  </ng-container>
+                </ion-row>
+              </ion-button>
+            </ion-col>
+            <ion-col size="3" class="ion-no-padding">
+              <!-- <ion-button fill="clear" (click)="select('brightness')">
+                <ion-icon src="assets/css/icon/brightness.svg"></ion-icon>
+              </ion-button> -->
+              <ion-button size="large" fill="clear" (click)="select('brightness')" class="ion-no-padding">
+                <ion-row class="ion-no-padding">
+                  <ng-container *ngIf="selected == 'brightness'">
+                    <ion-col size="12" class="ion-no-padding">
+                      <ion-icon src="assets/css/icon/bright-active.svg"></ion-icon>
+                    </ion-col>
+                    <ion-col size="12" class="text-button">
+                      <ion-text color='primary'>Brightness</ion-text>
+                    </ion-col>
+                  </ng-container>
+                  <ng-container *ngIf="selected != 'brightness'">
+                    <ion-col size="12" class="ion-no-padding">
+                      <ion-icon src="assets/css/icon/brightness.svg"></ion-icon>
+                    </ion-col>
+                    <ion-col size="12" class="text-button">
+                      <ion-text color='dark'>Brightness</ion-text>
+                    </ion-col>
+                  </ng-container>
+                </ion-row>
+              </ion-button>
+            </ion-col>
+            <ion-col size="3" class="ion-no-padding">
+              <!-- <ion-button fill="clear" (click)="select('contrast')">
+                <ion-icon src="assets/css/icon/contrast.svg"></ion-icon>
+              </ion-button> -->
+              <ion-button size="large" fill="clear" (click)="select('contrast')" class="ion-no-padding">
+                <ng-container *ngIf="selected == 'contrast'">
+                  <ion-row class="ion-no-padding">
+                    <ion-col size="12" class="ion-no-padding">
+                      <ion-icon src="assets/css/icon/contrast-active.svg"></ion-icon>
+                    </ion-col>
+                    <ion-col size="12" class="text-button">
+                      <ion-text color='primary'>Contrast</ion-text>
+                    </ion-col>
+                  </ion-row>
+                </ng-container>
+                <ng-container *ngIf="selected != 'contrast'">
+                  <ion-row class="ion-no-padding">
+                    <ion-col size="12" class="ion-no-padding">
+                      <ion-icon src="assets/css/icon/contrast.svg"></ion-icon>
+                    </ion-col>
+                    <ion-col size="12" class="text-button">
+                      <ion-text color='dark'>Contrast</ion-text>
+                    </ion-col>
+                  </ion-row>
+                </ng-container>
+              </ion-button>
+            </ion-col>
+            <ion-col size="3" class="ion-no-padding">
+              <!-- <ion-button fill="clear" (click)="select('saturation')">
+                <ion-icon src="assets/css/icon/saturation.svg"></ion-icon>
+              </ion-button> -->
+              <ion-button size="large" fill="clear" (click)="select('saturation')" class="ion-no-padding">
+                <ng-container *ngIf="selected == 'saturation'">
+                  <ion-row>
+                    <ion-col size="12" class="ion-no-padding">
+                      <ion-icon src="assets/css/icon/saturation-active.svg"></ion-icon>
+                    </ion-col>
+                    <ion-col size="12" class="text-button">
+                      <ion-text color='primary'>Saturation</ion-text>
+                    </ion-col>
+                  </ion-row>
+                </ng-container>
+                <ng-container *ngIf="selected != 'saturation'">
+                  <ion-row>
+                    <ion-col size="12" class="ion-no-padding">
+                      <ion-icon src="assets/css/icon/saturation.svg"></ion-icon>
+                    </ion-col>
+                    <ion-col size="12" class="text-button">
+                      <ion-text color='dark'>Saturation</ion-text>
+                    </ion-col>
+                  </ion-row>
+                </ng-container>
+              </ion-button>
+            </ion-col>
+          </ng-container>
+        </ion-col>
+      </ion-row>
+      <ng-container *ngIf="selected == 'crop'">
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <ion-col col-4 class="cropSpacing">
+              <ng-container *ngIf="cropSelected == 0">
+                <ion-chip button [ngClass]="{'active' : cropSelected == 0}" style="background-color: #b3a25d;"
+                  (click)="crop(0)">
+                  <ion-label color="light">{{ "Original" }}</ion-label>
+                </ion-chip>
+              </ng-container>
+              <ng-container *ngIf="cropSelected != 0">
+                <ion-chip button [ngClass]="{'active' : cropSelected == 0}" (click)="crop(0)" outline
+                  style="border-color: #b3a25d;">
+                  <ion-label>{{ "Original" }}</ion-label>
+                </ion-chip>
+              </ng-container>
+            </ion-col>
+            <ion-col col-3 offset-0>
+              <ng-container *ngIf="cropSelected == 1">
+                <ion-chip button [ngClass]="{'active' : cropSelected == 1}" (click)="crop(1)" outline
+                  style="background-color: #b3a25d;border-color: #b3a25d;">
+                  <ion-label color="light">{{ "2 : 3" }}</ion-label>
+                </ion-chip>
+              </ng-container>
+              <ng-container *ngIf="cropSelected != 1">
+                <ion-chip button [ngClass]="{'active' : cropSelected == 1}" (click)="crop(1)" outline
+                  style="border-color: #b3a25d;">
+                  <ion-label>{{ "2 : 3" }}</ion-label>
+                </ion-chip>
+              </ng-container>
+            </ion-col>
+            <ion-col col-3 offset-0>
+              <ng-container *ngIf="cropSelected == 2">
+                <ion-chip button [ngClass]="{'active' : cropSelected == 2}" outline (click)="crop(2)"
+                  style="background-color: #b3a25d;border-color: #b3a25d;">
+                  <ion-label color="light">{{ "1 : 1" }}</ion-label>
+                </ion-chip>
+              </ng-container>
+              <ng-container *ngIf="cropSelected != 2">
+                <ion-chip button [ngClass]="{'active' : cropSelected == 2}" outline (click)="crop(2)"
+                  style="border-color: #b3a25d;">
+                  <ion-label>{{ "1 : 1" }}</ion-label>
+                </ion-chip>
+              </ng-container>
+            </ion-col>
+            <!-- <ion-text class="vertical-line" color="medium" style="font-size: 30px !important;">|</ion-text>
+                <ion-col class="pTopAdjust">
+                  <ion-icon class="rotate-icon" src="assets/css/icon/new-rotate-icon.svg" (click)="rotateImage()"></ion-icon>
+                </ion-col> -->
+          </ion-col>
+        </ion-row>
+      </ng-container>
+      <ng-container *ngIf="selected == 'brightness'">
+        <ion-row class="ion-padding-top">
+          <ion-col class="ion-text-center" size="12">
+            <ion-row>
+              <ion-col size="1">
+                <ion-icon style="padding-top: 9px !important;" src="assets/css/icon/brightness.svg"></ion-icon>
+              </ion-col>
+              <ion-col size="10" class="ion-no-padding">
+                <!-- {{ pixiBrightness }} -->
+                <ion-range class="ion-no-padding" min="-80" max="80" pin="true"
+                  (ionChange)="changeBrightness($event.target.value)" [value]="pixiBrightness"></ion-range>
+              </ion-col>
+              <ion-col size="1">
+                <ion-icon style="padding-top: 9px !important;" src="assets/css/icon/brightness.svg" style="zoom: 1.5;">
+                </ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+      <ng-container *ngIf="selected == 'contrast'">
+        <!-- <ion-range min="-80" max="80" pin="true" (ionChange)="changeContrast($event)" [value]="pixiContrast"></ion-range> -->
+        <ion-row class="ion-padding-top">
+          <ion-col class="ion-text-center" size="12">
+            <ion-row>
+              <ion-col size="1">
+                <ion-icon style="padding-top: 9px !important;" src="assets/css/icon/contrast.svg"></ion-icon>
+              </ion-col>
+              <ion-col size="10" class="ion-no-padding">
+                <!-- {{ pixiContrast }} -->
+                <ion-range class="ion-no-padding" min="-80" max="80" pin="true"
+                  (ionChange)="changeContrast($event.target.value)" [value]="pixiContrast"></ion-range>
+              </ion-col>
+              <ion-col size="1">
+                <ion-icon style="padding-top: 9px !important;" src="assets/css/icon/contrast.svg" style="zoom: 1.5;">
+                </ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+      <ng-container *ngIf="selected == 'saturation'">
+        <!-- <ion-range min="-80" max="80" pin="true" (ionChange)="changeSaturation($event)" [value]="pixiSaturation"></ion-range> -->
+        <ion-row class="ion-padding-top">
+          <ion-col class="ion-text-center" size="12">
+            <ion-row>
+              <ion-col size="1">
+                <ion-icon style="padding-top: 9px !important;" src="assets/css/icon/saturation.svg"></ion-icon>
+              </ion-col>
+              <ion-col size="10" class="ion-no-padding">
+                <!-- {{ pixiSaturation }} -->
+                <ion-range class="ion-no-padding" min="-80" max="80" pin="true"
+                  (ionChange)="changeSaturation($event.target.value)" [value]="pixiSaturation"></ion-range>
+              </ion-col>
+              <ion-col size="1">
+                <ion-icon style="padding-top: 9px !important;" src="assets/css/icon/saturation.svg" style="zoom: 1.5;">
+                </ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!video">
+      <!--For Single Photo  -->
+      <ion-row *ngIf="!isMultiple">
+        <ion-col class="ion-text-center">
+          <img #thisImage [src]="imgbase64"
+            [ngStyle]="{ 'filter': 'brightness('+((pixiBrightness+100)/100)+') contrast('+((pixiContrast+100)/100)+') saturate('+((pixiSaturation+100)/100)+')' }">
+        </ion-col>
+      </ion-row>
+
+      <ng-container *ngIf="isMultiple">
+        <!-- For Multiple photo Not sliding -->
+        <!-- <ion-row>
+            <ion-col class="ion-text-center">
+              <ion-item *ngFor="let img of imgbase64">
+                <img #thisImage [src]="img" [ngStyle]="{ 'filter': 'brightness('+((pixiBrightness+100)/100)+') contrast('+((pixiContrast+100)/100)+') saturate('+((pixiSaturation+100)/100)+')' }">
+              </ion-item>
+            </ion-col>
+          </ion-row> -->
+
+        <!-- For multiple sliding -->
+        <ion-row style="position: relative;">
+          <div class="index-indicator">
+            <ion-text class="index">{{slidePage}} / {{imgbase64.length}}</ion-text>
+          </div>
+        </ion-row>
+        <ion-slides #slides pager="true" [options]="slideOpts" style="position: relative;"
+          (ionSlideDidChange)="ionSlideDidChange($event)" class="ion-padding-bottom ion-padding-horizontal">
+          <ion-slide *ngFor="let img of imgbase64; let i = index">
+            <img (click)="viewPhoto(img.img)" #thisImage [src]="img.img"
+              [ngStyle]="{ 'filter': 'brightness('+((img.pixiBrightness+100)/100)+') contrast('+((pixiContrast+100)/100)+') saturate('+((pixiSaturation+100)/100)+')' }"
+              style="height: 280px;">
+          </ion-slide>
+        </ion-slides>
+
+        <!-- For multiple With masonry -->
+        <!-- <ngx-masonry [options]="{ gutter: 10 }" [ordered]="true">
+            <div class="grid-sizer grid-item" *ngFor="let img of imgbase64">
+              <img #thisImage [src]="img" [ngStyle]="{ 'filter': 'brightness('+((pixiBrightness+100)/100)+') contrast('+((pixiContrast+100)/100)+') saturate('+((pixiSaturation+100)/100)+')' }">
+            </div>
+          </ngx-masonry> -->
+      </ng-container>
+
+    </ng-container>
+
+    <ng-container *ngIf="videoURL">
+      <input type="button" style="display: none;" (click)="click()" #test>
+      <div class="c-video" >
+        <video #myvideo class="video-file" (timeupdate)="setCurrentTime($event)"  (click)="showButtons()"></video>
+        <ion-button class="button-play-pause" (click)="playPause()" [ngClass]="{'hide-buttons': !showButton}">
+          <ion-icon [name]="playing ? 'pause' : 'play'" ></ion-icon>
+        </ion-button>
+        <div style="transform: translateY(-100%);">
+          <ion-range #duration max="100" min="0" style="--knob-size: 20px !important; --bar-background:lightgray !important;" (ionFocus)="setCurrentTimeForce($event)"></ion-range>
+        </div>
+      </div>
+     
+    </ng-container>
+
+    <ng-container>
+      <ion-list>
+        <ion-item lines="full">
+          <ion-icon src="assets/css/icon/caption.svg" class="ion-padding-top"></ion-icon>
+          <ion-textarea class="ion-no-padding" maxLength="500" placeholder="Say something about this post"
+            formControlName="description"></ion-textarea>
+          <ng-container *ngIf="postForm.controls.description.touched">
+            <ion-row>
+              <ion-col col-11 offset-1>
+                <ion-text no-margin class="try" color="danger"
+                  *ngIf="postForm.controls.description.hasError('required')">This field is required.</ion-text>
+              </ion-col>
+            </ion-row>
+          </ng-container>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-icon src="assets/css/icon/privacy-icon-2.svg"></ion-icon>
+          <ion-select #selectPrivacy class="select" size="12" placeholder="Select One" formControlName="isPrivate"
+            value="{{privacy}}" mode="md">
+            <ion-select-option value="0">Public</ion-select-option>
+            <ion-select-option value="2">Connections Only</ion-select-option>
+            <ion-select-option value="1">Only Me</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+  </form>
+  <ng-container *ngIf="isAndroid">
+    <ion-list>
+      <ion-item lines="full">
+        <ion-icon src="assets/css/icon/hashtag.svg" slot="start"></ion-icon>
+        <tag-input [(ngModel)]="tag" [editable]='true' placeholder="Add tags to this post" #tagInput
+          secondaryPlaceholder="Add tags to this post" mode="ios" (onTextChange)="seperatorKeys($event)"></tag-input>
+      </ion-item>
+      <ion-text class="ion-padding" *ngIf="activeTags" style="font-weight: 100 !important;">Use space, comma or enter
+        button to enter tags</ion-text>
+    </ion-list>
+  </ng-container>
+  <ng-container *ngIf="!isAndroid">
+    <ion-list>
+      <ion-item lines="full">
+        <ion-icon src="assets/css/icon/hashtag.svg" slot="start"></ion-icon>
+        <tag-input [(ngModel)]="tag" [editable]='true' placeholder="Add more tags to this post" #tagInput
+          secondaryPlaceholder="Add tags to this post" [allowDupes]="false" mode="ios"
+          (onTextChange)="seperatorKeys($event)"></tag-input>
+      </ion-item>
+      <ion-text class="ion-padding" *ngIf="activeTags" style="font-weight: 100 !important;">Use space, comma or enter
+        button to enter tags</ion-text>
+    </ion-list>
+    <!-- <ion-list>
+        <ion-item lines="full">
+          <ion-icon src="assets/css/icon/hashtag.svg" slot="start"></ion-icon>
+          <ion-chip class="chips-tag">
+            <ion-label >Icon Chip</ion-label>
+            <ion-icon name="close"></ion-icon>
+          </ion-chip>
+        </ion-item>
+      </ion-list> -->
+  </ng-container>
+  <ion-card style="margin: 0px !important; padding: 0px 10px !important;" id="autocompleteTags">
+    <ion-list>
+      <ion-item *ngFor="let tags of suggestTags" (click)="submitTag(tags.tags)" style="width: 95% !important;">
+        <ion-text style="font-family:'Raleway' !important">{{tags.tags.replace('#','')}}</ion-text>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+  <form [formGroup]="postForm" *ngIf="postForm">
+    <ng-container>
+      <ion-list>
+        <!-- <ng-container *ngIf="autocompleteItems && autocompleteItems.length < 1"> -->
+        <ion-item lines="full">
+          <ion-icon src="assets/css/icon/geo.svg"></ion-icon>
+          <ion-input placeholder="Add location" formControlName="location" (input)='getValue($event.target.value)'
+            #searchInput (ionFocus)="clearFocus()" (ionBlur)="blurFunction($event)"></ion-input>
+        </ion-item>
+        <!-- </ng-container>
+            <ng-container *ngIf="autocompleteItems && autocompleteItems.length > 0">
+              <ion-item lines="full" style="margin-bottom: 100px !important;">
+                <ion-icon src="assets/css/icon/geo.svg" ></ion-icon>
+                <ion-input placeholder="Add location" formControlName="location" (input)='getValue($event.target.value)' #searchInput (ionFocus)="clearFocus()" (ionBlur)="blurFunction($event)"></ion-input>
+              </ion-item>
+            </ng-container> -->
+      </ion-list>
+    </ng-container>
+
+    <ng-container *ngIf="autocompleteItems && autocompleteItems.length > 0">
+      <!-- <ion-item no-padding class="auto-complete-container"> -->
+      <ion-card class="ion-no-margin auto-complete-container" id="locations-card">
+        <ion-list lines="full" class="ion-no-padding">
+          <ion-item class="geo-item" *ngFor="let item of autocompleteItems" button (click)="geoCode(item)">{{ item }}
+          </ion-item>
+        </ion-list>
+      </ion-card>
+      <!-- </ion-item> -->
+    </ng-container>
+  </form>
+</ion-content>

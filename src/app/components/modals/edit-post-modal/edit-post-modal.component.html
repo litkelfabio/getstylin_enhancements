@@ -1,0 +1,84 @@
+<ion-content class="ion-no-padding" >
+  <ion-row class="ion-padding-horizontal" style="align-items: center;">
+    <ion-col size="12" class="ion-no-padding-bottom ion-padding-top">
+      <ng-container *ngIf="isMine">
+        <ion-item lines="none" (click)="goToEdit()" *ngIf="isMine">
+          <ion-text >Edit</ion-text>
+        </ion-item>
+        <ion-item lines="none" (click)="delete(item)" *ngIf="isMine">
+          <ion-text >Delete</ion-text>
+        </ion-item>
+        <ion-item lines="none" (click)="savePost(item)"  *ngIf="item ">
+          <ion-icon src="assets/css/icon/favorites.svg" *ngIf="item.isSaved" slot="end" style="zoom: 0.8;"></ion-icon>
+          <ion-icon src="assets/css/icon/favorites-gold.svg" *ngIf="!item.isSaved" slot="end" style="zoom: 0.8;"></ion-icon>
+          <ion-text *ngIf="!item.isSaved">Save as Favorites</ion-text>
+          <ion-text *ngIf="item.isSaved">Unsave</ion-text>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>
+            <ion-text ion-text style='font-weight: 600;'>Privacy</ion-text>
+          </ion-label>
+        </ion-item>
+          <ion-item lines="none">
+            <ion-col size="12" class="ion-no-padding">
+              <ion-select class="select" size="12"  [(ngModel)]="post_privacy" (ionChange)='changePostPrivacy(item)' mode="md">
+                <ion-select-option value="0" mode="ios">Public</ion-select-option>
+                <ion-select-option value="2">Connections Only</ion-select-option>
+                <ion-select-option value="1">Only Me</ion-select-option>
+              </ion-select>
+            </ion-col>
+        </ion-item>
+      </ng-container>
+      <!-- <ion-item lines="none" (click)="savePost(item)"  *ngIf="item && !otherUser ">
+        <ion-icon src="assets/css/icon/favorites.svg" *ngIf="item.isSaved" slot="end" style="zoom: 0.8;"></ion-icon>
+        <ion-icon src="assets/css/icon/favorites-gold.svg" *ngIf="!item.isSaved" slot="end" style="zoom: 0.8;"></ion-icon>
+        <ion-text *ngIf="!item.isSaved">Save as Favorites</ion-text>
+        <ion-text *ngIf="item.isSaved">Unsave</ion-text>
+      </ion-item> -->
+      <ng-container *ngIf="!isMine">
+        <ion-item lines="none" (click)="savePost(item)"  *ngIf="item ">
+          <ion-icon src="assets/css/icon/favorites.svg" *ngIf="item.isSaved" slot="end" style="zoom: 0.8;"></ion-icon>
+          <ion-icon src="assets/css/icon/favorites-gold.svg" *ngIf="!item.isSaved" slot="end" style="zoom: 0.8;"></ion-icon>
+          <ion-text *ngIf="!item.isSaved">Save as Favorites</ion-text>
+          <ion-text *ngIf="item.isSaved">Unsave</ion-text>
+        </ion-item>
+        <ion-item lines="none" *ngIf="otherUser && otherUser.isFriend && otherUser.isFriend != 'unconnected'"  (click)="muteUser(otherUser)">
+          <ion-icon src="assets/css/icon/mute-icon.svg" slot="end" style="zoom: 0.8;" *ngIf="!otherUser.isMuted"></ion-icon>
+          <ion-icon src="assets/css/icon/muted-icon.svg" slot="end" style="zoom: 0.8;" *ngIf="otherUser.isMuted"></ion-icon>
+          <ion-text *ngIf="!otherUser.isMuted">Mute</ion-text>
+          <ion-text *ngIf="otherUser.isMuted">Unmute</ion-text>
+        </ion-item>
+        <ion-item lines="none" (click)="blockUser(otherUser)" *ngIf="!otherUser.isBlocked && otherUser.is_style_concierge != 1">
+          <ion-icon src="assets/css/icon/block-icon.svg" slot="end" style="zoom: 0.8;"></ion-icon>
+          <ion-text>Block</ion-text>
+        </ion-item>
+        <ion-item lines="none" (click)="blockUser(otherUser)" *ngIf="otherUser.isBlocked && otherUser.is_style_concierge != 1">
+          <ion-icon src="assets/css/icon/blocked-icon.svg" slot="end" style="zoom: 0.8;"></ion-icon>
+          <ion-text>Unblock</ion-text>
+        </ion-item>
+        <ion-item lines="none"  *ngIf="otherUser " (click)="reportPost(item)">
+          <ion-text>Report</ion-text>
+        </ion-item>
+      </ng-container>
+      <ion-item lines="none">
+        <ion-text>Share</ion-text>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-col size="3">
+          <ion-icon src="assets/css/icon/new-fb.svg" style="zoom: 2;" (click)="prepImage('facebook')"></ion-icon>
+        </ion-col>
+        <ion-col size="3">
+          <ion-icon src="assets/css/icon/new-ig.svg" style="zoom: 2;" (click)="prepImage('instagram')"></ion-icon>
+        </ion-col>
+        <ion-col size="3">
+          <ion-icon src="assets/css/icon/new-twitter.svg" style="zoom: 2;" (click)="prepImage('twitter')"></ion-icon>
+        </ion-col>
+        <ion-col size="3">
+          <ion-icon src="assets/css/icon/new-email.svg" style="zoom: 2;" (click)="prepImage('email')"></ion-icon>
+        </ion-col>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <img #thisImage *ngIf="item && item.photo" [src]="item.photo" style="display: none;" crossorigin="anonymous"/>
+<canvas #thisCanvas></canvas>
+</ion-content>

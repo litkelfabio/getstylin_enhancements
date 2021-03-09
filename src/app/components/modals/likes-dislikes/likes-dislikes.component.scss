@@ -1,0 +1,27 @@
+// ion-segment-button {
+//     --background-checked: var(--ion-color-success);
+//     --color-checked: var(--ion-color-success-contrast);
+//   }
+.user-text{
+  padding-top: 2px !important;
+  font-size: 15px !important;
+}
+.no-dislike{
+  font-family: 'Raleway' !important;
+}
+.spinner2{
+  background-color: gray !important;
+  border-radius: 50%;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  height: 52px;
+  width: 52px;
+  top: 0px;
+  left: 10px;
+} 
+.spinner-circle{
+  top: 10px;
+  left: 0px;
+}

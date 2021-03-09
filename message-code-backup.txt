@@ -1,0 +1,111 @@
+if (this.platform.is('pwa')) {
+    /*
+      Check if the emitted message is yours.
+      If yours, simply update the message data with the emitted one.
+      If not yours, push it to the message tree.
+    */
+    console.log("New message emitted (core/desktop/web): ", message);
+    // if (message["data"].user_id != this.convo["user2"]) {
+    //   this.messages.map((mess, index) => {
+    //     if (mess.temp_id == message["data"]["temp_id"]) {
+    //       this.messages[index] = message["data"];
+    //       this.events.publish('has-message');
+    //       this.storage.set('unread_conversations', this.message)
+    //     }
+    //   });
+
+    if (message['data']['temp_id']) {
+      this.messages.map((mess, index) => {
+        if (mess.temp_id == message['data']['temp_id']) {
+          this.messages[index] = message['data'];
+          this.events.publish('has-message');
+          this.storage.set('unread_conversations', this.message)
+        }
+      });
+
+      this.temp_id++;
+    } else {
+      if(!this.isProcessing) {
+        this.isProcessing = true;
+        this.messages.push(message["data"]);
+        setTimeout(() => {
+          this.isProcessing = false;
+        }, 500);
+      }
+    }
+  }
+  else if (this.platform.is('android') || this.platform.is('ios')) {
+    /*
+      If the message has a temp_id (signifying that it is marked as Sending i.e. you sent it)
+      then
+    */
+    console.log("New message emitted (mobile): ", message);
+    let hasSent = false;
+    if (message['data']['temp_id'] && this.user.id == message['data']['user_id']) {
+      this.messages.map((mess, index) => {
+        if (mess.temp_id == message['data']['temp_id']) {
+          this.messages[index] = message['data'];
+          hasSent = true;
+          this.events.publish('has-message');
+          this.storage.set('unread_conversations', this.message)
+        }
+      });
+
+      if(!hasSent) {
+        if(!this.isProcessing) {
+          this.isProcessing = true;
+          this.messages.push(message["data"]);
+          setTimeout(() => {
+            this.isProcessing = false;
+          },500);
+        }
+      }
+
+      this.temp_id++;
+    } else {
+      if(!this.isProcessing) {
+        this.isProcessing = true;
+        this.messages.push(message["data"]);
+        setTimeout(() => {
+          this.isProcessing = false;
+        }, 500);
+      }
+    }
+    this.events.publish('has-message');
+    console.log('Current message tree: ', this.messages);
+  } else {
+    console.log("New message emitted (other): ", message);
+    let hasSent = false;
+    if (message['data']['temp_id'] && this.user.id == message['data']['user_id']) {
+      this.messages.map((mess, index) => {
+        if (mess.temp_id == message['data']['temp_id'] && this.user.id == message['data']['user_id']) {
+          this.messages[index] = message['data'];
+          hasSent = true;
+          this.events.publish('has-message');
+          this.storage.set('unread_conversations', this.message)
+        }
+      });
+
+      if(!hasSent) {
+        if(!this.isProcessing) {
+          this.isProcessing = true;
+          this.messages.push(message["data"]);
+          setTimeout(() => {
+            this.isProcessing = false;
+          },500);
+        }
+      }
+
+      this.temp_id++;
+    } else {
+      if(!this.isProcessing) {
+        this.isProcessing = true;
+        this.messages.push(message["data"]);
+        setTimeout(() => {
+          this.isProcessing = false;
+        }, 500);
+      }
+    }
+    this.events.publish('has-message');
+    console.log('Current message tree: ', this.messages);
+  }

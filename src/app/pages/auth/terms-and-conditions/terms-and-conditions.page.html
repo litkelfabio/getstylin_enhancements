@@ -1,0 +1,21 @@
+<ion-header class="ion-padding ion-no-border">
+  <ion-toolbar >
+    <ion-title>TERMS AND CONDITIONS</ion-title>
+    <ion-buttons (click)="back()">
+      <ion-icon src="assets/css/icon/back.svg"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="!cmsContent">
+    <ion-row class="ion-padding-top">
+     <ion-col class="ion-text-center ion-padding-top">
+       <ion-spinner color="primary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </div> 
+  <ion-row>
+  <div *ngIf="cmsContent" [innerHTML]="cmsContent.content" class="terms"></div>
+ </ion-row>
+</ion-content>
