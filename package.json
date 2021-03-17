@@ -35,7 +35,7 @@
     "@ionic-native/file-path": "^5.28.0",
     "@ionic-native/file-transfer": "^5.29.0",
     "@ionic-native/google-plus": "^5.28.0",
-    "@ionic-native/image-picker": "^5.29.0",
+    "@ionic-native/image-picker": "^5.31.1",
     "@ionic-native/in-app-browser": "^5.29.0",
     "@ionic-native/instagram": "^5.28.0",
     "@ionic-native/ionic-webview": "^5.31.1",
@@ -173,9 +173,7 @@
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-filepath": {},
-      "cordova-plugin-telerik-imagepicker": {
-        "PHOTO_LIBRARY_USAGE_DESCRIPTION": " "
-      },
+      "cordova-plugin-telerik-imagepicker": {},
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-googleplus": {
         "REVERSED_ID_CLIENT": "51993057457-0bh4l5ehrqssnucbg6f8avm99masdvk4.apps.googleusercontent.com",

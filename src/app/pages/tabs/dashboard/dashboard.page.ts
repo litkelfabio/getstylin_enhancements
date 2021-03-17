@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewChildren, ElementRef, NgZone, AfterViewInit, QueryList, Renderer2 } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router'
-import { MenuController, NavController, IonRefresher, IonRouterOutlet, Platform, IonImg } from '@ionic/angular';
+import { MenuController, NavController, IonRefresher, IonRouterOutlet, Platform, IonImg, IonSlides } from '@ionic/angular';
 import { ModalController } from '@ionic/angular'
 import { EditPostModalComponent } from '../../../components/modals/edit-post-modal/edit-post-modal.component'
 import { PostDetailsComponent } from 'src/app/components/modals/post-details/post-details.component';
@@ -25,6 +25,10 @@ import { TutorialModalComponent } from 'src/app/components/modals/tutorial-modal
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit, AfterViewInit {
+  @ViewChild('slides') slides: IonSlides
+  slidePage = 1;
+
+
   @ViewChildren("likeButton") likeButton: any;
   @ViewChildren("dislikeButton") dislikeButton: any;
   @ViewChild('imageContainer') imageContainer: ElementRef;
@@ -55,11 +59,11 @@ export class DashboardPage implements OnInit, AfterViewInit {
   // Flag this as true when there are NEW notifications
   // then flag again as FALSE if the notifications page is opened.
   showNotificationBlip: boolean = false;
-  // img = "https://getstylin.com/public/deploy1599536530/images/lns/sb/L2ltYWdlcy91cGxvYWRzL3Byb2ZpbGVwaWMvMTQ3/type/toheight/height/500/allow_enlarge/0/1582504925_yw456vuwtejxiqxwok56.jpg";
   data = false;
   context: any = "";
   dontShow: any;
   time: any = 10;
+  tempFirstPhoto: any[];
   constructor(
     private events: EventsService,
     private router: Router,
@@ -470,6 +474,12 @@ export class DashboardPage implements OnInit, AfterViewInit {
           }
           // data.photo = this.componentsProvider.photoCompressDefault(data.photo);
           data.comments = [];
+          if(data.is_multiple){
+            this.tempFirstPhoto = [];
+            this.tempFirstPhoto['photo'] = data['photo'];
+            this.tempFirstPhoto['filter'] = data['filter'];
+            data.multiplePics.unshift(this.tempFirstPhoto)
+          }
 
           this.items.push(data);
         });
@@ -604,6 +614,7 @@ export class DashboardPage implements OnInit, AfterViewInit {
   }
 
   async gotoDetails(item) {
+    item.multiplePics.shift();
     // this.navCtrl.push(PostDetailsPage, {
     //   item: item
     // });
@@ -611,7 +622,11 @@ export class DashboardPage implements OnInit, AfterViewInit {
     let mine = item.userId == this.profileInfo['id'] ? true : false;
     if (mine === true) {
       let navigationExtras: NavigationExtras = {
-        state: { item: item }
+        state: {
+          item: item,
+          isMultiple: item.is_multiple ? item.is_multiple : null,
+          multiplePics: item.multiplePics ? item.multiplePics : null
+         }
       }
       // this.dataSource.changeData({item: item});
       this.navCtrl.navigateForward(['/post-detail'], navigationExtras)
@@ -631,7 +646,12 @@ export class DashboardPage implements OnInit, AfterViewInit {
     }
     else {
       let navigationExtras: NavigationExtras = {
-        state: { item: item, otherUser: item['userinfo'] }
+        state: { 
+          item: item,
+          otherUser: item['userinfo'],
+          isMultiple: item.is_multiple ? item.is_multiple : null,
+          multiplePics: item.multiplePics ? item.multiplePics : null
+        }
       }
       // this.dataSource.changeData({item: item, state: item['userinfo']});
       this.navCtrl.navigateForward(['/post-detail'], navigationExtras)
@@ -990,6 +1010,16 @@ export class DashboardPage implements OnInit, AfterViewInit {
     document
       .getElementById("feed")
       .scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+
+  ionSlideDidChange(e, index) {
+    this.slides.getActiveIndex().then(res => {
+      this.items[index].slidePage = res + 1;
+      console.log('res', res);
+      console.log('index', index);
+      console.log('item index', this.items[index].slidePage);
+    })
   }
 
 }

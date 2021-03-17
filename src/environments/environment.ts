@@ -13,16 +13,16 @@ export const environment = {
   // data_url_api : "https://",
   
   //LOCAL SERVER
-  // data_url : "http://getstyln.local/api",
-  // default_url : "http://getstyln.local",
-  // base_url: "http://",
-  // data_url_api : "http://",
+  data_url : "http://getstyln.local/api",
+  default_url : "http://getstyln.local",
+  base_url: "http://",
+  data_url_api : "http://",
 
    // DEV SERVER
-  data_url : "https://devs.getstylin.livewire365.com/api",
-  default_url : "https://devs.getstylin.livewire365.com/",
-  base_url: "https://",
-  data_url_api : "https://",
+  // data_url : "https://devs.getstylin.com/api",
+  // default_url : "https://devs.getstylin.com/",
+  // base_url: "https://",
+  // data_url_api : "https://",
 
 };
 

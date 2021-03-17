@@ -64,32 +64,8 @@
           <div class="img-container">
             <ion-img *ngIf="profileInfo.profile_profile_pic &&  !profileInfo.errorProfile" (ionError)="errorLoad(profileInfo)" (ionImgDidLoad)="isLoadedImg2(profileInfo)" #image class="img-dashboard" [src]="profileInfo.profile_profile_pic"  style="border-radius: 10px!important;"></ion-img>
             <ion-img *ngIf="!profileInfo.profile_profile_pic  || profileInfo.errorProfile"  style="border-radius: 10px!important;" src="/assets/css/imgs/empty-states/no-user-photo.png" style="border-radius: 10px!important;overflow: hidden;"></ion-img>
-            <!-- <div class="spinner" *ngIf="!profileInfo.isLoadedProfile"> -->
               <ion-spinner name="crescent" class="spinner-circle" *ngIf="!profileInfo.isLoadedProfile"></ion-spinner>
-              <!-- </div> -->
-          <!-- <img [src]="item.photo" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }" tappable (click)="gotoDetails(item)"/> -->
-          <!-- <ng-container *ngIf="!item.isLoaded">
-            <ion-spinner name="crescent"></ion-spinner>
-            <ion-skeleton-text animated style="width: 100%; height: 300px; border-radius: 10px;"></ion-skeleton-text>
-            <img src= "/assets/css/imgs/empty-states/fallback.svg">
-          </ng-container> -->
-          <!-- <ng-container *ngIf="profileInfo.profile_profile_pic">
-           <ngx-progressive-img-loader
-           [height]="'150px'"
-           [width]="'100%'"
-           [img]="profileInfo.profile_profile_pic"
-           [thumbnail]="profileInfo.profile_profile_pic"
-           [placeholderBgColor]="'grey'"
-           [preserveAspectRatio]="true"
-           class="borderImg">
-           </ngx-progressive-img-loader>
-          </ng-container> -->
-              <!-- <ng-container *ngIf="!profileInfo.profile_profile_pic">
-              <img src="assets/css/imgs/placeholder.png">
-              </ng-container> -->
-            <!-- </div> -->
           </div>
-           <!-- [fallbackImg]="'assets/css/imgs/empty-states/no-user-photo.png'" -->
          </ion-col>
       </ng-container>
       <ng-container *ngIf="!isLoaded">
@@ -113,41 +89,15 @@
             <ion-text class="name-text ion-no-padding"><strong>{{ profileInfo.first_name }} {{ profileInfo.last_name }}</strong></ion-text>
           </ion-row>
         </ng-container>
-        <!-- <ion-row (click)="gotoEditProfile()" *ngIf="!otherUser"> -->
-            <!-- <ion-button fill="none" (click)="gotoEditProfile()" [disabled]="!isLoaded" *ngIf="!otherUser"></ion-button> -->
-            <!-- <ion-icon src="assets/css/icon/edit.svg" slot="start" ></ion-icon>
-          <ion-text>Edit</ion-text> -->
           <ion-button class="ion-no-padding ion-no-margin info" fill="clear" size="small" [disabled]="!isLoaded" *ngIf="!otherUser">
             <ion-icon src="assets/css/icon/edit.svg" (click)="gotoEditProfile()"></ion-icon>
             <ion-text color="primary" class="edit-text ion-no-padding" (click)="gotoEditProfile()"> <strong>&nbsp;&nbsp;EDIT</strong></ion-text>
           </ion-button>
-        <!-- </ion-row> -->
-        <!-- <ion-row *ngIf="otherUserPoints && isLoaded" style="padding: 10px 0px 10px 0px !important;">
-          <ng-container *ngIf="otherUserPoints < 5000">
-            <ion-icon src="assets/css/icon/rising-star.svg" style="padding-right: 10px !important;zoom: 0.6;padding-top: 5px;"></ion-icon>
-          <ion-text class="points-text" color="primary"><strong>RISING STAR</strong></ion-text>
-          </ng-container>
-          <ng-container *ngIf="otherUserPoints > 4999 && otherUserPoints < 15000">
-            <ion-icon src="assets/css/icon/a-rising-star.svg" style="padding-right: 10px !important;zoom: 0.6;padding-top: 5px;"></ion-icon>
-          <ion-text class="points-text" color="primary" ><strong>SUPERSTAR</strong></ion-text>
-          </ng-container>
-          <ng-container *ngIf="otherUserPoints > 14999 && otherUserPoints < 20000">
-            <ion-icon src="assets/css/icon/icon-star.svg" style="padding-right: 10px !important;zoom: 0.6;padding-top: 5px;"></ion-icon>
-            <ion-text class="points-text" color="primary" ><strong>ICON</strong></ion-text>
-          </ng-container>
-          <ng-container *ngIf="otherUserPoints > 19999">
-            <ion-icon src="assets/css/icon/legend-star.svg" style="padding-right: 10px !important;zoom: 0.6;padding-top: 5px;"></ion-icon>
-            <ion-text class="points-text" color="primary"><strong>LEGEND</strong></ion-text>
-          </ng-container>
-        </ion-row> -->
         <ion-row *ngIf="profileInfo.profile_about  && !profileInfo.isBlocked && !profileInfo.blockedBy && isLoaded">
           <ion-col class="ion-text-start ion-no-padding info" *ngIf="profileInfo.profile_about && profileInfo.profile_about != 'null'">
             <ion-text class="info-text">{{ profileInfo.profile_about }}</ion-text>
           </ion-col>
         </ion-row>
-        <!-- <ion-row style="padding-top: 10px !important;" *ngIf="otherUserPoints && isLoaded">
-          <ion-icon src="assets/css/icon/style-points-gold.svg" style="padding-top: 3px !important;"></ion-icon><ion-text class="points-text" color="primary" style="padding-left: 10px !important"><strong>{{ otherUserPoints }} PT<ng-container *ngIf="otherUserPoints > 1">S</ng-container></strong></ion-text>
-        </ion-row> -->
         <ion-row *ngIf="!isLoaded">
           <ion-skeleton-text animated style="height: 15px; width: 150px;"></ion-skeleton-text>
         </ion-row>
@@ -288,6 +238,7 @@
          <ngx-masonry [options]="{ gutter: 10, fitWidth: false }" (itemsLoaded)='completeMasonry()' [ordered]="true">
            <div class="ion-no-padding" ngxMasonryItem class="grid-sizer grid-item" *ngFor="let item of items; let i = index">
              <img class="ion-no-padding" (click)="gotoDetails(item)" [src]="item.photo" style="border-radius: 10px !important;" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
+             <ion-icon name="albums-outline" *ngIf="item.is_multiple" class="multi-icon"></ion-icon>
            </div>
          </ngx-masonry>
         </ion-col>
@@ -299,6 +250,7 @@
          <ngx-masonry [options]="{ gutter: 10, fitWidth: false }" (itemsLoaded)='completeMasonry()' [ordered]="true">
            <div class="ion-no-padding" ngxMasonryItem class="grid-sizer grid-item" *ngFor="let item of items; let i = index">
              <img class="ion-no-padding" (click)="gotoDetails(item)" [src]="item.photo" style="border-radius: 10px !important;" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
+             <ion-icon name="albums-outline"  *ngIf="item.is_multiple" class="multi-icon"></ion-icon>
            </div>
          </ngx-masonry>
         </ion-col>

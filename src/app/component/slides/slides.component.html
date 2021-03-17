@@ -1,0 +1,14 @@
+<ion-row style="position: relative;">
+  <div class="index-indicator">
+    <ion-text class="index">{{activeIndex}} / {{item.multiplePics.length}}</ion-text>
+  </div>
+</ion-row>
+
+<ion-slides #slides pager="true" [options]="slideOpts" style="position: relative;"
+(ionSlideDidChange)="ionSlideDidChange($event)" class="ion-padding-bottom ion-padding-horizontal">
+  <ion-slide *ngFor="let pic of item.multiplePics; let j = index">
+    <ion-img #thisImage [src]="pic.photo"
+      [ngStyle]="{ 'filter': 'brightness('+pic.filter.brightness+100+') contrast('+pic.filter.contrast+100+') saturate('+pic.filter.saturation+100+')' }"
+      style="height: 280px;border-radius: 10px!important;"></ion-img>
+  </ion-slide>
+</ion-slides>

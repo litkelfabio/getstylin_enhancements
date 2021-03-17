@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { ModalController, AlertController, NavController, Platform, IonRefresher, IonImg, LoadingController } from '@ionic/angular'
+import { ModalController, AlertController, NavController, Platform, IonRefresher, IonImg, LoadingController, IonSlides } from '@ionic/angular'
 import { EditPostModalComponent } from '../../../components/modals/edit-post-modal/edit-post-modal.component'
 import { DatasourceService } from 'src/app/services/datasource/datasource.service';
 import { EventsService } from 'src/app/services/events.service';
@@ -21,6 +21,8 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./post-detail.page.scss'],
 })
 export class PostDetailPage implements OnInit, AfterViewInit {
+  @ViewChild('slides') slides: IonSlides
+  slidePage = 1;
   @ViewChild("refresherRef") refresherRef: IonRefresher;
   @ViewChild('imageContainer') imageContainer: ElementRef;
   @ViewChild('imahe') imahe: ElementRef;
@@ -74,6 +76,13 @@ export class PostDetailPage implements OnInit, AfterViewInit {
   data: any;
   isLoadedImgComment = false;
   subscription: any;
+  isMultiple;
+  multiplePics;
+  slideOpts = {
+    initialSlide: 0,
+    speed: 200,
+    slidesPerView: 1,
+  };
   constructor(
     private modalCtrl: ModalController,
     private dataSource: DatasourceService,
@@ -133,6 +142,16 @@ export class PostDetailPage implements OnInit, AfterViewInit {
         this.data = this.router.getCurrentNavigation().extras.state.data;
         this.postId = this.router.getCurrentNavigation().extras.state.postId;
         this.error = this.router.getCurrentNavigation().extras.state.error;
+        this.isMultiple = this.router.getCurrentNavigation().extras.state.isMultiple ? true : false;
+        this.multiplePics = this.router.getCurrentNavigation().extras.state.multiplePics ? this.router.getCurrentNavigation().extras.state.multiplePics : null;
+        if(this.multiplePics){
+          let tempFirstPhoto = [];
+          tempFirstPhoto['photo'] = this.item['photo'];
+          tempFirstPhoto['filter'] = this.item['filter'];
+          this.multiplePics.unshift(tempFirstPhoto);
+        }
+        console.log(this.isMultiple);
+        console.log(this.multiplePics);
         console.log('Is from edit? ', this.fromPost);
         console.log('data? ', this.data);
         console.log('context? ', this.context);
@@ -1635,5 +1654,12 @@ export class PostDetailPage implements OnInit, AfterViewInit {
   }
   isLoadedCommentImg(comment) {
     comment.isLoadedCommentImg = true;
+  }
+
+
+  ionSlideDidChange(e) {
+    this.slides.getActiveIndex().then(res => {
+      this.slidePage = res + 1;
+    })
   }
 }

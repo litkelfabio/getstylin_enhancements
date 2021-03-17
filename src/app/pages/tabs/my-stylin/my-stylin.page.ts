@@ -969,25 +969,28 @@ export class MyStylinPage implements OnInit {
   }
   async gotoDetails(item) {
     let otherUser = this.userState
-    // this.navCtrl.push(PostDetailsPage, {
-    //   item: item
-    // });
-    // let postDetailModal;
     if (this.otherUser) {
       let navigationExtras: NavigationExtras = {
-        state: {item: item, otherUser: otherUser, state: this.userState}
+        state: {
+          item: item, 
+          otherUser: otherUser, 
+          state: this.userState,
+          isMultiple: item.is_multiple ? item.is_multiple : null,
+          multiplePics: item.multiplePics ? item.multiplePics : null
+        }
       };
       this.navCtrl.navigateForward(['/post-detail'],navigationExtras);
-      // postDetailModal = this.modalCtrl.create(PostDetailsPage, {item: item, otheruser: this.otherUser, state: this.userState});
     }
     else {
       let navigationExtras: NavigationExtras = {
-        state: {item: item}
+        state: {
+          item: item,
+          isMultiple: item.is_multiple ? item.is_multiple : null,
+          multiplePics: item.multiplePics ? item.multiplePics : null
+        }
       };
-      // postDetailModal = this.modalCtrl.create(PostDetailsPage, {item: item});
       this.navCtrl.navigateForward(['/post-detail'],navigationExtras);
     }
-    // postDetailModal.present();
   }
   gotoEditProfile(){
     this.navCtrl.navigateForward('/edit-profile');

@@ -22,6 +22,7 @@
   
   <div  id="feed">
     <ng-container *ngIf="isLoaded && items.length > 0">
+
       <ng-container *ngFor="let item of items; let i = index" class="ion-no-padding">
          <ion-row class="ion-no-padding">
            <ion-col size="12" class="ion-no-padding ion-padding-bottom">
@@ -31,12 +32,9 @@
                   <ion-img #image [src]="item.userinfo.profile_profile_pic" (ionImgDidLoad)="isLoadedImg2(item)" (ionError)="errorLoadAvatar(item)" *ngIf="item.userinfo.profile_profile_pic &&!item.errorImage"></ion-img>
                   <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="item.errorImage" ></ion-img>
                   <ion-img src="/assets/css/imgs/empty-states/no-user-photo.png" *ngIf="item && !item.userinfo.profile_profile_pic" ></ion-img>
-                  
                   <div *ngIf="!item.isLoadedProfile" class="spinner2">
                     <ion-spinner  name="crescent" class="spinner-circle"></ion-spinner>
                   </div>
-                  <!-- <img-loader backgroundSize="cover"  *ngIf="item && item.userinfo.profile_profile_pic" src="{{ item.userinfo.profile_profile_pic }}" fallbackUrl="assets/css/imgs/empty-states/no-user-photo.png" [fallbackAsPlaceholder]="true"></img-loader>
-                   <img *ngIf="item && !item.userinfo.profile_profile_pic" src="assets/css/imgs/empty-states/no-user-photo.png"/> -->
                  </ion-avatar>
                </ion-col>
                <ion-col size="8" (click)="goToProfile(item.userinfo)">
@@ -54,34 +52,32 @@
              </ion-row>
              <ion-row (click)="gotoDetails(item)">
                <ion-col size="12" >
-                 <!-- <ng-container *ngIf="isAndroid">
-                  <div [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
-                    <ngx-progressive-img-loader #thisImage
-                      [height]="'auto'"
-                      [width]="'100%'"
-                      [img]="item.photo"
-                      [thumbnail]="item.photo"
-                      [preserveAspectRatio]="true"
-                      class="borderImg"
-                      (imageLoaded)="onImgLoad($event, item)"
-                      [fallbackImg]="'/assets/css/imgs/empty-states/fallback.svg'">
-                    </ngx-progressive-img-loader>
-                    <ng-container *ngIf="!item.isLoaded">
-                      <img src= "/assets/css/imgs/empty-states/fallback.svg">
-                    </ng-container>
-                 </div>
-                 </ng-container>
-                  <ng-container *ngIf="!isAndroid"> -->
-                    <div class="photo-container" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
+                    <div *ngIf="!item.is_multiple" class="photo-container" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
                       <ion-img #image class="img-dashboard" [src]="item.photo" (ionImgDidLoad)="isLoadedImg(item)" (ionError)="errorLoad()" style="border-radius: 10px!important;"></ion-img>
-                      <!-- <img [src]="item.photo" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }" tappable (click)="gotoDetails(item)"/> -->
                       <ng-container *ngIf="!item.isLoaded">
                         <ion-spinner name="crescent" class="spinner"></ion-spinner>
-                        <!-- <ion-skeleton-text animated style="width: 100%; height: 300px; border-radius: 10px;"></ion-skeleton-text> -->
-                        <!-- <img src= "/assets/css/imgs/empty-states/fallback.svg"> -->
                       </ng-container>
                     </div>
-                  <!-- </ng-container> -->
+
+
+                    <div *ngIf="item.is_multiple">
+                      <app-slides [item]="item"></app-slides>
+                      <!-- <ion-row style="position: relative;">
+                        <div class="index-indicator">
+                          <ion-text class="index">{{item.slidePage}} / {{item.multiplePics.length}}</ion-text>
+                        </div>
+                      </ion-row>
+
+                      <ion-slides #slides pager="true" [options]="slideOpts" style="position: relative;"
+                      (ionSlideDidChange)="ionSlideDidChange($event, i)" class="ion-padding-bottom ion-padding-horizontal">
+                        <ion-slide *ngFor="let pic of item.multiplePics; let j = index">
+                          <ion-img #thisImage [src]="pic.photo"
+                            [ngStyle]="{ 'filter': 'brightness('+pic.filter.brightness+100+') contrast('+pic.filter.contrast+100+') saturate('+pic.filter.saturation+100+')' }"
+                            style="height: 280px;border-radius: 10px!important;"></ion-img>
+                        </ion-slide>
+                      </ion-slides> -->
+
+                    </div>
                  
                </ion-col>
              </ion-row>

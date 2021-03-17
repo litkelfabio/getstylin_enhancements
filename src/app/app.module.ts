@@ -182,7 +182,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
     AppVersion,
     Adjust,
     MediaCapture,
-    AndroidPermissions
+    AndroidPermissions,
    // BarcodeScanner
   ],
   bootstrap: [AppComponent]

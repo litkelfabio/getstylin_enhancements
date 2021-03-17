@@ -21,6 +21,7 @@ import * as imageResizeCompress from 'image-resize-compress';
 import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions } from '@ionic-native/media-capture/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
+
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.page.html',
@@ -36,7 +37,7 @@ export class TabsPage implements OnInit {
   myStylinIcon: any;
   uploadIcon: any;
   rewardsIcon: any;
-  discoverIcon 
+  discoverIcon
   icon: any;
   tabsColor: any;
   items = [];
@@ -80,7 +81,7 @@ export class TabsPage implements OnInit {
     private storage: Storage,
     private chatService: ChatService,
     private userProvider: UserService,
-    private alertCtrl : AlertController,
+    private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     private mediaCapture: MediaCapture,
     private androidPermissions: AndroidPermissions,
@@ -95,16 +96,16 @@ export class TabsPage implements OnInit {
     this.uploadIcon = "assets/css/icon/upload.svg";
     this.rewardsIcon = "assets/css/icon/rewards2.svg";
     this.discoverIcon = "assets/css/icon/discover.svg";
-    
+
   }
 
   ngOnInit() {
-    
-    this.events.subscribe('refresh-tab' , () =>{
+
+    this.events.subscribe('refresh-tab', () => {
       console.log("refresh tab")
     });
     this.events.subscribe("init-socket", () => {
-      this.storage.get('user').then( user =>{
+      this.storage.get('user').then(user => {
         this.chatService.initChatSocket(user.id);
       })
     });
@@ -176,7 +177,7 @@ export class TabsPage implements OnInit {
         console.log('Error updating stylist status: ', ex);
       });
     });
-    
+
     this.componentsProvider.changeStatusBarColor("#FFFFFF");
     this.getnotifnotifaction();
   }
@@ -185,7 +186,7 @@ export class TabsPage implements OnInit {
     this.userProvider.getNotificationSettings('getnotifsettings').then(response => {
       if (response['error'] == 0) {
         console.log('getnotifsettings ', response);
-        if(response['postNotif'] == 1 || response['muteAll'] == 1 || response['styleColumnNotif'] == 1 ) {
+        if (response['postNotif'] == 1 || response['muteAll'] == 1 || response['styleColumnNotif'] == 1) {
           console.log('Show Alert')
           this.showNotifAlert();
         }
@@ -196,7 +197,7 @@ export class TabsPage implements OnInit {
       console.log('Error getting notification settings: ', ex);
     })
   }
-  
+
   setCurrentTab() {
     this.selectedTab = this.tabs.getSelected();
     // if(this.selectedTab == "dashboard"){
@@ -253,10 +254,10 @@ export class TabsPage implements OnInit {
     let data = {
       postNotif: 0,
       muteAll: 0,
-      styleColumnNotif: 0  
+      styleColumnNotif: 0
     }
 
-      this.userProvider.getNotificationSettings('getnotifsettings', data, true).then(response => {
+    this.userProvider.getNotificationSettings('getnotifsettings', data, true).then(response => {
       if (response['error'] == 0) {
         console.log('Updated: ', response);
       }
@@ -327,12 +328,12 @@ export class TabsPage implements OnInit {
       //     }
       //   }
 
-        // if (this.nav.canGoBack()) {
-        //   this.nav.pop();
-        // }
-        // else {
-        //   this.appMinimize.minimize();
-        // }
+      // if (this.nav.canGoBack()) {
+      //   this.nav.pop();
+      // }
+      // else {
+      //   this.appMinimize.minimize();
+      // }
       // });
     }
   }
@@ -376,33 +377,33 @@ export class TabsPage implements OnInit {
     loader.dismiss();
   }
 
-  async openImagePicker(){
+  async openImagePicker() {
     this.imgupload.nativeElement.value = null;
     this.imgupload.nativeElement.click();
   }
   async imgChange(e: any) {
     let imgs: any = e.target.files;
     console.log(imgs)
-    if(imgs[0].type == 'video/mp4'){
+    if (imgs[0].type == 'video/mp4') {
       let loader: any = await this.loadingCtrl.create({
       });
       loader.present();
-      let alert  = await this.alertCtrl.create({
+      let alert = await this.alertCtrl.create({
         message: 'Videos are not supported',
         mode: 'md',
         cssClass: 'videoAlert',
-        buttons:[
+        buttons: [
           {
             text: 'OK',
             role: 'cancel',
-            handler: () => {}
+            handler: () => { }
           },
         ]
       });
       loader.dismiss();
       alert.present();
       // alert('Videos are not allowed in posting')
-    }else{
+    } else {
       if (imgs.length == 1) {
         let loader: any = await this.loadingCtrl.create({
         });
@@ -411,24 +412,16 @@ export class TabsPage implements OnInit {
           this._zone.run(() => {
             let reader = new FileReader();
             reader.onload = (e: any) => {
+              let imageType = imgs[0].type;
               this.imageCompress.compressFile(e.target.result, 1, 100, 90).then(async (res: any) => {
-                /* console.log("imgChange", res); */
-                let imgblob: any = this.componentsProvider.b64toBlobNew(res.replace("data:image/jpeg;base64,", ""), 'image/jpeg', 512);
-                /* console.log("imgblob", imgblob); */
-                /* console.log("photo", imgs[0]);
-                console.log("compressedImg", res);
-                console.log("nonNormalizedUrl", e.target.result);
-                console.log("imgblob", imgblob); */
+                let imgblob: any = this.componentsProvider.b64toBlobNew(res.replace("data:" + imageType + ";base64,", ""), imageType, 512);
                 loader.dismiss();
                 console.log('before ', imgblob)
-                if(imgblob['size'] > 1000){
-                  imageResizeCompress.fromBlob(imgblob, 100 , 1080 ,1350).then( async resize=>{
+                if (imgblob['size'] > 1000) {
+                  imageResizeCompress.fromBlob(imgblob, 100, 1080, 1350).then(async resize => {
                     imgblob = resize
                     this.dataSoource.changeData({
-                      /* photo: imgs,
-                      compressedImg: res, */
                       isEditPost: 1,
-                      /* nonNormalizedUrl: e.target.result, */
                       imgblob: imgblob,
                       imgbase64: res,
                       from: 'gallery',
@@ -438,12 +431,9 @@ export class TabsPage implements OnInit {
                     });
                     modal.present();
                   })
-                }else{
+                } else {
                   this.dataSoource.changeData({
-                    /* photo: imgs,
-                    compressedImg: res, */
                     isEditPost: 1,
-                    /* nonNormalizedUrl: e.target.result, */
                     imgblob: imgblob,
                     imgbase64: res,
                     from: 'gallery',
@@ -453,47 +443,42 @@ export class TabsPage implements OnInit {
                   });
                   modal.present();
                 }
-                
-                // this.navCtrl.navigateForward(['/post']);
-                // this.navCtrl.push(PostPage, {
-                //   photo: this.photo[0],
-                //   isNewPost: true,
-                //   from: "gallery",
-                //   nonNormalizedUrl: this.nonNormalizedUrl
-                // });
               });
             }
             reader.readAsDataURL(img);
           });
         });
-      }else if(imgs.length > 1){
+      } else if (imgs.length > 1) {
         let arrImgs = [];
         let arrBase64Imgs = [];
         let loader: any = await this.loadingCtrl.create({
         });
         await loader.present();
-        await Array.from(imgs).forEach((img: any) => {
+        await Array.from(imgs).forEach((img: any, index) => {
           this._zone.run(() => {
             let reader = new FileReader();
             reader.onload = (e: any) => {
+              let imageType = imgs[index].type
+              console.log(imageType)
+              console.log(imageType)
               this.imageCompress.compressFile(e.target.result, 1, 100, 90).then(async (res: any) => {
-                let imgblob: any = this.componentsProvider.b64toBlobNew(res.replace("data:image/jpeg;base64,", ""), 'image/jpeg', 512);
+                let imgblob: any = this.componentsProvider.b64toBlobNew(res.replace("data:" + imageType + ";base64,", ""), imageType, 512);
                 arrImgs.push(imgblob)
-                arrBase64Imgs.push({'img':res})
+                arrBase64Imgs.push({ 'img': res })
                 // console.log(arrBase64Imgs.length)
-                if(arrBase64Imgs.length == imgs.length){
+                if (arrBase64Imgs.length == imgs.length) {
                   loader.dismiss();
-                this.dataSoource.changeData({
-                  isEditPost: 1,
-                  imgblob: arrImgs,
-                  imgbase64: arrBase64Imgs,
-                  from: 'gallery',
-                  backUpBase64: arrBase64Imgs
-                });
-                let modal = await this.modalCtrl.create({
-                  component: PostPage
-                });
-                modal.present();
+                  this.dataSoource.changeData({
+                    isEditPost: 1,
+                    imgblob: arrImgs,
+                    imgbase64: arrBase64Imgs,
+                    from: 'gallery',
+                    backUpBase64: arrBase64Imgs
+                  });
+                  let modal = await this.modalCtrl.create({
+                    component: PostPage
+                  });
+                  modal.present();
                 }
               });
             }
@@ -502,8 +487,75 @@ export class TabsPage implements OnInit {
         });
       }
     }
-    
+
   }
+
+  // openImagePicker(){
+  //   let options ={
+  //     maximumImagesCount: 5,
+  //     quality : 70,
+  //     mode : 'ios'
+  //   }
+  //   let temp = [];
+  //   let arrImg = [];
+  //   let arrB64 =[];
+  //   this.imagePicker.getPictures(options).then(async (results) => {
+  //     if(results.length > 0){
+  //       let msg = 'Preparing image...';
+  //     if(results.length > 1){
+  //       msg = 'Preparing images...'
+  //     }
+  //     let prepareLoading = await this.loadingCtrl.create({
+  //       message: msg
+  //     });
+  //     prepareLoading.present();
+  //     results.forEach(async element => {
+  //       temp['path'] = element
+  //       await this.componentsProvider.photoCompress(temp).then(image =>{
+  //         let imageType = element.split(/[#?]/)[0].split('.').pop().trim();
+  //         if(imageType == 'jpg'){
+  //           imageType = 'jpeg';
+  //         }
+  //         console.log(imageType)
+  //         if(image){
+  //           if (image['error'] == 0) {
+  //             this._zone.run(() => {
+  //               this.imageCompress.compressFile(image['compressedImg'], 1, 100, 70).then( async compressedImg =>{
+  //                 console.log(compressedImg)
+  //                 let imgblob;
+  //                 try {
+  //                   imgblob = this.componentsProvider.b64toBlobNew(compressedImg.replace("data:image/"+imageType+";base64,", ""), 'image/'+imageType, 512)
+  //                 } catch (error) {
+  //                   console.log(error)
+  //                 }
+  //                 arrB64.push(compressedImg)
+  //                 arrImg.push(imgblob);
+  //                 if(arrImg.length == results.length){
+  //                   this.dataSoource.changeData({
+  //                     isEditPost: 1,
+  //                     imgblob: arrImg,
+  //                     imgbase64: arrB64,
+  //                     from: 'gallery',
+  //                     backUpBase64: arrB64
+  //                   });
+  //                   let modal = await this.modalCtrl.create({
+  //                     component: PostPage
+  //                   });
+  //                   modal.present();
+  //                   prepareLoading.dismiss();
+  //                 }
+  //               }).catch(e=>{
+  //                 console.log(e)
+  //               })
+  //             });
+  //           }
+  //         }
+  //       })
+  //     });
+  //     console.log(arrImg)
+  //     }
+  //   });
+  // }
 
   async takePicture() {
     let options = {
@@ -535,7 +587,6 @@ export class TabsPage implements OnInit {
           t = t.replace(")", "%29");
           if (this.platform.is("ios")) {
             t = t.replace("file://", "");
-            // t = t.replace("file://", "/_file_");
             new_pp["path"] = t;
           }
           this.photo.splice(0, 1);
@@ -554,16 +605,12 @@ export class TabsPage implements OnInit {
                   console.log("nonNormalizedUrl", this.nonNormalizedUrl);
                   let imgblob = this.componentsProvider.b64toBlobNew(response['compressedImg'].replace("data:image/jpeg;base64,", ""), 'image/jpeg', 512)
                   this.dataSoource.changeData({
-                    /* photo: this.photo[0],
-                    compressedImg: response['compressedImg'], */
                     isEditPost: 1,
-                    /* nonNormalizedUrl: this.nonNormalizedUrl, */
                     imgblob: imgblob,
                     imgbase64: response['compressedImg'],
                     from: 'camera',
                   });
                 });
-                // this.navCtrl.navigateForward(['/post']);
                 let modal = await this.modalCtrl.create({
                   component: PostPage
                 });
@@ -579,33 +626,7 @@ export class TabsPage implements OnInit {
             }).then(() => {
               prepareLoading.dismiss();
             });
-
-            // this.compressPhoto({path: this.nonNormalizedUrl}).then(response => {
-            //   if (response['error'] == 0) {
-            //     console.log(response);
-            //     this.navCtrl.push(PostPage, {
-            //       photo: this.photo[0],
-            //       isNewPost: true,
-            //       from: "gallery",
-            //       nonNormalizedUrl: this.nonNormalizedUrl,
-            //       compressedImg: response['compressedImg']
-            //     });
-            //   }
-            //   else {
-            //     console.log('Error in compression response: ', response);
-            //   }
-            // }).catch(requestCompressError => {
-            //   console.log('Error requesting compression: ', requestCompressError);
-            // }).then(() => {
-            //   prepareLoading.dismiss();
-            // });
           });
-          // this.navCtrl.push(PostPage, {
-          //   photo: this.photo[0],
-          //   isNewPost: true,
-          //   from: "camera",
-          //   nonNormalizedUrl: this.nonNormalizedUrl
-          // });
         }
       },
       function (error) {
@@ -613,148 +634,16 @@ export class TabsPage implements OnInit {
       }
     );
   }
-  /* async gotoImageCropper(image) {
-    console.log("gotoImageCropper", image);
-    this.imageCompress.compressFile(image, orientation, 100, 90).then(result => {
-      this.presentCropperModal(this.componentsProvider.b64toBlobNew(result.replace("data:image/jpeg;base64,", ""), 'image/jpeg', 512));
-    }).catch(e => {
-      console.log("e", e);
-    });
-  } */
-
-  // async openImagePicker() {
-
-  //   const options: CameraOptions = {
-  //     quality: 100,
-  //     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-  //     destinationType: this.camera.DestinationType.DATA_URL,
-  //     encodingType: this.camera.EncodingType.JPEG,
-  //     mediaType: this.camera.MediaType.PICTURE,
-  //     correctOrientation: true
-  //   };
-
-  //   let prepareLoading = await this.loadingCtrl.create({
-  //     message:`Preparing image...`,
-  //   });
-
-  //  await prepareLoading.present();
-
-
-  //   await this.camera.getPicture(options).then((res: any) => {
-  //     if (res.length > 0) {
-  //       this._zone.run(() => {
-  //         let image: any;
-  //         prepareLoading.dismiss();
-  //         image = "data:image/jpeg;base64," + res;
-  //         this.selectedPhoto = "data:image/jpeg;base64," + res;
-
-  //         this.compressFiles(image);
-  //       });
-  //     }
-  //   }).catch(e => {
-  //     prepareLoading.dismiss();
-  //     console.log("e", e);
-  //   });
-
-  // }
-
-  // async takePicture() {
-
-
-  //   let prepareLoading = await this.loadingCtrl.create({
-  //     message:`Preparing image...`,
-  //   });
-
-  //  await prepareLoading.present();
-
-  //   const options: CameraOptions = {
-  //     quality: 100,
-  //     destinationType: this.camera.DestinationType.DATA_URL,
-  //     encodingType: this.camera.EncodingType.JPEG,
-  //     mediaType: this.camera.MediaType.PICTURE,
-  //     correctOrientation: true
-  //   };
-
-  //   await this.camera.getPicture(options).then((res: any) => {
-  //     if (res.length > 0) {
-  //       let image: any;
-  //       image = "data:image/jpeg;base64," + res;
-  //       this.selectedPhoto = "data:image/jpeg;base64," + res;
-  //       prepareLoading.dismiss();
-  //       this.compressFiles(image);
-  //     }
-  //   }).catch(e => {
-  //     prepareLoading.dismiss();
-  //     console.log("e", e);
-  //   });
-
-  // }
-
-  // async compressFiles(image: any) {
-  //   let filename = image.substring(image.lastIndexOf('/')+1);
-  //   this.imageCompress.compressFile(image, orientation, 100, 90).then((res: any) => {
-  //     this._zone.run(() => {
-  //      this.pic_attachment = this.env.b64toBlob(res.replace("data:image/jpeg;base64,", ""), 'image/jpeg', 512);
-
-  //       this.dataSoource.changeData({
-  //         photo: res,
-  //         compressedImg: this.pic_attachment,
-  //         isNewPost: true,
-  //         from: 'camera',
-  //         filename: filename,
-  //       });
-  //       this.navCtrl.navigateForward('/post', {
-  //       });
-  //     });
-  //   }).catch(e => {
-  //     console.log("e", e);
-  //   });
-  // }
-
-
-  // getImages() {
-  //   this.options = {
-  //     // Android only. Max images to be selected, defaults to 15. If this is set to 1, upon
-  //     // selection of a single image, the plugin will return it.
-  //     //maximumImagesCount: 3,
-
-  //     // max width and height to allow the images to be.  Will keep aspect
-  //     // ratio no matter what.  So if both are 800, the returned image
-  //     // will be at most 800 pixels wide and 800 pixels tall.  If the width is
-  //     // 800 and height 0 the image will be 800 pixels wide if the source
-  //     // is at least that wide.
-  //     width: 200,
-  //     //height: 200,
-
-  //     // quality of resized image, defaults to 100
-  //     quality: 25,
-
-  //     // output type, defaults to FILE_URIs.
-  //     // available options are 
-  //     // window.imagePicker.OutputType.FILE_URI (0) or 
-  //     // window.imagePicker.OutputType.BASE64_STRING (1)
-  //     outputType: 1
-  //   };
-  //   this.imageResponse = [];
-  //   this.imagePicker.getPictures(this.options).then((results) => {
-  //     for (var i = 0; i < results.length; i++) {
-  //       this.imageResponse.push('data:image/jpeg;base64,' + results[i]);
-  //     }
-  //   }, (err) => {
-  //     alert(err);
-  //   });
-
-  // }
-  refreshDashboard(){
+  refreshDashboard() {
     this.events.publish('refresh-dashboard');
     console.log('clicked')
   }
 
-  goToStylin(){
+  goToStylin() {
     this.navCtrl.navigateRoot('/tabs/tabs/my-stylin');
   }
 
-  recordVideo(){
+  recordVideo() {
     this.androidPermissions.requestPermissions(
       [
         this.androidPermissions.PERMISSION.CAMERA,
@@ -762,25 +651,51 @@ export class TabsPage implements OnInit {
         this.androidPermissions.PERMISSION.READ_MEDIA_VIDEO
 
       ]
-    ).then(()=>{
+    ).then(() => {
       this.mediaCapture.captureVideo()
-    .then(
-      async (data: MediaFile[]) => {
-        this.dataSoource.changeData({
-          video: 'true',
-          file: data,
-        });
-        let loader: any = await this.loadingCtrl.create({
-        });
-        await loader.present();
-        let modal = await this.modalCtrl.create({
-          component: PostPage
-        });
-        loader.dismiss();
-        modal.present();
-        
-      })
+        .then(
+          async (data: MediaFile[]) => {
+            let loader: any = await this.loadingCtrl.create({
+            });
+            this.convertVideoToBase64(data[0]['fullPath']).then( videoBase64 =>{
+              this.componentsProvider.b64toBlob(videoBase64, 'video/mp4').then( async newBlob =>{
+                // console.log(newBlob['generatedBlob'])
+                this.dataSoource.changeData({
+                      video: 'true',
+                      file: data,
+                      videoBlob: newBlob['generatedBlob']
+                    });
+                    await loader.present();
+                    let modal = await this.modalCtrl.create({
+                      component: PostPage
+                    });
+                    loader.dismiss();
+                    modal.present();
+              })
+            })
+          })
     })
+  }
+  async convertVideoToBase64(video) {
+    return new Promise(async (resolve) => {
+      let res:any = await this.file.resolveLocalFilesystemUrl(video);
+      res.file((resFile) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(resFile);
+        reader.onloadend = async (evt: any) => {
+          let encodingType = "data:video/mp4;base64,";
+          /*
+           * File reader provides us with an incorrectly encoded base64 string.
+           * So we have to fix it, in order to upload it correctly.
+           */
+          let OriginalBase64 = evt.target.result.split(',')[1]; // Remove the "data:video..." string.
+          let decodedBase64 = atob(OriginalBase64); // Decode the incorrectly encoded base64 string.
+          let encodedBase64 = btoa(decodedBase64); // re-encode the base64 string (correctly).
+          let newBase64 = encodingType + encodedBase64; // Add the encodingType to the string.
+          resolve(newBase64);
+        }
+      });
+    });
   }
 
 }

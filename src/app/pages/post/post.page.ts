@@ -36,18 +36,14 @@ export class PostPage implements OnInit {
   @ViewChild('searchInput') searchInput: IonText;
   @ViewChild('selectPrivacy') selectPrivacy: IonSelect;
   @ViewChild('slides') slides: IonSlides
-  /* @ViewChild(Content) content: Content; */
   public postForm: FormGroup;
 
-  /* img: any = "https://getstylin.com/public/deploy1599536530/images/lns/sb/L2ltYWdlcy91cGxvYWRzL3Byb2ZpbGVwaWMvMTQ3/type/toheight/height/500/allow_enlarge/0/1582504925_yw456vuwtejxiqxwok56.jpg"; */
   pixiBrightness: number = 0;
   pixiContrast: number = 0;
   pixiSaturation: number = 0;
   stage;
-  /* canvas; */
   selected = null;
   isEditPost: any;
-  /* compressedImg: any; */
   tags: any = [[]];
   filename: any;
   path: any;
@@ -58,7 +54,6 @@ export class PostPage implements OnInit {
   base64StockImage: any;
   dataDir: string;
   onChange: any;
-  /* temp_photo:any; */
   autocompleteItems: any = [];
   service = new google.maps.places.AutocompleteService();
 
@@ -71,7 +66,6 @@ export class PostPage implements OnInit {
   rotation: any;
   tag: any = [];
   temp_crop: any;
-  /* temp_crop: any; */
   isAndroid: any;
   imgblob: any;
   imgblob_backup: any;
@@ -84,7 +78,8 @@ export class PostPage implements OnInit {
   suggestTags: any = [];
   slideOpts = {
     initialSlide: 0,
-    speed: 400
+    speed: 200,
+    slidesPerView: 1,
   };
   playing = false;
   public masonryOptions: NgxMasonryOptions = {
@@ -103,6 +98,7 @@ export class PostPage implements OnInit {
   videoFile;
   showButton = true;
   completeDuration;
+  videoBlob;
   // slideOpts = {
   //   coverflowEffect: {
   //     rotate: 50,
@@ -228,42 +224,29 @@ export class PostPage implements OnInit {
             this.imgblob = res['imgblob'];
             this.imgblob_backup = this.imgblob;
             this.imgbase64 = res['imgbase64'];
-            if (Array.isArray(this.imgbase64)) {
+            if (this.imgbase64.length > 1) {
               this.isMultiple = true;
             }
             this.video = res['video']
-              let file = res['file']
-              this.videoURL = this.webview.convertFileSrc(file[0]['fullPath'])
-              
+            let file = res['file']
+            this.videoURL = this.webview.convertFileSrc(file[0]['fullPath'])
+            this.videoBlob = res['videoBlob']
+            this.videoBlob['error'] = 0;
             this.imgbase64_backup = this.imgbase64;
             // this.multipleBase64_backUp = res['backUpBase64'];
             this.storage.set('back-up-base64', res['backUpBase64'])
             /* this photo */
             this.isEditPost = res['isEditPost'];
-            /* this.img = res['photo'];
-            this.temp_crop = res['photo']['path']
-            this.temp_photo = res['photo']; */
-            /* this.canvas = res['compressedImg'];
-            this.compressedImg = res['compressedImg']; */
             this.item = res['item'] ? res['item'] : null;
             this.isFromEdit = this.item != null ? true : false;
             this.privacy = this.item['isPrivate'];
             console.log("isPrivate: ", this.privacy)
-            /* if(res['editBase64']){
-              this.canvas = res['editBase64'];
-              this.compressedImg = res['editBase64'];
-            } */
           });
 
         } catch (error) {
 
         }
       }
-      /* if (this.compressedImg) {
-        this._zone.run(() => {
-          this.base64StockImage = this.compressedImg;
-        });
-      } */
     });
     this.buildForm();
 
@@ -275,7 +258,7 @@ export class PostPage implements OnInit {
       // Attach a postId form value in the formGroup.
       if (this.platform.is('ios')) {
         this.postForm.addControl('postId', new FormControl(''));
-        this.postForm.controls['postId'].setValue(this.item['id']);
+        this.item['id'] ? this.postForm.controls['postId'].setValue(this.item['id']) : null;
       }
       else {
         this.postForm.addControl('postId', new FormControl(this.item.id));
@@ -286,9 +269,16 @@ export class PostPage implements OnInit {
       this.saturation = (Number(this.item.filter.saturation) - 1) * 100;
       this.rotation = this.item.filter.rotation;
 
-      this.changeBrightness(this.brightness, true);
-      this.changeContrast(this.contrast, true);
-      this.changeSaturation(this.saturation, true);
+      if(this.isMultiple){
+        this.changeBrightness(this.imgbase64[0]['pixiBrightness'] ? this.imgbase64[0]['pixiBrightness'] : 1, false);
+        this.changeContrast(this.imgbase64[0]['pixiContrast'] ? this.imgbase64[0]['pixiContrast'] : 1, false);
+        this.changeSaturation(this.imgbase64[0]['pixiSaturation'] ? this.imgbase64[0]['pixiSaturation'] : 1, false);
+      }else{
+        this.changeBrightness(this.brightness, true);
+        this.changeContrast(this.contrast, true);
+        this.changeSaturation(this.saturation, true);
+      }
+      
       this.postForm.controls.description.setValue(this.item.description && this.item.description != 'null' ? this.item.description : null);
       this.postForm.controls.location.setValue(this.item.location && this.item.location != 'null' ? this.item.location : null);
       this.postForm.controls.longitude.setValue(this.item.longitude && this.item.longitude != 'null' ? this.item.longitude : null);
@@ -344,13 +334,13 @@ export class PostPage implements OnInit {
         '',
       ],
       brightness: [
-        1
+        this.isMultiple ? null : 1
       ],
       contrast: [
-        1
+        this.isMultiple ? null : 1
       ],
       saturation: [
-        1
+        this.isMultiple ? null : 1
       ],
       rotation: [
         'rotate(0deg)'
@@ -411,8 +401,6 @@ export class PostPage implements OnInit {
 
 
   async pushPost(isDirect?) {
-    console.log("this is tags", this.tag);
-    console.log('Uploading photo....');
     let prepareLoading = await this.loadingCtrl.create({
       message: `Uploading image...`,
     });
@@ -440,13 +428,33 @@ export class PostPage implements OnInit {
     }
 
     let thisData = this.postForm.value;
+    console.log(thisData)
     var formData = new FormData();
-    if (this.isMultiple) {
-      this.imgblob.forEach((element, index) => {
-        formData.append(`photo[${index}]`, element);
-      });
-    } else {
-      formData.append('photo', this.imgblob);
+    if(this.videoBlob){
+      formData.append('isVideo', 'true');
+      formData.append('video', this.videoBlob);
+      console.log('video', this.videoBlob)
+    }else{
+      if (this.isMultiple) {
+        this.postForm.controls.brightness.setValue(null);
+        this.postForm.controls.contrast.setValue(null);
+        this.postForm.controls.saturation.setValue(null);
+        formData.append('isMultiple', this.isMultiple.toString());
+        this.imgblob.forEach((element, index) => {
+        let multiBrightness = this.imgbase64[index]['pixiBrightness'];
+        multiBrightness = ((multiBrightness + 100)/100);
+        let multiContrast = this.imgbase64[index]['pixiContrast'];
+        multiContrast = ((multiContrast + 100)/100);
+        let multiSaturation = this.imgbase64[index]['pixiSaturation'];
+         multiSaturation = ((multiSaturation + 100)/100);
+        formData.append(`multiple_brightness[${index}]`, multiBrightness ? multiBrightness : 1);
+        formData.append(`multiple_contrast[${index}]`, multiContrast ? multiContrast : 1);
+        formData.append(`multiple_saturation[${index}]`,multiSaturation ? multiSaturation: 1);
+          formData.append(`photo[${index}]`, element);
+        });
+      } else {
+        formData.append('photo', this.imgblob);
+      }
     }
     let keys = Object.keys(thisData);
     for (var i = keys.length - 1; i >= 0; i--) {
@@ -462,19 +470,23 @@ export class PostPage implements OnInit {
         // this.events.publish('refresh-main-profile-feed');
         let navigationExtras: NavigationExtras = {
           state: {
+            isMultiple: result['debug'].isMultiple ? result['debug'].isMultiple : null,
+            multiplePics: result['multiPic'] ? result['multiPic']: null,
             item: result['data'],
             temp_photo: this.imgbase64/* this.rotatedImage != '' ? this.rotatedImage : this.temp_photo */,
             fromPost: this.isEditPost
           }
         }
-        this.modalCtrl.dismiss();
+        this.storage.remove('back-up-base64').then(()=>{
+          this.modalCtrl.dismiss();
+        })
         this.navCtrl.navigateForward(['/post-detail'], navigationExtras);
         this.events.publish('refresh-post-details');
-        if (result.status === 0) {
-          this.postService.postNotif({ postId: result.data.id }).then(res => {
-            console.log(res);
-          });
-        }
+        // if (result.status === 0) {
+        //   this.postService.postNotif({ postId: result.data.id }).then(res => {
+        //     console.log(res);
+        //   });
+        // }
       } else {
         prepareLoading.dismiss();
       }
@@ -497,11 +509,12 @@ export class PostPage implements OnInit {
           let pixiBrightness = { 'pixiBrightness': this.pixiBrightness }
           this.imgbase64[this.slidePage - 1] = Object.assign(this.imgbase64[this.slidePage - 1], pixiBrightness)
         } else {
+          console.log('here')
           this.pixiBrightness = e;
+          this.postForm.controls.brightness.setValue((this.pixiBrightness + 100) / 100);
         }
       });
     }
-    this.postForm.controls.brightness.setValue((this.pixiBrightness + 100) / 100);
     console.log(this.postForm)
   }
   changeContrast(e, isFromEdit = false) {
@@ -515,13 +528,13 @@ export class PostPage implements OnInit {
         if (this.isMultiple) {
           this.pixiContrast = e;
           let pixiContrast = { 'pixiContrast': this.pixiContrast }
-          this.imgbase64[this.slidePage - 1] = Object.assign(this.imgbase64[this.slidePage - 1], pixiContrast)
+          this.imgbase64[this.slidePage - 1] = Object.assign(this.imgbase64[this.slidePage - 1],pixiContrast )
         } else {
           this.pixiContrast = e;
+          this.postForm.controls.contrast.setValue((this.pixiContrast + 100) / 100);
         }
       });
     }
-    this.postForm.controls.contrast.setValue((this.pixiContrast + 100) / 100);
   }
   changeSaturation(e, isFromEdit = false) {
     console.log('changeSaturation', e);
@@ -534,13 +547,13 @@ export class PostPage implements OnInit {
         if (this.isMultiple) {
           this.pixiSaturation = e;
           let pixiSaturation = { 'pixiSaturation': this.pixiSaturation }
-          this.imgbase64[this.slidePage - 1] = Object.assign(this.imgbase64[this.slidePage - 1], pixiSaturation)
+          this.imgbase64[this.slidePage - 1] = Object.assign(this.imgbase64[this.slidePage - 1],pixiSaturation)
         } else {
           this.pixiSaturation = e;
+          this.postForm.controls.saturation.setValue((this.pixiSaturation + 100) / 100);
         }
       });
     }
-    this.postForm.controls.saturation.setValue((this.pixiSaturation + 100) / 100);
   }
   renderImage() {
     let naturalImage = this.thisImage.nativeElement
@@ -883,10 +896,11 @@ export class PostPage implements OnInit {
   ionSlideDidChange(e) {
     this.slides.getActiveIndex().then(res => {
       this.slidePage = res + 1;
-      this.changeBrightness(this.imgbase64[res]['pixiBrightness'] ? this.imgbase64[res]['pixiBrightness'] : 0, false);
-      this.changeContrast(this.imgbase64[res]['pixiContrast'] ? this.imgbase64[res]['pixiContrast'] : 0, false);
-      this.changeSaturation(this.imgbase64[res]['pixiSaturation'] ? this.imgbase64[res]['pixiSaturation'] : 0, false);
-      this.cropDetermine(this.imgbase64[res]['cropSelected'] ? this.imgbase64[res]['cropSelected'] : 0)
+      this.changeBrightness(this.imgbase64[res]['pixiBrightness'] ? this.imgbase64[res]['pixiBrightness'] : 1, false);
+      this.changeContrast(this.imgbase64[res]['pixiContrast'] ? this.imgbase64[res]['pixiContrast'] : 1, false);
+      this.changeSaturation(this.imgbase64[res]['pixiSaturation'] ? this.imgbase64[res]['pixiSaturation'] : 1, false);
+      this.cropDetermine(this.imgbase64[res]['cropSelected'] ? this.imgbase64[res]['cropSelected'] : 0);
+      console.log(this.imgbase64[this.slidePage - 1]);
     })
   }
 

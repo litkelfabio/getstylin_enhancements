@@ -113,4 +113,10 @@ ion-badge{
 .points-text{
     font-size: 15px !important;
 }
-
+.multi-icon{
+    position: absolute;
+    z-index: 999;
+    right: 4px;
+    top: 6px;
+    zoom: 1.2;
+}

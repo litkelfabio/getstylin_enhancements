@@ -174,14 +174,30 @@
             </div>
           </ng-container>  -->
           <!-- <ng-container *ngIf="!isAndroid"> -->
-            <div class="photo-container" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
-              <ion-img #image class="img-dashboard" [src]="item.photo" (ionImgDidLoad)="isLoadedImg(item)" (ionError)="errorLoad()" style="border-radius: 10px!important;"  (click)="viewPhoto(item.photo, item.description,item.filter)"></ion-img>
-              <!-- <img [src]="item.photo" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }" tappable (click)="gotoDetails(item)"/> -->
-              <ng-container *ngIf="!item.isLoaded">
-                <ion-spinner name="crescent" class="spinner"></ion-spinner>
-                <!-- <ion-skeleton-text animated style="width: 100%; height: 300px; border-radius: 10px;"></ion-skeleton-text> -->
-              </ng-container>
-            </div> 
+            <ng-container *ngIf="!isMultiple">
+              <div class="photo-container" [ngStyle]="{ 'filter': 'brightness('+item.filter.brightness+') contrast('+item.filter.contrast+') saturate('+item.filter.saturation+')' }">
+                <ion-img #image class="img-dashboard" [src]="item.photo" (ionImgDidLoad)="isLoadedImg(item)" (ionError)="errorLoad()" style="border-radius: 10px!important;"  (click)="viewPhoto(item.photo, item.description,item.filter)"></ion-img>
+                <ng-container *ngIf="!item.isLoaded">
+                  <ion-spinner name="crescent" class="spinner"></ion-spinner>
+                </ng-container>
+              </div> 
+            </ng-container>
+
+            <ng-container *ngIf="isMultiple">
+              <ion-row style="position: relative;">
+                <div class="index-indicator">
+                  <ion-text class="index">{{slidePage}} / {{multiplePics.length}}</ion-text>
+                </div>
+              </ion-row>
+              <ion-slides #slides pager="true" [options]="slideOpts" style="position: relative;"
+              (ionSlideDidChange)="ionSlideDidChange($event)" class="ion-padding-bottom ion-padding-horizontal">
+                <ion-slide *ngFor="let pic of multiplePics; let i = index">
+                  <img (click)="viewPhoto(pic.photo, item.description, pic.filter)" #thisImage [src]="pic.photo"
+                    [ngStyle]="{ 'filter': 'brightness('+pic.filter.brightness+100+') contrast('+pic.filter.contrast+100+') saturate('+pic.filter.saturation+100+')' }"
+                    style="height: 280px;">
+                </ion-slide>
+              </ion-slides>
+            </ng-container>
           <!-- </ng-container> -->
         </ion-col>
       </ion-row>

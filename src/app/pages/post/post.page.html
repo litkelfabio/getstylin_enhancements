@@ -262,7 +262,7 @@
         <ion-slides #slides pager="true" [options]="slideOpts" style="position: relative;"
           (ionSlideDidChange)="ionSlideDidChange($event)" class="ion-padding-bottom ion-padding-horizontal">
           <ion-slide *ngFor="let img of imgbase64; let i = index">
-            <img (click)="viewPhoto(img.img)" #thisImage [src]="img.img"
+            <img #thisImage [src]="img"
               [ngStyle]="{ 'filter': 'brightness('+((img.pixiBrightness+100)/100)+') contrast('+((pixiContrast+100)/100)+') saturate('+((pixiSaturation+100)/100)+')' }"
               style="height: 280px;">
           </ion-slide>
